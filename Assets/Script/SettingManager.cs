@@ -74,7 +74,7 @@ public class SettingManager : MonoBehaviour
             //유닛세팅 완료
             if (Input.GetMouseButtonDown(0))
             {
-                //ShaderChange(1);
+                ShaderChange(0);
                 unitGroupTr.parent = transform.parent;
                 unitSetList.Clear();
                 unitGroupTr = null;
@@ -119,7 +119,7 @@ public class SettingManager : MonoBehaviour
                 }
                 if(unitGroupTr!=null&&unitGroupTr.childCount==unitSetList.Count)
                 {
-                    //ShaderChange(0);
+                    ShaderChange(1);
                 }
             }
         }
