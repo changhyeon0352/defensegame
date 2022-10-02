@@ -11,11 +11,13 @@ public class SettingManager : MonoBehaviour
     List<GameObject> unitSetList;
     float unitOffset = 1.5f;
     public float scrollSpeed=1f;
+    private Transform unitGroupTr;
 
     private void Awake()
     {
         inputActions= new PlayerInput();
-        unitSetList= new List<GameObject>();
+
+        unitSetList = new List<GameObject>();
     }
     private void OnEnable()
     {
@@ -33,6 +35,11 @@ public class SettingManager : MonoBehaviour
         {
             if (unitSetList.Count==0)
             {
+                GameObject obj = new GameObject();
+                obj.name = "unitGroup";
+                unitGroupTr = obj.transform;
+                unitGroupTr.parent = transform;
+
                 AddUnitToList();
             }
         }
@@ -56,22 +63,20 @@ public class SettingManager : MonoBehaviour
 
             if (Input.GetKey(KeyCode.Q))
             {
-                transform.rotation *= Quaternion.Euler(0f, -360f * Time.deltaTime, 0f);
+                unitGroupTr.rotation *= Quaternion.Euler(0f, -360f * Time.deltaTime, 0f);
             }
             else if (Input.GetKey(KeyCode.E))
             {
-                transform.rotation *= Quaternion.Euler(0f, 360f * Time.deltaTime, 0f);
+                unitGroupTr.rotation *= Quaternion.Euler(0f, 360f * Time.deltaTime, 0f);
             }
 
             if (Input.GetMouseButtonDown(0))
             {
-                int unitCount=unitSetList.Count;
-                for(int i=0; i<unitCount;i++)
-                {
-                    unitSetList[unitSetList.Count - 1].transform.parent = transform.parent;
-                    unitSetList.RemoveAt(unitSetList.Count - 1);
-                }
-                
+                unitGroupTr.parent = transform.parent;
+                unitSetList.Clear();
+                unitGroupTr = null;
+                //Debug.Log(transform.rotation);
+                //transform.rotation = Quaternion.identity;
             }
 
             float centerDiff = 0;
@@ -90,7 +95,7 @@ public class SettingManager : MonoBehaviour
             {
                 //짝수면 n/2-0.5  홀수면 (n-1)/2 
                 Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                ray.origin += unitOffset*(i-centerDiff)*transform.right ;
+                ray.origin += unitOffset*(i-centerDiff)*unitGroupTr.right ;
                 if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
                 {
 
@@ -100,10 +105,28 @@ public class SettingManager : MonoBehaviour
 
             }
         }
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Unit")))
+                {
+                    unitGroupTr = hit.transform.parent;
+                    unitGroupTr.parent = transform;
+                    //transform.rotation = unitGroupTr.rotation;
+                    for(int i = 0; i < unitGroupTr.childCount; i++)
+                    {
+                        unitSetList.Add(unitGroupTr.GetChild(i).gameObject);
+                    }
+                    //리스트에 따라 
+                }
+            }
+        }
     }
     void AddUnitToList()
     {
-        GameObject obj = Instantiate(meleeUnitPrefab, transform);
+        GameObject obj = Instantiate(meleeUnitPrefab, unitGroupTr);
         unitSetList.Add(obj);
     }
     void RemoveLastToList()
