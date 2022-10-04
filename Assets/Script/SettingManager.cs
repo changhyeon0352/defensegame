@@ -12,6 +12,7 @@ public class SettingManager : MonoBehaviour
     float unitOffset = 1.5f;
     public float scrollSpeed=1f;
     private Transform unitGroupTr;
+    private int num_row;
 
     private void Awake()
     {
@@ -32,7 +33,7 @@ public class SettingManager : MonoBehaviour
     private void Update()
     {
         //세팅 시작 버튼
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             if (unitSetList.Count==0)
             {
@@ -40,8 +41,7 @@ public class SettingManager : MonoBehaviour
                 obj.name = "unitGroup";
                 unitGroupTr = obj.transform;
                 unitGroupTr.parent = transform;
-                
-
+                num_row = 1;
                 AddUnitToList();
             }
         }
@@ -83,24 +83,45 @@ public class SettingManager : MonoBehaviour
             }
 
             //유닛그룹 정렬시키기
+            //짝수면 n/2-0.5  홀수면 (n-1)/2 
             float centerDiff = 0;
-            if(unitSetList.Count%2==0)
+            if((unitSetList.Count/num_row)%2==0)
             {
-                centerDiff=unitSetList.Count/2-0.5f;
+                centerDiff=(unitSetList.Count/num_row)/2-0.5f;
             }
             else
             {
-                centerDiff=(unitSetList.Count-1)/2;
+                centerDiff=((unitSetList.Count / num_row)-1)/2;
             }
-            for (int i = 0; i < unitSetList.Count; i++)
+            for (int i = 0; i < unitSetList.Count/num_row; i++)
             {
-                //짝수면 n/2-0.5  홀수면 (n-1)/2 
-                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                ray.origin += unitOffset*(i-centerDiff)*unitGroupTr.right ;
-                if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
+                for(int j=0;j<num_row;j++)
                 {
-                    unitSetList[i].transform.position = hit.point;
+                    Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                    ray.origin += unitOffset *( (i - centerDiff)*unitGroupTr.right- unitGroupTr.forward*j);
+                    if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
+                    {
+                        unitSetList[i*num_row+j].transform.position = hit.point;
+                    }
                 }
+                
+            }
+            //유닛 몇행으로 설지
+            if(Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                ChangeGroupRow(1);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                ChangeGroupRow(2);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                ChangeGroupRow(3);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                ChangeGroupRow(4);
             }
         }
         else // 유닛 세팅 고치기
@@ -124,10 +145,30 @@ public class SettingManager : MonoBehaviour
             }
         }
     }
+    void ChangeGroupRow(int iRow)
+    {
+        if(unitSetList.Count>0)
+        {
+            UnitListClear();
+            num_row=iRow;
+            AddUnitToList();
+        }
+    }
+    void UnitListClear()
+    {
+        for(int i=0;i<unitSetList.Count;i++)
+        {
+            RemoveLastToList();
+        }
+    }
     void AddUnitToList()
     {
-        GameObject obj = Instantiate(meleeUnitPrefab, unitGroupTr);
-        unitSetList.Add(obj);
+        for(int i=0;i<num_row;i++)
+        {
+            GameObject obj = Instantiate(meleeUnitPrefab, unitGroupTr);
+            unitSetList.Add(obj);
+        }
+        
     }
     void RemoveLastToList()
     {
@@ -143,6 +184,14 @@ public class SettingManager : MonoBehaviour
         for (int i = 0; i < skinRen.Length; i++)
         {
             skinRen[i].material.SetInt("_IsSpawning", isSpawning1or0);
+            if(isSpawning1or0==1)
+            {
+                skinRen[i].material.SetFloat("_Alpha",0.2f);
+            }
+            else
+            {
+                skinRen[i].material.SetFloat("_Alpha", 1f);
+            }
         }
     }
 }
