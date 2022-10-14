@@ -110,6 +110,11 @@ public class Unit : MonoBehaviour,IHealth
             ChangeState(unitState.Attack);
         }
     }
+    public void MeleeAttack()
+    {
+        IHealth Enemy_IHealth = attackTargetTr.GetComponent<IHealth>();
+        Enemy_IHealth.TakeDamage(Attack);
+    }
     virtual protected void AttackUpdate()
     {
         timeCount -= Time.deltaTime;
@@ -127,10 +132,8 @@ public class Unit : MonoBehaviour,IHealth
             if (enemyTr != null)
             {
                 attackTargetTr = enemyTr;
-                timeCount = attackSpeed;
                 anim.SetTrigger("Attack");
-                IHealth Enemy_IHealth=attackTargetTr.GetComponent<IHealth>();
-                Enemy_IHealth.TakeDamage(Attack);
+                timeCount = attackSpeed;
             }
             else
             {
@@ -144,6 +147,9 @@ public class Unit : MonoBehaviour,IHealth
         //아군 범위내 상대가 없으면 진형으로 복귀
 
     }
+
+   
+
     //=================================================================================
     private void SearchAndChase(float radius)
     {
