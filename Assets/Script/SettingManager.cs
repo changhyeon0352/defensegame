@@ -166,7 +166,9 @@ public class SettingManager : MonoBehaviour
         for(int i=0;i<num_row;i++)
         {
             GameObject obj = Instantiate(meleeUnitPrefab, unitGroupTr);
+            ShaderChange(1);
             unitSetList.Add(obj);
+
         }
         
     }

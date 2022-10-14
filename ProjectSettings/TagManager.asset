@@ -5,15 +5,17 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Ally
+  - Monster
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Unit
+  - Ally
   - Water
   - UI
   - Ground
-  - 
+  - Monster
   - 
   - 
   - 
