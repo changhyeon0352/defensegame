@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum unitShader
+{
+    normalShader=0,
+    transparentShader
+}
+    
+
 public class SettingManager : MonoBehaviour
 {
     public GameObject meleeUnitPrefab;
@@ -32,7 +39,7 @@ public class SettingManager : MonoBehaviour
    
     private void Update()
     {
-        //¼¼ÆÃ ½ÃÀÛ ¹öÆ°
+        //ì„¸íŒ… ì‹œì‘ ë²„íŠ¼
         if(Input.GetKeyDown(KeyCode.Space))
         {
             if (unitSetList.Count==0)
@@ -46,10 +53,10 @@ public class SettingManager : MonoBehaviour
             }
         }
         
-        //¼¼ÆÃÁß
+        //ì„¸íŒ…ì¤‘
         if(unitSetList.Count>0)
         {
-            //ÈÙ º¯°æ
+            //íœ  ë³€ê²½
             if(Input.GetAxis("Mouse ScrollWheel")>0)
             {
                 AddUnitToList();
@@ -62,7 +69,7 @@ public class SettingManager : MonoBehaviour
                 }
             }
             
-            // À¯´Ö±×·ì È¸Àü
+            // ìœ ë‹›ê·¸ë£¹ íšŒì „
             if (Input.GetKey(KeyCode.Q))
             {
                 unitGroupTr.rotation *= Quaternion.Euler(0f, -360f * Time.deltaTime, 0f);
@@ -71,19 +78,35 @@ public class SettingManager : MonoBehaviour
             {
                 unitGroupTr.rotation *= Quaternion.Euler(0f, 360f * Time.deltaTime, 0f);
             }
-            //À¯´Ö¼¼ÆÃ ¿Ï·á
+            //ìœ ë‹›ì„¸íŒ… ì™„ë£Œ
             if (Input.GetMouseButtonDown(0))
             {
-                ShaderChange(0);
-                unitGroupTr.parent = transform.parent;
+                GameObject obj = new GameObject();
+                obj.name = "unitSpots";
+                
+                for (int i=0;i<unitGroupTr.childCount;i++)
+                {
+                    GameObject spot = new GameObject();
+                    spot.name = $"spot{i}";
+                    spot.transform.position = unitGroupTr.GetChild(i).position;
+                    spot.transform.rotation = unitGroupTr.rotation;
+                    spot.transform.parent = obj.transform;
+                    Unit unit = unitGroupTr.GetChild(i).GetComponent<Unit>();
+                    unit.goalTr = spot.transform;
+                    unit.ChangeState(unitState.Move);
+                }
+                obj.transform.parent = unitGroupTr;
+
+                ShaderChange(unitShader.normalShader);
+
+                unitGroupTr.parent = transform.parent;//ì›ë˜ ì´ê±°ìì‹ì´ unitGroupTrì¸ë° í˜•ì œë¡œ ê²©ìƒ
                 unitSetList.Clear();
                 unitGroupTr = null;
-                //Debug.Log(transform.rotation);
-                //transform.rotation = Quaternion.identity;
+                
             }
 
-            //À¯´Ö±×·ì Á¤·Ä½ÃÅ°±â
-            //Â¦¼ö¸é n/2-0.5  È¦¼ö¸é (n-1)/2 
+            //ìœ ë‹›ê·¸ë£¹ ì •ë ¬ì‹œí‚¤ê¸°
+            //ì§ìˆ˜ë©´ n/2-0.5  í™€ìˆ˜ë©´ (n-1)/2 
             float centerDiff = 0;
             if((unitSetList.Count/num_row)%2==0)
             {
@@ -106,7 +129,7 @@ public class SettingManager : MonoBehaviour
                 }
                 
             }
-            //À¯´Ö ¸îÇàÀ¸·Î ¼³Áö
+            //ìœ ë‹› ëª‡í–‰ìœ¼ë¡œ ì„¤ì§€
             if(Input.GetKeyDown(KeyCode.Alpha1))
             {
                 ChangeGroupRow(1);
@@ -124,24 +147,28 @@ public class SettingManager : MonoBehaviour
                 ChangeGroupRow(4);
             }
         }
-        else // À¯´Ö ¼¼ÆÃ °íÄ¡±â
+        else // ìœ ë‹› ì„¸íŒ… ê³ ì¹˜ê¸°
         {
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Unit")))
+                if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
                 {
                     unitGroupTr = hit.transform.parent;
+                    GameObject objDestroy = unitGroupTr.GetChild(unitGroupTr.childCount - 1).gameObject;
+                    objDestroy.transform.parent = null;
+                    Destroy(objDestroy);
                     unitGroupTr.parent = transform;
                     for(int i = 0; i < unitGroupTr.childCount; i++)
                     {
                         unitSetList.Add(unitGroupTr.GetChild(i).gameObject);
                     }
+                    if (unitGroupTr != null && unitGroupTr.childCount == unitSetList.Count)
+                    {
+                        ShaderChange(unitShader.transparentShader);
+                    }
                 }
-                if(unitGroupTr!=null&&unitGroupTr.childCount==unitSetList.Count)
-                {
-                    ShaderChange(1);
-                }
+                
             }
         }
     }
@@ -166,7 +193,7 @@ public class SettingManager : MonoBehaviour
         for(int i=0;i<num_row;i++)
         {
             GameObject obj = Instantiate(meleeUnitPrefab, unitGroupTr);
-            ShaderChange(1);
+            ShaderChange(unitShader.transparentShader);
             unitSetList.Add(obj);
 
         }
@@ -178,22 +205,24 @@ public class SettingManager : MonoBehaviour
         unitSetList.Remove(obj);
         Destroy(obj);
     }
-    void ShaderChange(int isSpawning1or0)
+    void ShaderChange(unitShader _type)
     {
         SkinnedMeshRenderer[] skinRen = unitGroupTr.GetComponentsInChildren<SkinnedMeshRenderer>();
 
 
         for (int i = 0; i < skinRen.Length; i++)
         {
-            skinRen[i].material.SetInt("_IsSpawning", isSpawning1or0);
-            if(isSpawning1or0==1)
+            skinRen[i].material.SetInt("_IsSpawning", (int)_type);
+            if(_type==unitShader.transparentShader)
             {
                 skinRen[i].material.SetFloat("_Alpha",0.2f);
             }
             else
             {
                 skinRen[i].material.SetFloat("_Alpha", 1f);
+
             }
         }
     }
+
 }

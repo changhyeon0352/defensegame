@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class Monster : Unit
 {
-   
+
+    override protected void Awake()
+    {
+        base.Awake();
+        goalTr = FindObjectOfType<Goal>().transform;
+    }
 }

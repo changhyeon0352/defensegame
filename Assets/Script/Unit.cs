@@ -18,8 +18,8 @@ public class Unit : MonoBehaviour,IHealth
     protected float attackSpeed = 2.0f;
     protected int hp = 100;
     protected int attack = 20;
-    float searchRange = 3f;
-    float attackRange = 1.5f;
+    protected float searchRange = 4f;
+    protected float attackRange = 2f;
 
     public Transform goalTr;
     public int Hp 
@@ -31,10 +31,12 @@ public class Unit : MonoBehaviour,IHealth
             if (hp <= 0)
             {
                 hp = 0;
-                //Á×À½
+                //ì£½ìŒ
                 ChangeState(unitState.Dead);
+                Destroy(gameObject);
             }
-            Debug.Log($"{transform.name}ÀÇ hp: {hp}");
+            Debug.Log($"{transform.name}ì˜ hp: {hp}");
+            
         }
     }
     public int Attack { get => attack; set => attack=value; }
@@ -43,12 +45,12 @@ public class Unit : MonoBehaviour,IHealth
        Hp-=damage;
     }
 
-    private void Awake()
+    virtual protected void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         anim= GetComponent<Animator>();
     }
-    private void Update()
+    virtual protected void Update()
     {
         if(Input.GetKeyDown(KeyCode.Z))
         {
@@ -80,23 +82,27 @@ public class Unit : MonoBehaviour,IHealth
     //==============================================================================
     virtual protected void IdleUpdate()
     {
-        // ¾Æ±ºÀ¯´Ö ´ë±â»óÅÂ
-        // ¾Æ±ºÀ¯´Ö ÀÌµ¿À¸·Î ÀüÈ¯
-        //±Ã¼ö´Â  Attack ÀüÈ¯
-        //Àü»ç´Â  Chase ÀüÈ¯
+        // ì•„êµ°ìœ ë‹› ëŒ€ê¸°ìƒíƒœ
+        // ì•„êµ°ìœ ë‹› ì´ë™ìœ¼ë¡œ ì „í™˜
+        //ê¶ìˆ˜ëŠ”  Attack ì „í™˜
+        //ì „ì‚¬ëŠ”  Chase ì „í™˜
         SearchAndChase(searchRange);
+        if(goalTr!=null)
+            transform.LookAt(goalTr.forward+transform.position);
     }
 
     
 
     virtual protected void MoveUpdate()
     {
-        agent.SetDestination(goalTr.position);          //¸ñÇ¥·Î °¡±â
-        SearchAndChase(searchRange);
-        if(agent.remainingDistance<1f&&!agent.pathPending)                  //¸ñÇ¥¿¡ ´Ù°¡°¡¸é Idel·Î º¯°æ
-        {                                       
-            ChangeState(unitState.Idle);                        
+        if (agent.remainingDistance < 0.1f && !agent.pathPending)                  //ëª©í‘œì— ë‹¤ê°€ê°€ë©´ Idleë¡œ ë³€ê²½
+        {
+
+            ChangeState(unitState.Idle);
         }
+        agent.SetDestination(goalTr.position);          //ëª©í‘œë¡œ ê°€ê¸°
+        SearchAndChase(searchRange);
+        
 
     }
     virtual protected void ChaseUpdate()
@@ -105,15 +111,24 @@ public class Unit : MonoBehaviour,IHealth
         {
             agent.SetDestination(chaseTargetTr.position);
         }
-        if (agent.remainingDistance<1f && !agent.pathPending)
+        else
+        {
+            agent.ResetPath();
+            ChangeState(unitState.Move);
+        }
+        if (agent.remainingDistance<attackRange && !agent.pathPending)
         {
             ChangeState(unitState.Attack);
         }
     }
     public void MeleeAttack()
     {
-        IHealth Enemy_IHealth = attackTargetTr.GetComponent<IHealth>();
-        Enemy_IHealth.TakeDamage(Attack);
+        if(attackTargetTr!=null)
+        {
+            IHealth Enemy_IHealth = attackTargetTr.GetComponent<IHealth>();
+            Enemy_IHealth.TakeDamage(Attack);
+        }
+        
     }
     virtual protected void AttackUpdate()
     {
@@ -121,49 +136,53 @@ public class Unit : MonoBehaviour,IHealth
         if(attackTargetTr != null)
         {
             transform.LookAt(attackTargetTr);
+            if (timeCount < 0)
+            {
+                Transform enemyTr = SearchEnemy(attackRange);
+                if (enemyTr != null)
+                {
+                    attackTargetTr = enemyTr;
+                    anim.SetTrigger("Attack");
+                    timeCount = attackSpeed;
+                }
+                else
+                {
+                    ChangeState(unitState.Move);
+                }
+
+            }
         }
         else
         {
             ChangeState(unitState.Move);
         }
-        if (timeCount < 0)
-        {
-            Transform enemyTr = SearchEnemy(attackRange);
-            if (enemyTr != null)
-            {
-                attackTargetTr = enemyTr;
-                anim.SetTrigger("Attack");
-                timeCount = attackSpeed;
-            }
-            else
-            {
-                ChangeState(unitState.Move);
-            }
-            
-        }
         
-        //½Ã°£Àç°í °ø°İ
-        //ÀûÀº ¹üÀ§³» »ó´ë°¡ ¾øÀ¸¸é ¹«ºê
-        //¾Æ±º ¹üÀ§³» »ó´ë°¡ ¾øÀ¸¸é ÁøÇüÀ¸·Î º¹±Í
+        
+        //ì‹œê°„ì¬ê³  ê³µê²©
+        //ì ì€ ë²”ìœ„ë‚´ ìƒëŒ€ê°€ ì—†ìœ¼ë©´ ë¬´ë¸Œ
+        //ì•„êµ° ë²”ìœ„ë‚´ ìƒëŒ€ê°€ ì—†ìœ¼ë©´ ì§„í˜•ìœ¼ë¡œ ë³µê·€
 
     }
 
    
 
     //=================================================================================
-    private void SearchAndChase(float radius)
+    public bool SearchAndChase(float radius)
     {
-        Transform enemyTr = SearchEnemy(radius);   //Àû °Ë»ö
+        bool result = false;
+        Transform enemyTr = SearchEnemy(radius);   //ì  ê²€ìƒ‰
         if (enemyTr != null)
         {
-            chaseTargetTr = enemyTr;                    //ÀûÀ» Ç¥ÀûÀ¸·Î
-            ChangeState(unitState.Chase);               //Ç¥Àû ÃßÀûÀ¸·Î º¯°æ
+            chaseTargetTr = enemyTr;                    //ì ì„ í‘œì ìœ¼ë¡œ
+            ChangeState(unitState.Chase);               //í‘œì  ì¶”ì ìœ¼ë¡œ ë³€ê²½
+            result = true;
         }
+        return result;
     }
     public Transform SearchEnemy(float radius)
     {
         Transform enemyTr = null;
-        Collider[] cols = Physics.OverlapSphere(transform.position, 2f, enemyLayer);
+        Collider[] cols = Physics.OverlapSphere(transform.position, radius, enemyLayer);
         float minimunDistance = float.MaxValue;
         foreach (Collider col in cols)
         {
@@ -196,16 +215,21 @@ public class Unit : MonoBehaviour,IHealth
         {
             case unitState.Idle:
                 anim.SetInteger("iState", 0);
+                agent.ResetPath();
                 break;
             case unitState.Move:
                 anim.SetInteger("iState", 1);
+                chaseTargetTr = null;
+                attackTargetTr = null;
                 break;
             case unitState.Chase:
                 anim.SetInteger("iState", 1);
                 break;
             case unitState.Attack:
                 anim.SetInteger("iState", 0);
-                timeCount = 0;
+                timeCount = attackSpeed/2;
+                attackTargetTr = chaseTargetTr;
+                chaseTargetTr = null;
                 break;
             case unitState.Dead:
                 anim.SetInteger("iState", 3);
