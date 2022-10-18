@@ -19,7 +19,7 @@ public class AllyUnit : Unit
         int multipleNum = 2;
         for(int i=0; i<10; i++)
         {
-            if (SearchAndChase(attackRange*multipleNum))
+            if (SearchAndChase(searchRange*multipleNum))
             {
                 break;
             }

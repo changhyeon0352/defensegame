@@ -18,8 +18,9 @@ public class Unit : MonoBehaviour,IHealth
     protected float attackSpeed = 2.0f;
     protected int hp = 100;
     protected int attack = 20;
-    protected float searchRange = 4f;
-    protected float attackRange = 2f;
+    const float stopRange = 0.1f;
+    protected const float searchRange = 4f;
+    const float attackRange = 2f;
 
     public Transform goalTr;
     public int Hp 
@@ -95,7 +96,7 @@ public class Unit : MonoBehaviour,IHealth
 
     virtual protected void MoveUpdate()
     {
-        if (agent.remainingDistance < 0.1f && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
+        if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
         {
 
             ChangeState(unitState.Idle);
