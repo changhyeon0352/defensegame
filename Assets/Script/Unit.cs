@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEditor;
 
 public class Unit : MonoBehaviour,IHealth
 {
@@ -96,13 +97,14 @@ public class Unit : MonoBehaviour,IHealth
 
     virtual protected void MoveUpdate()
     {
+        agent.SetDestination(goalTr.position);          //목표로 가기
+        SearchAndChase(searchRange);
         if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
         {
 
             ChangeState(unitState.Idle);
         }
-        agent.SetDestination(goalTr.position);          //목표로 가기
-        SearchAndChase(searchRange);
+        
         
 
     }
@@ -114,7 +116,6 @@ public class Unit : MonoBehaviour,IHealth
         }
         else
         {
-            agent.ResetPath();
             ChangeState(unitState.Move);
         }
         if (agent.remainingDistance<attackRange && !agent.pathPending)
@@ -139,10 +140,10 @@ public class Unit : MonoBehaviour,IHealth
             transform.LookAt(attackTargetTr);
             if (timeCount < 0)
             {
-                Transform enemyTr = SearchEnemy(attackRange);
-                if (enemyTr != null)
+                float distance=Vector3.SqrMagnitude(attackTargetTr.position-transform.position);
+                if (distance<attackRange*attackRange)
                 {
-                    attackTargetTr = enemyTr;
+                    
                     anim.SetTrigger("Attack");
                     timeCount = attackSpeed;
                 }
@@ -206,29 +207,32 @@ public class Unit : MonoBehaviour,IHealth
             case unitState.Idle:
                 break;
             case unitState.Move:
+                agent.ResetPath();
                 break;
             case unitState.Chase:
                 break;
             case unitState.Attack:
+                attackTargetTr = null;
+
                 break;
         }
         switch (newState)
         {
             case unitState.Idle:
                 anim.SetInteger("iState", 0);
-                agent.ResetPath();
                 break;
             case unitState.Move:
-                anim.SetInteger("iState", 1);
                 chaseTargetTr = null;
-                attackTargetTr = null;
+                anim.SetInteger("iState", 1);
+                agent.stoppingDistance = 0;
                 break;
             case unitState.Chase:
                 anim.SetInteger("iState", 1);
+                agent.stoppingDistance = attackRange;
                 break;
             case unitState.Attack:
                 anim.SetInteger("iState", 0);
-                timeCount = attackSpeed/2;
+                timeCount = attackSpeed/3;
                 attackTargetTr = chaseTargetTr;
                 chaseTargetTr = null;
                 break;
@@ -245,7 +249,7 @@ public class Unit : MonoBehaviour,IHealth
     
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, searchRange);
+        Handles.DrawWireDisc(transform.position, transform.up, searchRange);
     }
 
     
