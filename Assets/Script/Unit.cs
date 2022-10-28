@@ -34,13 +34,22 @@ public class Unit : MonoBehaviour,IHealth
             {
                 hp = 0;
                 //죽음
-                ChangeState(unitState.Dead);
-                Destroy(gameObject);
+                Die();
             }
             Debug.Log($"{transform.name}의 hp: {hp}");
             
         }
     }
+
+    virtual protected void Die()
+    {
+        GetComponent<Collider>().enabled = false;
+        agent.enabled = false;
+        ChangeState(unitState.Dead);
+        
+        //Destroy(gameObject);
+    }
+
     public int Attack { get => attack; set => attack=value; }
     public void TakeDamage(int damage)
     {
@@ -54,13 +63,6 @@ public class Unit : MonoBehaviour,IHealth
     }
     virtual protected void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            ChangeState(unitState.Move);
-        }
-        
-            
-
         switch (state)
         {
             case unitState.Idle:
@@ -146,6 +148,7 @@ public class Unit : MonoBehaviour,IHealth
                     
                     anim.SetTrigger("Attack");
                     timeCount = attackSpeed;
+                    attackTargetTr = null;
                 }
                 else
                 {
@@ -156,7 +159,15 @@ public class Unit : MonoBehaviour,IHealth
         }
         else
         {
-            ChangeState(unitState.Move);
+            Transform enemyTr = SearchEnemy(attackRange);
+            if(enemyTr!=null)
+            {
+                attackTargetTr = enemyTr;
+            }
+            else
+            {
+                ChangeState(unitState.Move);
+            }
         }
         
         

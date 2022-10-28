@@ -44,6 +44,24 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CameraRotateOnOff"",
+                    ""type"": ""Button"",
+                    ""id"": ""e33b86b5-1729-483c-bd1e-e0b0dc8ffa4d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraZoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""bc9f4279-f0f0-4578-80e0-dbd31defa80c"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -112,6 +130,28 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""CameraRotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e3c62f4-41df-469e-8a09-12671541834a"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotateOnOff"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""240ba89b-ca37-47be-8efa-11101ef0ed5f"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -120,24 +160,235 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             ""id"": ""c7aadc0e-47e6-4d72-a8a8-2c4f8cd1e8fe"",
             ""actions"": [
                 {
-                    ""name"": ""MouseMove"",
+                    ""name"": ""NewUnitGroup"",
+                    ""type"": ""Button"",
+                    ""id"": ""63b8ae0b-47bc-407f-9863-76442e02da37"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""scrollUpDown"",
                     ""type"": ""Value"",
-                    ""id"": ""513f5141-67b4-483e-8a49-9aeba6b8717c"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""id"": ""a2f8055c-c67f-4018-929f-fdc29243625d"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RotateUnitGroup"",
+                    ""type"": ""Value"",
+                    ""id"": ""4b9cba86-49eb-48b1-8178-1af57f6b2f24"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""41b3e08d-2428-403d-80ce-eeb847003fc8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ReSetting"",
+                    ""type"": ""Button"",
+                    ""id"": ""4593cc3c-cd7e-4737-bc6d-bd7a4c2dcd91"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchRow"",
+                    ""type"": ""Button"",
+                    ""id"": ""053bf4f0-d9c6-4fbc-8b7d-8b9b09a233df"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""d0cbd7c1-0690-4a79-869f-1c289aedf4cb"",
-                    ""path"": ""<Mouse>/position"",
+                    ""id"": ""cd037e39-09e1-488e-aa8e-703615c3725e"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MouseMove"",
+                    ""action"": ""NewUnitGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23c3e38a-b9de-4ad4-a15d-bc77ae49cae4"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""scrollUpDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""dab6e51b-82a5-4825-8040-a35794070379"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateUnitGroup"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""f8ac8ea2-6f8b-4961-9d4c-0c0231bd5496"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateUnitGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""8f6c317f-8f10-41a9-b5c7-e1a98bc544d7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateUnitGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f9e05e2-9ebd-4da6-8c5b-a387c091a19c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5be3a913-d85d-4002-86df-6465d463fcca"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReSetting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""be2fc703-1f7a-43cc-8f63-6f15c8a48a0c"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchRow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63ca5f40-7439-4ebf-9b07-3add6bead423"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchRow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""304f0050-d6b7-4650-bc54-881212c589f6"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchRow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d9f60cf-11be-4533-8b7b-20b0f3c36daf"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchRow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Test"",
+            ""id"": ""6f988005-0680-4377-a4b3-50e406b2fdb5"",
+            ""actions"": [
+                {
+                    ""name"": ""CameraStop"",
+                    ""type"": ""Button"",
+                    ""id"": ""178f1cea-74ac-489d-b217-1ad6b9ae66cb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ecda2b5c-6a02-467d-bc5a-598e505c1de7"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraStop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Command"",
+            ""id"": ""ec32dbf4-cfac-47a6-9848-f75a2959fcbe"",
+            ""actions"": [
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""b4285c70-e16b-4eb7-a9b7-ab235d118973"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""28f94a1c-bc30-4ee4-ae40-eb59df0d4500"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -160,6 +411,22 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""pc"",
+            ""bindingGroup"": ""pc"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -167,9 +434,22 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_CameraMove = m_Camera.FindAction("CameraMove", throwIfNotFound: true);
         m_Camera_CameraRotate = m_Camera.FindAction("CameraRotate", throwIfNotFound: true);
+        m_Camera_CameraRotateOnOff = m_Camera.FindAction("CameraRotateOnOff", throwIfNotFound: true);
+        m_Camera_CameraZoom = m_Camera.FindAction("CameraZoom", throwIfNotFound: true);
         // Setting
         m_Setting = asset.FindActionMap("Setting", throwIfNotFound: true);
-        m_Setting_MouseMove = m_Setting.FindAction("MouseMove", throwIfNotFound: true);
+        m_Setting_NewUnitGroup = m_Setting.FindAction("NewUnitGroup", throwIfNotFound: true);
+        m_Setting_scrollUpDown = m_Setting.FindAction("scrollUpDown", throwIfNotFound: true);
+        m_Setting_RotateUnitGroup = m_Setting.FindAction("RotateUnitGroup", throwIfNotFound: true);
+        m_Setting_Click = m_Setting.FindAction("Click", throwIfNotFound: true);
+        m_Setting_ReSetting = m_Setting.FindAction("ReSetting", throwIfNotFound: true);
+        m_Setting_SwitchRow = m_Setting.FindAction("SwitchRow", throwIfNotFound: true);
+        // Test
+        m_Test = asset.FindActionMap("Test", throwIfNotFound: true);
+        m_Test_CameraStop = m_Test.FindAction("CameraStop", throwIfNotFound: true);
+        // Command
+        m_Command = asset.FindActionMap("Command", throwIfNotFound: true);
+        m_Command_Click = m_Command.FindAction("Click", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -231,12 +511,16 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private ICameraActions m_CameraActionsCallbackInterface;
     private readonly InputAction m_Camera_CameraMove;
     private readonly InputAction m_Camera_CameraRotate;
+    private readonly InputAction m_Camera_CameraRotateOnOff;
+    private readonly InputAction m_Camera_CameraZoom;
     public struct CameraActions
     {
         private @PlayerInput m_Wrapper;
         public CameraActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @CameraMove => m_Wrapper.m_Camera_CameraMove;
         public InputAction @CameraRotate => m_Wrapper.m_Camera_CameraRotate;
+        public InputAction @CameraRotateOnOff => m_Wrapper.m_Camera_CameraRotateOnOff;
+        public InputAction @CameraZoom => m_Wrapper.m_Camera_CameraZoom;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -252,6 +536,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @CameraRotate.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotate;
                 @CameraRotate.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotate;
                 @CameraRotate.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotate;
+                @CameraRotateOnOff.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotateOnOff;
+                @CameraRotateOnOff.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotateOnOff;
+                @CameraRotateOnOff.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotateOnOff;
+                @CameraZoom.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraZoom;
+                @CameraZoom.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraZoom;
+                @CameraZoom.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraZoom;
             }
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -262,6 +552,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @CameraRotate.started += instance.OnCameraRotate;
                 @CameraRotate.performed += instance.OnCameraRotate;
                 @CameraRotate.canceled += instance.OnCameraRotate;
+                @CameraRotateOnOff.started += instance.OnCameraRotateOnOff;
+                @CameraRotateOnOff.performed += instance.OnCameraRotateOnOff;
+                @CameraRotateOnOff.canceled += instance.OnCameraRotateOnOff;
+                @CameraZoom.started += instance.OnCameraZoom;
+                @CameraZoom.performed += instance.OnCameraZoom;
+                @CameraZoom.canceled += instance.OnCameraZoom;
             }
         }
     }
@@ -270,12 +566,22 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     // Setting
     private readonly InputActionMap m_Setting;
     private ISettingActions m_SettingActionsCallbackInterface;
-    private readonly InputAction m_Setting_MouseMove;
+    private readonly InputAction m_Setting_NewUnitGroup;
+    private readonly InputAction m_Setting_scrollUpDown;
+    private readonly InputAction m_Setting_RotateUnitGroup;
+    private readonly InputAction m_Setting_Click;
+    private readonly InputAction m_Setting_ReSetting;
+    private readonly InputAction m_Setting_SwitchRow;
     public struct SettingActions
     {
         private @PlayerInput m_Wrapper;
         public SettingActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MouseMove => m_Wrapper.m_Setting_MouseMove;
+        public InputAction @NewUnitGroup => m_Wrapper.m_Setting_NewUnitGroup;
+        public InputAction @scrollUpDown => m_Wrapper.m_Setting_scrollUpDown;
+        public InputAction @RotateUnitGroup => m_Wrapper.m_Setting_RotateUnitGroup;
+        public InputAction @Click => m_Wrapper.m_Setting_Click;
+        public InputAction @ReSetting => m_Wrapper.m_Setting_ReSetting;
+        public InputAction @SwitchRow => m_Wrapper.m_Setting_SwitchRow;
         public InputActionMap Get() { return m_Wrapper.m_Setting; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -285,20 +591,116 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_SettingActionsCallbackInterface != null)
             {
-                @MouseMove.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnMouseMove;
-                @MouseMove.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnMouseMove;
-                @MouseMove.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnMouseMove;
+                @NewUnitGroup.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnNewUnitGroup;
+                @NewUnitGroup.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnNewUnitGroup;
+                @NewUnitGroup.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnNewUnitGroup;
+                @scrollUpDown.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnScrollUpDown;
+                @scrollUpDown.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnScrollUpDown;
+                @scrollUpDown.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnScrollUpDown;
+                @RotateUnitGroup.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnRotateUnitGroup;
+                @RotateUnitGroup.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnRotateUnitGroup;
+                @RotateUnitGroup.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnRotateUnitGroup;
+                @Click.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnClick;
+                @Click.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnClick;
+                @Click.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnClick;
+                @ReSetting.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnReSetting;
+                @ReSetting.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnReSetting;
+                @ReSetting.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnReSetting;
+                @SwitchRow.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
+                @SwitchRow.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
+                @SwitchRow.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
             }
             m_Wrapper.m_SettingActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @MouseMove.started += instance.OnMouseMove;
-                @MouseMove.performed += instance.OnMouseMove;
-                @MouseMove.canceled += instance.OnMouseMove;
+                @NewUnitGroup.started += instance.OnNewUnitGroup;
+                @NewUnitGroup.performed += instance.OnNewUnitGroup;
+                @NewUnitGroup.canceled += instance.OnNewUnitGroup;
+                @scrollUpDown.started += instance.OnScrollUpDown;
+                @scrollUpDown.performed += instance.OnScrollUpDown;
+                @scrollUpDown.canceled += instance.OnScrollUpDown;
+                @RotateUnitGroup.started += instance.OnRotateUnitGroup;
+                @RotateUnitGroup.performed += instance.OnRotateUnitGroup;
+                @RotateUnitGroup.canceled += instance.OnRotateUnitGroup;
+                @Click.started += instance.OnClick;
+                @Click.performed += instance.OnClick;
+                @Click.canceled += instance.OnClick;
+                @ReSetting.started += instance.OnReSetting;
+                @ReSetting.performed += instance.OnReSetting;
+                @ReSetting.canceled += instance.OnReSetting;
+                @SwitchRow.started += instance.OnSwitchRow;
+                @SwitchRow.performed += instance.OnSwitchRow;
+                @SwitchRow.canceled += instance.OnSwitchRow;
             }
         }
     }
     public SettingActions @Setting => new SettingActions(this);
+
+    // Test
+    private readonly InputActionMap m_Test;
+    private ITestActions m_TestActionsCallbackInterface;
+    private readonly InputAction m_Test_CameraStop;
+    public struct TestActions
+    {
+        private @PlayerInput m_Wrapper;
+        public TestActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @CameraStop => m_Wrapper.m_Test_CameraStop;
+        public InputActionMap Get() { return m_Wrapper.m_Test; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TestActions set) { return set.Get(); }
+        public void SetCallbacks(ITestActions instance)
+        {
+            if (m_Wrapper.m_TestActionsCallbackInterface != null)
+            {
+                @CameraStop.started -= m_Wrapper.m_TestActionsCallbackInterface.OnCameraStop;
+                @CameraStop.performed -= m_Wrapper.m_TestActionsCallbackInterface.OnCameraStop;
+                @CameraStop.canceled -= m_Wrapper.m_TestActionsCallbackInterface.OnCameraStop;
+            }
+            m_Wrapper.m_TestActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @CameraStop.started += instance.OnCameraStop;
+                @CameraStop.performed += instance.OnCameraStop;
+                @CameraStop.canceled += instance.OnCameraStop;
+            }
+        }
+    }
+    public TestActions @Test => new TestActions(this);
+
+    // Command
+    private readonly InputActionMap m_Command;
+    private ICommandActions m_CommandActionsCallbackInterface;
+    private readonly InputAction m_Command_Click;
+    public struct CommandActions
+    {
+        private @PlayerInput m_Wrapper;
+        public CommandActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Click => m_Wrapper.m_Command_Click;
+        public InputActionMap Get() { return m_Wrapper.m_Command; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CommandActions set) { return set.Get(); }
+        public void SetCallbacks(ICommandActions instance)
+        {
+            if (m_Wrapper.m_CommandActionsCallbackInterface != null)
+            {
+                @Click.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnClick;
+                @Click.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnClick;
+                @Click.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnClick;
+            }
+            m_Wrapper.m_CommandActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Click.started += instance.OnClick;
+                @Click.performed += instance.OnClick;
+                @Click.canceled += instance.OnClick;
+            }
+        }
+    }
+    public CommandActions @Command => new CommandActions(this);
     private int m_NewcontrolschemeSchemeIndex = -1;
     public InputControlScheme NewcontrolschemeScheme
     {
@@ -308,13 +710,37 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_NewcontrolschemeSchemeIndex];
         }
     }
+    private int m_pcSchemeIndex = -1;
+    public InputControlScheme pcScheme
+    {
+        get
+        {
+            if (m_pcSchemeIndex == -1) m_pcSchemeIndex = asset.FindControlSchemeIndex("pc");
+            return asset.controlSchemes[m_pcSchemeIndex];
+        }
+    }
     public interface ICameraActions
     {
         void OnCameraMove(InputAction.CallbackContext context);
         void OnCameraRotate(InputAction.CallbackContext context);
+        void OnCameraRotateOnOff(InputAction.CallbackContext context);
+        void OnCameraZoom(InputAction.CallbackContext context);
     }
     public interface ISettingActions
     {
-        void OnMouseMove(InputAction.CallbackContext context);
+        void OnNewUnitGroup(InputAction.CallbackContext context);
+        void OnScrollUpDown(InputAction.CallbackContext context);
+        void OnRotateUnitGroup(InputAction.CallbackContext context);
+        void OnClick(InputAction.CallbackContext context);
+        void OnReSetting(InputAction.CallbackContext context);
+        void OnSwitchRow(InputAction.CallbackContext context);
+    }
+    public interface ITestActions
+    {
+        void OnCameraStop(InputAction.CallbackContext context);
+    }
+    public interface ICommandActions
+    {
+        void OnClick(InputAction.CallbackContext context);
     }
 }

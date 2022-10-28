@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Ally
   - Monster
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - UI
   - Ground
   - Monster
-  - 
+  - effect
   - 
   - 
   - 
