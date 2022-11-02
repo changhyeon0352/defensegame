@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-	public class Bow_Load_Shot : MonoBehaviour
+	public class BowLoadShot : MonoBehaviour
 	{
 	   
 		public Transform bow;

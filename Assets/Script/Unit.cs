@@ -242,13 +242,13 @@ public class Unit : MonoBehaviour,IHealth
                 agent.stoppingDistance = attackRange;
                 break;
             case UnitState.Attack:
-                anim.SetInteger("iState", 0);
+                anim.SetInteger("iState", 2);
                 timeCount = attackSpeed/3;
                 attackTargetTr = chaseTargetTr;
                 chaseTargetTr = null;
                 break;
             case UnitState.Dead:
-                anim.SetInteger("iState", 3);
+                anim.SetBool("isDead", true);
                 break;
             default:
                 break;

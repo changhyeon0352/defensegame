@@ -15,16 +15,7 @@ public class AllyUnit : Unit
             selectedMark.SetActive(isSelectedUnit);
         }
     }
-    protected override void Awake()
-    {
-        base.Awake();
-
-    }
-    protected override void Update()
-    {
-        base.Update();
-        
-    }
+    
     public void ChargeToEnemy()
     {
         int multipleNum = 2;

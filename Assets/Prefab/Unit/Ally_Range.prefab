@@ -2106,8 +2106,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 430410}
-  - component: {fileID: 683032339152783975}
-  - component: {fileID: 1119090411}
+  - component: {fileID: 5095714225329788553}
+  - component: {fileID: 2043105617243096268}
   - component: {fileID: 9593232}
   - component: {fileID: 8430469705054338826}
   - component: {fileID: 7331461338978706186}
@@ -2139,11 +2139,10 @@ Transform:
   - {fileID: 451500}
   - {fileID: 656618282}
   - {fileID: 4772200002249250835}
-  - {fileID: 137062246305561674}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &683032339152783975
+--- !u!114 &5095714225329788553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2152,7 +2151,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 169604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67d18e7a9d029004c812d2bb7cc9aa55, type: 3}
+  m_Script: {fileID: 11500000, guid: a93f042a32cbedd43b9a28ad91c04836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyLayer:
@@ -2160,7 +2159,8 @@ MonoBehaviour:
     m_Bits: 128
   goalTr: {fileID: 0}
   selectedMark: {fileID: 4772200002249250832}
---- !u!114 &1119090411
+  shotRange: 10
+--- !u!114 &2043105617243096268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2169,7 +2169,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 169604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2289541da6550c45bdcdbd207454893, type: 3}
+  m_Script: {fileID: 11500000, guid: d2bb2e811ccd8044a8b758101d70852b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bow: {fileID: 730593118286093388}
@@ -2178,8 +2178,8 @@ MonoBehaviour:
   arrowToDraw: {fileID: 7102917065288276202}
   arrowToShoot: {fileID: 79862129729574746, guid: a7eb1ac063f66f24f81e703a0d397f8d,
     type: 3}
-  shotAngle: 10
-  accuracy: 1
+  shotAngle: 45
+  accuracy: 0.5
   target: {fileID: 0}
 --- !u!95 &9593232
 Animator:
@@ -2191,7 +2191,7 @@ Animator:
   m_GameObject: {fileID: 169604}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d288a0e4a2d923b46898986e979da643, type: 3}
-  m_Controller: {fileID: 9100000, guid: 495c7a295e611b7459086b9b290bd2d8, type: 2}
+  m_Controller: {fileID: 9100000, guid: ef49463d53f4d3a47ba7c6ea86367afc, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3684,37 +3684,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6587928340562525823
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 137062246305561674}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &137062246305561674
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6587928340562525823}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.2875537, y: 0.18372196, z: -2.487193}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 430410}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8579277943269953347
 GameObject:
   m_ObjectHideFlags: 0
