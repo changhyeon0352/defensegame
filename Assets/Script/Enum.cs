@@ -2,11 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum unitState
+public enum UnitState
 {
     Idle=0,
     Move,
     Chase,
     Attack,
     Dead
+}
+public enum UnitShader
+{
+    normalShader = 0,
+    transparentShader
+}
+public enum UnitType
+{
+    meleeSoldier = 0,
+    rangeSoldier,
+    warrior,
+    mage,
+}
+[System.Flags]
+public enum SkillAvailable:byte
+{
+    None        = 0b0000_0000,
+    MoveToSpot  = 0b0000_0001,
+    Charge      = 0b0000_0010,
+    Shoot       = 0b_0000_0100
+        //
 }

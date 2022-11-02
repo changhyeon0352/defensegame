@@ -6,7 +6,7 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Animator Override Controller
+  m_Name: Melee Animator
   m_Controller: {fileID: 9100000, guid: 85a5aae5d6939c44099135a6d3ec9dd2, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: d9f309750859d70499c357d934a2a8dd, type: 3}

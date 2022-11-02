@@ -5,16 +5,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
-public enum unitShader
-{
-    normalShader=0,
-    transparentShader
-}
+
     
 
 public class SettingMgr : MonoBehaviour
 {
-    public GameObject meleeUnitPrefab;
+    public GameObject[] unitPrefabs;
+    private GameObject spawnUnitPrefab;
     public GameObject unitGroupPrefab;
     PlayerInput inputActions;
 
@@ -104,9 +101,9 @@ public class SettingMgr : MonoBehaviour
     {
         CompleteUnitSetting();
         inputActions.Setting.Click.Disable();
-        inputActions.Camera.CameraZoom.Enable();
         inputActions.Setting.scrollUpDown.Disable();
         inputActions.Setting.ReSetting.Enable();
+        inputActions.Command.Click.Enable();
     }
     private void OnRotateUnitGroup(InputAction.CallbackContext obj)
     {
@@ -115,28 +112,32 @@ public class SettingMgr : MonoBehaviour
     private void OnStartSetting(InputAction.CallbackContext _)
     {
         
-        if (unitSetList.Count == 0)
+        if (unitSetList.Count == 0&&spawnUnitPrefab!=null)
         {
             GameObject obj = Instantiate(unitGroupPrefab, Vector3.zero, Quaternion.identity);
             unitGroupTr = obj.transform;
             unitGroupTr.parent = transform;
             num_row = 1;
             AddUnitRow();
-            inputActions.Camera.CameraZoom.Disable();
             inputActions.Setting.scrollUpDown.Enable();
+            inputActions.Setting.Click.Enable();
+            inputActions.Command.Click.Disable();
         }
-        inputActions.Setting.Click.Enable();
+        
     }
     private void OnscrollUpDown(InputAction.CallbackContext obj)
     {
-        float scroll = obj.ReadValue<float>();
-        if (scroll < 0)
+        if (!Input.GetKey(KeyCode.LeftShift))
         {
-            RemoveLastRow();
-        }
-        else
-        {
-            AddUnitRow();
+            float scroll = obj.ReadValue<float>();
+            if (scroll < 0)
+            {
+                RemoveLastRow();
+            }
+            else
+            {
+                AddUnitRow();
+            }
         }
     }
     private void OnResetting(InputAction.CallbackContext _)
@@ -157,12 +158,17 @@ public class SettingMgr : MonoBehaviour
             }
             if (unitGroupTr != null && unitGroupTr.childCount == unitSetList.Count)
             {
-                ShaderChange(unitShader.transparentShader);
+                ShaderChange(UnitShader.transparentShader);
             }
             inputActions.Setting.Click.Enable();
             inputActions.Setting.ReSetting.Disable();
+            inputActions.Command.Click.Disable();
         }
         
+    }
+    public void SelectSpawnUnitType(int i)
+    {
+        spawnUnitPrefab = unitPrefabs[i];
     }
     // 로컬 함수====================================================
     
@@ -217,11 +223,11 @@ public class SettingMgr : MonoBehaviour
             spot.transform.parent = obj.transform;
             Unit unit = unitGroupTr.GetChild(i).GetComponent<Unit>();
             unit.goalTr = spot.transform;
-            unit.ChangeState(unitState.Move);
+            unit.ChangeState(UnitState.Move);
         }
         obj.transform.parent = unitGroupTr;
 
-        ShaderChange(unitShader.normalShader);
+        ShaderChange(UnitShader.normalShader);
 
         unitGroupTr.parent = transform.parent;//원래 이거자식이 unitGroupTr인데 형제로 격상
         unitSetList.Clear();
@@ -257,8 +263,8 @@ public class SettingMgr : MonoBehaviour
     {
         for(int i=0;i<num_row;i++)
         {
-            GameObject obj = Instantiate(meleeUnitPrefab, unitGroupTr);
-            ShaderChange(unitShader.transparentShader);
+            GameObject obj = Instantiate(spawnUnitPrefab, unitGroupTr);
+            ShaderChange(UnitShader.transparentShader);
             unitSetList.Add(obj);
         }
     }
@@ -281,7 +287,7 @@ public class SettingMgr : MonoBehaviour
             Destroy(obj);
         }
     }
-    void ShaderChange(unitShader _type)
+    void ShaderChange(UnitShader _type)
     {
         SkinnedMeshRenderer[] skinRen = unitGroupTr.GetComponentsInChildren<SkinnedMeshRenderer>();
 
@@ -289,7 +295,7 @@ public class SettingMgr : MonoBehaviour
         for (int i = 0; i < skinRen.Length; i++)
         {
             skinRen[i].material.SetInt("_IsSpawning", (int)_type);
-            if(_type==unitShader.transparentShader)
+            if(_type==UnitShader.transparentShader)
             {
                 skinRen[i].material.SetFloat("_Alpha",0.2f);
             }

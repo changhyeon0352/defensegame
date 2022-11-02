@@ -2,17 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public enum CommandType
-{
-    moveToGoal=0,
-    Charge
-}
+
 
 public class CommandMgr : MonoBehaviour
 {
+    public GameObject[] skillIndicatorPrefabs;
     List<UnitGroup> seletedGroupList = null;
     PlayerInput inputActions;
     public List<UnitGroup> SelectedGroupList
@@ -45,37 +41,43 @@ public class CommandMgr : MonoBehaviour
         {
             ClickGroup();
         }
+        //유닛 그룹에 스킬 교집합 체크 스킬넘버배열을 넘겨주자
+        //스킬 사용가능여부 비트연산자 이용할것
+        SkillAvailable groupsSkills = ~SkillAvailable.None;
+        foreach(UnitGroup selectGroup in seletedGroupList)
+        {
+            groupsSkills &= selectGroup.GroupSkill;
+        }
+        if(seletedGroupList.Count>0)
+        {
+            GameMgr.Instance.uiMgr.SetButtonAvailable(groupsSkills);
+        }
+        
     }
 
     public void ClearSelect()
     {
         seletedGroupList.Clear();
+        GameMgr.Instance.uiMgr.ClearSkillButton();
     }
     private void ClickGroup()
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
         {
-            if (EventSystem.current.IsPointerOverGameObject() == false)
+            ClearSelect();
+            UnitGroup unitGroup = hit.transform.parent.GetComponent<UnitGroup>();
+            if (unitGroup != null)
             {
-                ClearSelect();
-                UnitGroup unitGroup = hit.transform.parent.GetComponent<UnitGroup>();
-                if (unitGroup != null)
-                {
-                    seletedGroupList.Add(unitGroup);
-                }
+                seletedGroupList.Add(unitGroup);
             }
-                    
         }
-        else if (Physics.Raycast(ray, out RaycastHit hit1, 1000.0f, LayerMask.GetMask("Ground")))
+        else
         {
-            if (EventSystem.current.IsPointerOverGameObject() == false)
-            {
-                ClearSelect();
-            }
+            ClearSelect();
         }
         
-            AllCheckSelected();
+        AllCheckSelected();
     }
     private void ShiftClickGroup()
     {
@@ -110,9 +112,9 @@ public class CommandMgr : MonoBehaviour
 
     public void UnitCommand(int command)
     {
-        UnitCommand((CommandType)command);
+        UnitCommand((SkillAvailable)command);
     }
-    public void UnitCommand(CommandType command )
+    public void UnitCommand(SkillAvailable command )
     {
         foreach (UnitGroup unitGroup in seletedGroupList)
         {
@@ -121,10 +123,10 @@ public class CommandMgr : MonoBehaviour
             {
                 switch (command)
                 {
-                    case(CommandType.moveToGoal):
-                        unit.ChangeState(unitState.Move);
+                    case(SkillAvailable.MoveToSpot):
+                        unit.ChangeState(UnitState.Move);
                         break;
-                    case (CommandType.Charge):
+                    case (SkillAvailable.Charge):
                         unit.ChargeToEnemy();
                         break;
                 }

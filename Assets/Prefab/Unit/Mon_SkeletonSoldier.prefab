@@ -526,7 +526,7 @@ GameObject:
   - component: {fileID: 8614961877638879888}
   - component: {fileID: 1946232293}
   m_Layer: 7
-  m_Name: ma017_UndeadGuard_1
+  m_Name: Mon_SkeletonSoldier
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

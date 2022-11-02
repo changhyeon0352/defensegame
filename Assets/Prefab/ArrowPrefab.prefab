@@ -50,7 +50,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowDamage: 10
   gravityForce: 20
-  accuracy: 0.8
 --- !u!54 &1094327036315249582
 Rigidbody:
   m_ObjectHideFlags: 0

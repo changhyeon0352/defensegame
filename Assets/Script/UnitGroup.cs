@@ -2,18 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum UnitType
-{
-    meleeSoldier=0,
-    rangeSoldier,
-    warrior,
-    mage,
 
-}
 public class UnitGroup:MonoBehaviour
 {
     List<AllyUnit> unitList;
     UnitType unitType;
+    SkillAvailable groupSkill =SkillAvailable.None;
+
+    public SkillAvailable GroupSkill { get => groupSkill; }
 
     private void Awake()
     {
@@ -37,9 +33,23 @@ public class UnitGroup:MonoBehaviour
             AllyUnit allyUnit = transform.GetChild(i).GetComponent<AllyUnit>();
             unitList.Add(allyUnit);
         }
+        tag = transform.GetChild(0).tag;
+        SetAvailableSkills();
     }
     public void RemoveUnitFromList(AllyUnit unit)
     {
         unitList.Remove(unit);
+    }
+    private void SetAvailableSkills()
+    {
+        if (CompareTag("Melee"))
+        {
+            groupSkill |= SkillAvailable.MoveToSpot;
+            groupSkill |= SkillAvailable.Charge;
+        }
+        else if (CompareTag("Range"))
+        {
+            groupSkill |= SkillAvailable.Shoot;
+        }
     }
 }

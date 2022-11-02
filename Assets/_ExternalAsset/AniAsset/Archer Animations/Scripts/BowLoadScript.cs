@@ -1,16 +1,5 @@
-///////////////////////////////////////////////////////////////////////////
-//  Archer Animations - BowLoadScript                                    //
-//  Kevin Iglesias - https://www.keviniglesias.com/     			     //
-//  Contact Support: support@keviniglesias.com                           //
-///////////////////////////////////////////////////////////////////////////
-
-// This script makes the bow animate when pulling arrow, also it makes thes
-// arrow look ready to shot when drawing it from the quivers.
-
-// To do the pulling animation, the bow mesh needs a blenshape named 'Load' 
-// and the character needs an empty Gameobject in your Unity scene named 
-// 'ArrowLoad' as a child, see character dummies hierarchy from the demo 
-// scene as example. More information at Documentation PDF file.
+//활을 쏘는 애니메이션이 실행될때 모션에 따라 취하는 행동
+//활이 휘어지게 화살이 나오게 화살을 목표에 쏘게
 
 using System.Collections;
 using System.Collections.Generic;
@@ -31,7 +20,7 @@ namespace KevinIglesias {
 		public Transform arrowToDraw;  //화살 쏘는척 할꺼 
 		public GameObject arrowToShoot; //화살 쏠꺼
         bool isShootingEnd = true;
-
+        public float shotAngle=45;
         [SerializeField] float accuracy = 0f;
         public Transform target;
         Transform correctionTarget;
@@ -66,7 +55,7 @@ namespace KevinIglesias {
                     correctionTarget = obj.transform;
                     correctionTarget.parent = target;
                 }
-                transform.LookAt(correctionTarget);
+                transform.forward = new Vector3(correctionTarget.position.x-transform.position.x,0,correctionTarget.position.z-transform.position.z);
 
                 //Bow blendshape animation 오른팔을 뒤로 뺄수록 활이 휘어짐
                 if (bowSkinnedMeshRenderer != null && bow != null && arrowLoad != null)
@@ -100,7 +89,9 @@ namespace KevinIglesias {
                             aTr.parent = null;
                             aTr.forward = transform.forward;
 
-                            aTr.rotation *= Quaternion.Euler(new Vector3(-45, 0, 0));
+                            //aTr.rotation *= Quaternion.Euler(new Vector3(-45, 0, 0));
+                            aTr.rotation *= Quaternion.Euler(new Vector3(-shotAngle, 0, 0));
+                            
                             float distance = Vector2.Distance(new Vector2(aTr.position.x, aTr.position.z),
                                 new Vector2(target.position.x, target.position.z));
                             float deltaH = aTr.position.y - target.position.y;
@@ -110,6 +101,7 @@ namespace KevinIglesias {
                             arrow.MakeNoise(noise);
                             arrowToDraw.gameObject.SetActive(false);
                             arrowOnHand = false;
+                            //Time.timeScale = 0.001f;
                         }
                     }
                     if (arrowLoad.localPosition == Vector3.zero)
@@ -120,11 +112,29 @@ namespace KevinIglesias {
             }
 		
 		}
-        public float GetArrowVelocity(float distance, float deltaH, float gravityForce)
+        public float GetArrowVelocity(float L, float dH, float g)
         {
-            Debug.Log($"distance:{distance},H:{deltaH},gravity:{gravityForce}   ");
-            float vel = 0;
-            vel=Mathf.Sqrt(gravityForce*distance*distance/(distance+deltaH));
+            float vel;
+            //float sin2theta = Mathf.Sin(2 * shotAngle * Mathf.Deg2Rad);
+            //vel = Mathf.Sqrt(g * L * L / ((L + dH) * sin2theta));
+            float cos=Mathf.Cos(shotAngle*Mathf.Deg2Rad);
+            float sin = Mathf.Sin(shotAngle * Mathf.Deg2Rad);
+            //float a = sin2 * sin2 / 4 * (1 - 1 / (g * g));
+            //float b = (2 * g * dH * cos * cos - L * sin2 / g);
+            //float c = -L * L;
+
+            //if (dH>0)
+            //{
+            //    vel=Mathf.Sqrt((-b + Mathf.Sqrt(b * b - 4 * a * c)) / (2 * a));
+            //    Debug.Log($"dh가 양수임{vel}");
+            //}
+            //else
+            //{
+            //    vel = Mathf.Sqrt((-b - Mathf.Sqrt(b * b - 4 * a * c)) / (2 * a));
+            //    Debug.Log($"dh가 음수임{vel}");
+            //}
+            vel = Mathf.Sqrt((g * g * L * L) / (cos * cos) / (2 * g * L * sin / cos + 2 * g * (dH)));
+
             return vel;
         }
 	}

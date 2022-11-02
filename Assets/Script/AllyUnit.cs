@@ -15,20 +15,13 @@ public class AllyUnit : Unit
             selectedMark.SetActive(isSelectedUnit);
         }
     }
+    protected override void Awake()
+    {
+        base.Awake();
+
+    }
     protected override void Update()
     {
-        //if(isSelectedUnit)
-        //{
-        //    if (Input.GetKey(KeyCode.X))
-        //    {
-        //        ChargeToEnemy();
-        //    }
-        //    if(Input.GetKey(KeyCode.Z))
-        //    {
-        //        ChangeState(unitState.Move);
-        //    }
-        //}
-        
         base.Update();
         
     }
@@ -39,7 +32,7 @@ public class AllyUnit : Unit
         {
             if (SearchAndChase(searchRange*multipleNum))
             {
-                ChangeState(unitState.Chase);
+                ChangeState(UnitState.Chase);
                 break;
             }
             multipleNum *= multipleNum;
@@ -53,4 +46,5 @@ public class AllyUnit : Unit
         transform.parent = null;
         base.Die();
     }
+    
 }

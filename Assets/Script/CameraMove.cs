@@ -46,8 +46,12 @@ public class CameraMove : MonoBehaviour
 
     private void OnCameraZoom(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        float y = obj.ReadValue<float>();
-        transform.position += Vector3.up * -y * zoomSpeed ;
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            float y = obj.ReadValue<float>();
+            transform.position += Vector3.up * -y * zoomSpeed;
+        }
+            
     }
 
     private void OnCameraRotateOff(UnityEngine.InputSystem.InputAction.CallbackContext obj)

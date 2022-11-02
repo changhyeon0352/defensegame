@@ -12,7 +12,7 @@ public class Unit : MonoBehaviour,IHealth
     protected Animator anim;
     protected Transform chaseTargetTr;
     protected Transform attackTargetTr;
-    protected unitState state = unitState.Idle;
+    protected UnitState state = UnitState.Idle;
     public LayerMask enemyLayer;
 
     protected float timeCount;
@@ -45,7 +45,7 @@ public class Unit : MonoBehaviour,IHealth
     {
         GetComponent<Collider>().enabled = false;
         agent.enabled = false;
-        ChangeState(unitState.Dead);
+        ChangeState(UnitState.Dead);
         
         //Destroy(gameObject);
     }
@@ -65,19 +65,19 @@ public class Unit : MonoBehaviour,IHealth
     {
         switch (state)
         {
-            case unitState.Idle:
+            case UnitState.Idle:
                 IdleUpdate();
                 break;
-            case unitState.Move:
+            case UnitState.Move:
                 MoveUpdate();
                 break;
-            case unitState.Chase:
+            case UnitState.Chase:
                 ChaseUpdate();
                 break;
-            case unitState.Attack:
+            case UnitState.Attack:
                 AttackUpdate();
                 break;
-            case unitState.Dead:
+            case UnitState.Dead:
             default:
                 break;
         }
@@ -104,7 +104,7 @@ public class Unit : MonoBehaviour,IHealth
         if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
         {
 
-            ChangeState(unitState.Idle);
+            ChangeState(UnitState.Idle);
         }
         
         
@@ -118,11 +118,11 @@ public class Unit : MonoBehaviour,IHealth
         }
         else
         {
-            ChangeState(unitState.Move);
+            ChangeState(UnitState.Move);
         }
         if (agent.remainingDistance<attackRange && !agent.pathPending)
         {
-            ChangeState(unitState.Attack);
+            ChangeState(UnitState.Attack);
         }
     }
     public void MeleeAttack()
@@ -152,7 +152,7 @@ public class Unit : MonoBehaviour,IHealth
                 }
                 else
                 {
-                    ChangeState(unitState.Move);
+                    ChangeState(UnitState.Move);
                 }
 
             }
@@ -166,7 +166,7 @@ public class Unit : MonoBehaviour,IHealth
             }
             else
             {
-                ChangeState(unitState.Move);
+                ChangeState(UnitState.Move);
             }
         }
         
@@ -187,7 +187,7 @@ public class Unit : MonoBehaviour,IHealth
         if (enemyTr != null)
         {
             chaseTargetTr = enemyTr;                    //적을 표적으로
-            ChangeState(unitState.Chase);               //표적 추적으로 변경
+            ChangeState(UnitState.Chase);               //표적 추적으로 변경
             result = true;
         }
         return result;
@@ -211,43 +211,43 @@ public class Unit : MonoBehaviour,IHealth
     }
     
 
-    public void ChangeState(unitState newState)
+    public void ChangeState(UnitState newState)
     {
         switch (state)
         {
-            case unitState.Idle:
+            case UnitState.Idle:
                 break;
-            case unitState.Move:
+            case UnitState.Move:
                 agent.ResetPath();
                 break;
-            case unitState.Chase:
+            case UnitState.Chase:
                 break;
-            case unitState.Attack:
+            case UnitState.Attack:
                 attackTargetTr = null;
 
                 break;
         }
         switch (newState)
         {
-            case unitState.Idle:
+            case UnitState.Idle:
                 anim.SetInteger("iState", 0);
                 break;
-            case unitState.Move:
+            case UnitState.Move:
                 chaseTargetTr = null;
                 anim.SetInteger("iState", 1);
                 agent.stoppingDistance = 0;
                 break;
-            case unitState.Chase:
+            case UnitState.Chase:
                 anim.SetInteger("iState", 1);
                 agent.stoppingDistance = attackRange;
                 break;
-            case unitState.Attack:
+            case UnitState.Attack:
                 anim.SetInteger("iState", 0);
                 timeCount = attackSpeed/3;
                 attackTargetTr = chaseTargetTr;
                 chaseTargetTr = null;
                 break;
-            case unitState.Dead:
+            case UnitState.Dead:
                 anim.SetInteger("iState", 3);
                 break;
             default:

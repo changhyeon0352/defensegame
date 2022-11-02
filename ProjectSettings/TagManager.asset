@@ -8,6 +8,8 @@ TagManager:
   - Ally
   - Monster
   - FxTemporaire
+  - Melee
+  - Range
   layers:
   - Default
   - TransparentFX
