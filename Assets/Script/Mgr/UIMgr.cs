@@ -28,7 +28,7 @@ public class UIMgr : MonoBehaviour
         {
             commandImages.Add(commandUiTr.GetChild(i).GetComponent<Image>());
             commandButtons.Add(commandUiTr.GetChild(i).GetComponent<Button>());
-            int index = i;
+            int index =(int) Mathf.Pow(2, i);
             commandButtons[i].onClick.AddListener(() => GameMgr.Instance.CommandMgr.UnitCommand(index));
         }
         ClearSkillButton();

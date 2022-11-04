@@ -46,9 +46,10 @@ using UnityEngine;
 		{
             if(target != null)
             {
-                if(correctionTarget == null||correctionTarget!=target)
+                if(correctionTarget == null)
                 {
                     GameObject obj = new GameObject();
+                Debug.Log("계속 생성");
                     obj.transform.position=target.position;
                     obj.transform.Translate(transform.right * -0.25f);
                     correctionTarget = obj.transform;

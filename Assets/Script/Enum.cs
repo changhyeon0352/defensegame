@@ -17,7 +17,8 @@ public enum UnitShader
 }
 public enum UnitType
 {
-    meleeSoldier = 0,
+    none=0,
+    meleeSoldier,
     rangeSoldier,
     warrior,
     mage,

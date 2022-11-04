@@ -34,7 +34,11 @@ public class Unit : MonoBehaviour,IHealth
             {
                 hp = 0;
                 //죽음
-                Die();
+                if(state !=UnitState.Dead)
+                {
+                    Die();
+                }
+                
             }
             Debug.Log($"{transform.name}의 hp: {hp}");
             
@@ -248,7 +252,7 @@ public class Unit : MonoBehaviour,IHealth
                 chaseTargetTr = null;
                 break;
             case UnitState.Dead:
-                anim.SetBool("isDead", true);
+                anim.SetTrigger("isDead");
                 break;
             default:
                 break;

@@ -371,9 +371,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             ""id"": ""ec32dbf4-cfac-47a6-9848-f75a2959fcbe"",
             ""actions"": [
                 {
-                    ""name"": ""Click"",
+                    ""name"": ""Select"",
                     ""type"": ""Button"",
                     ""id"": ""b4285c70-e16b-4eb7-a9b7-ab235d118973"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""skillClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""3b7da92a-2cab-4673-ab97-925f9fe092e5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -388,7 +397,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Click"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1592ad38-0da6-4a32-8fac-59e35fbcba4a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""skillClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -449,7 +469,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Test_CameraStop = m_Test.FindAction("CameraStop", throwIfNotFound: true);
         // Command
         m_Command = asset.FindActionMap("Command", throwIfNotFound: true);
-        m_Command_Click = m_Command.FindAction("Click", throwIfNotFound: true);
+        m_Command_Select = m_Command.FindAction("Select", throwIfNotFound: true);
+        m_Command_skillClick = m_Command.FindAction("skillClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -672,12 +693,14 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     // Command
     private readonly InputActionMap m_Command;
     private ICommandActions m_CommandActionsCallbackInterface;
-    private readonly InputAction m_Command_Click;
+    private readonly InputAction m_Command_Select;
+    private readonly InputAction m_Command_skillClick;
     public struct CommandActions
     {
         private @PlayerInput m_Wrapper;
         public CommandActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Click => m_Wrapper.m_Command_Click;
+        public InputAction @Select => m_Wrapper.m_Command_Select;
+        public InputAction @skillClick => m_Wrapper.m_Command_skillClick;
         public InputActionMap Get() { return m_Wrapper.m_Command; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -687,16 +710,22 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_CommandActionsCallbackInterface != null)
             {
-                @Click.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnClick;
-                @Click.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnClick;
-                @Click.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnClick;
+                @Select.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSelect;
+                @skillClick.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
+                @skillClick.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
+                @skillClick.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
             }
             m_Wrapper.m_CommandActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Click.started += instance.OnClick;
-                @Click.performed += instance.OnClick;
-                @Click.canceled += instance.OnClick;
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
+                @skillClick.started += instance.OnSkillClick;
+                @skillClick.performed += instance.OnSkillClick;
+                @skillClick.canceled += instance.OnSkillClick;
             }
         }
     }
@@ -741,6 +770,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     }
     public interface ICommandActions
     {
-        void OnClick(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
+        void OnSkillClick(InputAction.CallbackContext context);
     }
 }

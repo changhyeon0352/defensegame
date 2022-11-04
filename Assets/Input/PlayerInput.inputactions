@@ -349,9 +349,18 @@
             "id": "ec32dbf4-cfac-47a6-9848-f75a2959fcbe",
             "actions": [
                 {
-                    "name": "Click",
+                    "name": "Select",
                     "type": "Button",
                     "id": "b4285c70-e16b-4eb7-a9b7-ab235d118973",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "skillClick",
+                    "type": "Button",
+                    "id": "3b7da92a-2cab-4673-ab97-925f9fe092e5",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -366,7 +375,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1592ad38-0da6-4a32-8fac-59e35fbcba4a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "skillClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -39,7 +39,9 @@ public class Arrow : MonoBehaviour
         {
             targetHP.TakeDamage(arrowDamage);
         }
-        transform.parent = other.transform;
+
+        
+        transform.parent = other.transform.Find("Root")?? other.transform.Find("Bip001")??other.transform;
         isFlying = false;
         rb.isKinematic = true;
         rb.useGravity = false;

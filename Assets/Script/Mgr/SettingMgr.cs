@@ -21,6 +21,7 @@ public class SettingMgr : MonoBehaviour
     private int     num_row;
     float dir = 0;
     private Transform unitGroupTr;
+    private UnitGroup unitGroup;
 
 
     private void Awake()
@@ -103,7 +104,7 @@ public class SettingMgr : MonoBehaviour
         inputActions.Setting.Click.Disable();
         inputActions.Setting.scrollUpDown.Disable();
         inputActions.Setting.ReSetting.Enable();
-        inputActions.Command.Click.Enable();
+        inputActions.Command.Select.Enable();
     }
     private void OnRotateUnitGroup(InputAction.CallbackContext obj)
     {
@@ -116,12 +117,13 @@ public class SettingMgr : MonoBehaviour
         {
             GameObject obj = Instantiate(unitGroupPrefab, Vector3.zero, Quaternion.identity);
             unitGroupTr = obj.transform;
+            unitGroup=obj.GetComponent<UnitGroup>();
             unitGroupTr.parent = transform;
             num_row = 1;
             AddUnitRow();
             inputActions.Setting.scrollUpDown.Enable();
             inputActions.Setting.Click.Enable();
-            inputActions.Command.Click.Disable();
+            inputActions.Command.Select.Disable();
         }
         
     }
@@ -145,24 +147,28 @@ public class SettingMgr : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
         {
-            unitGroupTr = hit.transform.parent;
+            unitGroupTr = hit.transform.parent.parent;
+            unitGroup = unitGroupTr.GetComponent<UnitGroup>();
             //unitspot제거
-            GameObject objDestroy = unitGroupTr.GetChild(unitGroupTr.childCount - 1).gameObject;
-            objDestroy.transform.parent = null;
-            Destroy(objDestroy);
+            
+            for(int i=0;i<unitGroup.spots.childCount;i++)
+            {
+                Destroy(unitGroup.spots.GetChild(i).gameObject);
+            }
+            
 
             unitGroupTr.parent = transform;
-            for (int i = 0; i < unitGroupTr.childCount; i++)
+            for (int i = 0; i < unitGroup.units.childCount; i++)
             {
-                unitSetList.Add(unitGroupTr.GetChild(i).gameObject);
+                unitSetList.Add(unitGroup.units.GetChild(i).gameObject);
             }
-            if (unitGroupTr != null && unitGroupTr.childCount == unitSetList.Count)
+            if (unitGroupTr != null && unitGroup.units.childCount == unitSetList.Count)
             {
                 ShaderChange(UnitShader.transparentShader);
             }
             inputActions.Setting.Click.Enable();
             inputActions.Setting.ReSetting.Disable();
-            inputActions.Command.Click.Disable();
+            inputActions.Command.Select.Disable();
         }
         
     }
@@ -211,28 +217,24 @@ public class SettingMgr : MonoBehaviour
 
     private void CompleteUnitSetting()
     {
-        GameObject obj = new GameObject();
-        obj.name = "unitSpots";
 
-        for (int i = 0; i < unitGroupTr.childCount; i++)
+        for (int i = 0; i < unitGroup.units.childCount; i++)
         {
             GameObject spot = new GameObject();
             spot.name = $"spot{i}";
-            spot.transform.position = unitGroupTr.GetChild(i).position;
+            spot.transform.position = unitGroup.units.GetChild(i).position;
             spot.transform.rotation = unitGroupTr.rotation;
-            spot.transform.parent = obj.transform;
-            Unit unit = unitGroupTr.GetChild(i).GetComponent<Unit>();
+            spot.transform.parent = unitGroup.spots;
+            Unit unit = unitGroup.units.GetChild(i).GetComponent<Unit>();
             unit.goalTr = spot.transform;
             unit.ChangeState(UnitState.Move);
         }
-        obj.transform.parent = unitGroupTr;
 
         ShaderChange(UnitShader.normalShader);
 
-        unitGroupTr.parent = transform.parent;//원래 이거자식이 unitGroupTr인데 형제로 격상
+        unitGroupTr.parent = unitGroup.AllyGroups;//원래 이거자식이 unitGroupTr인데 형제로 격상
         unitSetList.Clear();
-        UnitGroup unitgroup=unitGroupTr.GetComponent<UnitGroup>();
-        unitgroup.InitializeUnitList();
+        unitGroup.InitializeUnitList();
         unitGroupTr = null;
 
         
@@ -263,7 +265,7 @@ public class SettingMgr : MonoBehaviour
     {
         for(int i=0;i<num_row;i++)
         {
-            GameObject obj = Instantiate(spawnUnitPrefab, unitGroupTr);
+            GameObject obj = Instantiate(spawnUnitPrefab, unitGroup.units);
             ShaderChange(UnitShader.transparentShader);
             unitSetList.Add(obj);
         }
@@ -289,7 +291,7 @@ public class SettingMgr : MonoBehaviour
     }
     void ShaderChange(UnitShader _type)
     {
-        SkinnedMeshRenderer[] skinRen = unitGroupTr.GetComponentsInChildren<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer[] skinRen = unitGroup.units.GetComponentsInChildren<SkinnedMeshRenderer>();
 
 
         for (int i = 0; i < skinRen.Length; i++)

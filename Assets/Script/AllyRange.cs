@@ -42,4 +42,10 @@ public class AllyRange : AllyUnit
             ChangeState(UnitState.Idle);
         }
     }
+
+    public void SetNewTarget(Transform targetTr)
+    {
+        bowLoadShot.target = targetTr;
+        ChangeState(UnitState.Attack);
+    }
 }

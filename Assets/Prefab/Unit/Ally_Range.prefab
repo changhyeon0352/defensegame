@@ -2178,7 +2178,7 @@ MonoBehaviour:
   arrowToDraw: {fileID: 7102917065288276202}
   arrowToShoot: {fileID: 79862129729574746, guid: a7eb1ac063f66f24f81e703a0d397f8d,
     type: 3}
-  shotAngle: 45
+  shotAngle: 10
   accuracy: 0.5
   target: {fileID: 0}
 --- !u!95 &9593232

@@ -10,6 +10,7 @@ TagManager:
   - FxTemporaire
   - Melee
   - Range
+  - UI
   layers:
   - Default
   - TransparentFX

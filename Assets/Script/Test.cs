@@ -5,9 +5,20 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    string testString = "123,456";
-    private void Awake()
+    private void Update()
     {
-        float health = PlayerPrefs.GetFloat("Health");
+        if(Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f))
+            {
+                Debug.Log(hit.transform.name);
+            }
+        }
+    }
+    public void ButtonClick()
+    {
+        Debug.Log("버튼 클릭됨");
     }
 }
+ 

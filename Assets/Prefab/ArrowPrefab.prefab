@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a8aa950d73a1184f91898cbdbfc8d94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowDamage: 10
+  arrowDamage: 20
   gravityForce: 20
 --- !u!54 &1094327036315249582
 Rigidbody:

@@ -33,7 +33,7 @@ public class AllyUnit : Unit
     protected override void Die()
     {
         IsSelectedUnit = false;
-        transform.parent.GetComponent<UnitGroup>().RemoveUnitFromList(this);
+        transform.parent.parent.GetComponent<UnitGroup>().RemoveUnitFromList(this);
         transform.parent = null;
         base.Die();
     }

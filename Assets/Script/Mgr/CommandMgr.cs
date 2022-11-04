@@ -1,7 +1,9 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 
@@ -11,6 +13,9 @@ public class CommandMgr : MonoBehaviour
     public GameObject[] skillIndicatorPrefabs;
     List<UnitGroup> seletedGroupList = null;
     PlayerInput inputActions;
+    public GameObject[] skillPrefabs;
+    Transform skillIndicatorTr;
+    Transform[] skillTargets;
     public List<UnitGroup> SelectedGroupList
     {
         get => seletedGroupList;
@@ -23,36 +28,66 @@ public class CommandMgr : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Command.Enable();
-        inputActions.Command.Click.performed += OnClick;
+        inputActions.Command.Select.performed += OnSelect;
+        inputActions.Command.skillClick.performed += OnSkillClick;
         
+        inputActions.Command.skillClick.Disable();
     }
+
+    private void OnSkillClick(InputAction.CallbackContext obj)
+    {
+        int selectedUnitNum = 0;
+
+
+        UnitCommand(SkillAvailable.Shoot);
+        Destroy(skillIndicatorTr.gameObject);
+        inputActions.Command.Select.Enable();
+        inputActions.Command.skillClick.Disable();
+    }
+
     private void OnDisable()
     {
-        inputActions.Command.Click.performed -= OnClick;
+        inputActions.Command.skillClick.performed -= OnSkillClick;
+        inputActions.Command.Select.performed -= OnSelect;
         inputActions.Command.Disable();
+
     }
-    private void OnClick(InputAction.CallbackContext obj)
+    private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        //q,e로 회전가능 휠로 크기조절 가능 궁수숫자만큼 target생성
+        if(skillIndicatorTr!=null)
         {
-            ShiftClickGroup();
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
+            {
+                skillIndicatorTr.position=hit.point;
+            }
         }
-        else
+    }
+    private void OnSelect(InputAction.CallbackContext obj)
+    {
+        if(!EventSystem.current.IsPointerOverGameObject())
         {
-            ClickGroup();
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                ShiftClickGroup();
+            }
+            else
+            {
+                ClickGroup();
+            }
+            //유닛 그룹에 스킬 교집합 체크 스킬넘버배열을 넘겨주자
+            //스킬 사용가능여부 비트연산자 이용할것
+            SkillAvailable groupsSkills = ~SkillAvailable.None;
+            foreach (UnitGroup selectGroup in seletedGroupList)
+            {
+                groupsSkills &= selectGroup.GroupSkill;
+            }
+            if (seletedGroupList.Count > 0)
+            {
+                GameMgr.Instance.uiMgr.SetButtonAvailable(groupsSkills);
+            }
         }
-        //유닛 그룹에 스킬 교집합 체크 스킬넘버배열을 넘겨주자
-        //스킬 사용가능여부 비트연산자 이용할것
-        SkillAvailable groupsSkills = ~SkillAvailable.None;
-        foreach(UnitGroup selectGroup in seletedGroupList)
-        {
-            groupsSkills &= selectGroup.GroupSkill;
-        }
-        if(seletedGroupList.Count>0)
-        {
-            GameMgr.Instance.uiMgr.SetButtonAvailable(groupsSkills);
-        }
-        
     }
 
     public void ClearSelect()
@@ -62,21 +97,20 @@ public class CommandMgr : MonoBehaviour
     }
     private void ClickGroup()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f,LayerMask.GetMask("Ally")))
         {
             ClearSelect();
-            UnitGroup unitGroup = hit.transform.parent.GetComponent<UnitGroup>();
+            UnitGroup unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
             if (unitGroup != null)
             {
                 seletedGroupList.Add(unitGroup);
-            }
-        }
+            }        }
         else
         {
             ClearSelect();
         }
-        
+
         AllCheckSelected();
     }
     private void ShiftClickGroup()
@@ -84,7 +118,7 @@ public class CommandMgr : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
         {
-            UnitGroup unitGroup = hit.transform.parent.GetComponent<UnitGroup>();
+            UnitGroup unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
             if (unitGroup != null)
             {
                 if (seletedGroupList.Contains(unitGroup))
@@ -108,6 +142,20 @@ public class CommandMgr : MonoBehaviour
             unitGroup.CheckSelected();
         }
     }
+
+    //스킬=================================================
+    public void SelectShotSpot()
+    {
+        inputActions.Command.Select.Disable();
+        inputActions.Command.skillClick.Enable();
+        foreach(var group in seletedGroupList)
+        {
+            Instantiate(group.spots);
+        }
+        Instantiate(skillIndicatorPrefabs[0]);
+        
+    }
+    
     //커맨드 함수==============================
 
     public void UnitCommand(int command)
@@ -116,18 +164,33 @@ public class CommandMgr : MonoBehaviour
     }
     public void UnitCommand(SkillAvailable command )
     {
+        Debug.Log("스킬사용");
         foreach (UnitGroup unitGroup in seletedGroupList)
         {
-            AllyUnit[] units = unitGroup.GetComponentsInChildren<AllyUnit>();
-            foreach (AllyUnit unit in units)
+            AllyUnit[] units;
+            units = unitGroup.GetComponentsInChildren<AllyUnit>();
+            
+            //foreach (var unit in units)
+            for(int i = 0; i < units.Length; i++)
             {
                 switch (command)
                 {
-                    case(SkillAvailable.MoveToSpot):
-                        unit.ChangeState(UnitState.Move);
+                    case (SkillAvailable.MoveToSpot):
+                        units[i].ChangeState(UnitState.Move);
                         break;
                     case (SkillAvailable.Charge):
-                        unit.ChargeToEnemy();
+                        units[i].ChargeToEnemy();
+                        break;
+                    case (SkillAvailable.Shoot):
+                        if(!inputActions.Command.skillClick.enabled)
+                        {
+                            SelectShotSpot();
+                            return;
+                        }
+                        else
+                        {
+                            units[i].GetComponent<AllyRange>().SetNewTarget(skillTargets[i]);
+                        }
                         break;
                 }
             }
