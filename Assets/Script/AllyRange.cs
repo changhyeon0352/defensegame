@@ -6,7 +6,7 @@ public class AllyRange : AllyUnit
 {
     BowLoadShot bowLoadShot = null;
     public float shotRange = 10f;
-
+    private bool isShotSpot=false;
     protected override void Awake()
     {
         base.Awake();
@@ -29,15 +29,29 @@ public class AllyRange : AllyUnit
             ChangeState(UnitState.Attack);
         }
     }
-    
+
     protected override void AttackUpdate()
     {
+        timeCount -= Time.deltaTime;
+        if (bowLoadShot.target != null)
+        {
+            transform.LookAt(bowLoadShot.target);
+            if (timeCount < 0)
+            {
+                anim.SetTrigger("Attack");
+                timeCount = attackSpeed;
+            }
+        }
+        else
+        {
+            ChangeState(UnitState.Idle);
+        }
 
     }
     public void CheckTargetAlive()
     {
         Collider col = bowLoadShot.target.GetComponent<Collider>();
-        if(col==null||!col.enabled)
+        if((col==null||!col.enabled)&&!isShotSpot)
         {
             ChangeState(UnitState.Idle);
         }
@@ -47,5 +61,7 @@ public class AllyRange : AllyUnit
     {
         bowLoadShot.target = targetTr;
         ChangeState(UnitState.Attack);
+        isShotSpot = true;
     }
+    
 }

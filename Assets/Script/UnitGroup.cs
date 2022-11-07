@@ -10,7 +10,7 @@ public class UnitGroup:MonoBehaviour
     public Transform units;
     public Transform spots;
     public Transform AllyGroups;
-    private Vector2Int rowColumn=Vector2Int.zero;
+    public Vector2Int rowColumn=Vector2Int.zero;
 
     SkillAvailable groupSkill =SkillAvailable.None;
 
@@ -40,6 +40,7 @@ public class UnitGroup:MonoBehaviour
             AllyUnit allyUnit = transform.GetChild(0).GetChild(i).GetComponent<AllyUnit>();
             unitList.Add(allyUnit);
         }
+        
         tag = transform.GetChild(0).GetChild(0).tag;
         if (CompareTag("Melee"))
         {

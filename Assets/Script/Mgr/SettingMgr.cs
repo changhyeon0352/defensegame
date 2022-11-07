@@ -23,6 +23,7 @@ public class SettingMgr : MonoBehaviour
     private Transform unitGroupTr;
     private UnitGroup unitGroup;
 
+    public float UnitOffset { get => unitOffset; }
 
     private void Awake()
     {
@@ -204,7 +205,7 @@ public class SettingMgr : MonoBehaviour
                 for (int j = 0; j < num_row; j++)
                 {
                     Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                    ray.origin += unitOffset * ((i - centerDiff) * unitGroupTr.right - unitGroupTr.forward * j);
+                    ray.origin += UnitOffset * ((i - centerDiff) * unitGroupTr.right +unitGroupTr.forward * ((num_row-1)*0.5f-j));
                     if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
                     {
                         unitSetList[i * num_row + j].transform.position = hit.point;
@@ -217,9 +218,16 @@ public class SettingMgr : MonoBehaviour
 
     private void CompleteUnitSetting()
     {
-
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
+        {
+            unitGroup.spots.position = hit.point;
+        }
+        
+        unitGroup.spots.forward = unitGroupTr.forward;
         for (int i = 0; i < unitGroup.units.childCount; i++)
         {
+            unitGroup.rowColumn=new Vector2Int(num_row,(int)(unitGroup.units.childCount/num_row));
             GameObject spot = new GameObject();
             spot.name = $"spot{i}";
             spot.transform.position = unitGroup.units.GetChild(i).position;
@@ -236,7 +244,7 @@ public class SettingMgr : MonoBehaviour
         unitSetList.Clear();
         unitGroup.InitializeUnitList();
         unitGroupTr = null;
-
+        unitGroup = null;
         
     }
     
