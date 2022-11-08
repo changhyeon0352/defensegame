@@ -7,22 +7,28 @@ public class UIMgr : MonoBehaviour
 { 
     Transform commandUiTr =null;
     Transform spawnUiTr=null;
-    List<Button> commandButtons;
-    List<Image> commandImages;
+    Transform defenseStart = null;
+    List<Button> commandButtons=new();
+    List<Button> spawnButtons=new();
+    List<Image> commandImages = new();
+    List<Image> spawnImages = new();
+
+
     private void Awake()
     {
         commandUiTr = transform.Find("CommandUI");
         spawnUiTr = transform.Find("SpawnUI");
-        commandButtons = new List<Button>();
-        commandImages = new();
+        defenseStart = transform.Find("defenseStartButton");
         InitializeUI();
     }
     void InitializeUI()
     {
         for (int i = 0; i < spawnUiTr.childCount; i++)
         {
+            spawnImages.Add(spawnUiTr.GetChild(i).GetComponent<Image>());
+            spawnButtons.Add(spawnUiTr.GetChild(i).GetComponent<Button>());
             int index = i;
-            spawnUiTr.GetChild(i).GetComponent<Button>().onClick.AddListener(() => GameMgr.Instance.settingMgr.SelectSpawnUnitType(index));
+            spawnButtons[i].onClick.AddListener(() => GameMgr.Instance.settingMgr.SelectSpawnUnitType(index));
         }
         for (int i = 0; i < commandUiTr.childCount; i++)
         {
@@ -31,6 +37,7 @@ public class UIMgr : MonoBehaviour
             int index =(int) Mathf.Pow(2, i);
             commandButtons[i].onClick.AddListener(() => GameMgr.Instance.CommandMgr.UnitCommand(index));
         }
+        defenseStart.GetComponent<Button>().onClick.AddListener(DefenseStart);
         ClearSkillButton();
     }
     public void SetButtonAvailable(SkillAvailable groupsSkills)
@@ -54,6 +61,15 @@ public class UIMgr : MonoBehaviour
         {
             commandButtons[i].enabled = false;
             commandImages[i].color = Color.gray;
+        }
+    }
+    public void DefenseStart()
+    {
+        GameMgr.Instance.inputActions.Setting.Disable();
+        GameMgr.Instance.inputActions.Command.Enable();
+        for(int i=0; i<spawnButtons.Count; i++)
+        {
+            spawnButtons[i].gameObject.SetActive(false);
         }
     }
 }

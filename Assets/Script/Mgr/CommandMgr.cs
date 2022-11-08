@@ -29,7 +29,8 @@ public static class InputSystemUtils
 public class CommandMgr : MonoBehaviour
 {
     public GameObject[] skillIndicatorPrefabs;
-    List<UnitGroup> seletedGroupList = null;
+    List<UnitGroup> seletedGroupList = new List<UnitGroup>();
+    List<Hero> heroList = new List<Hero>();
     PlayerInput inputActions;
     public GameObject[] skillPrefabs;
     private List<Transform> skillIndicatorTr = new List<Transform>();
@@ -43,18 +44,24 @@ public class CommandMgr : MonoBehaviour
     private void Awake()
     {
         inputActions = GameMgr.Instance.inputActions;
-        seletedGroupList = new List<UnitGroup>();
     }
     private void OnEnable()
     {
         inputActions.Command.Enable();
         inputActions.Command.Select.performed += OnSelect;
         inputActions.Command.skillClick.performed += OnSkillClick;
-        
+        inputActions.Command.MoveorSetTarget.performed += OnMoveOrSetTarget;
+
         inputActions.Command.skillClick.Disable();
     }
 
-    
+    private void OnMoveOrSetTarget(InputAction.CallbackContext obj)
+    {
+        if(SelectedGroupList.Count>0&&SelectedGroupList[0].UnitType == UnitType.hero)
+        {
+
+        }
+    }
 
     private void OnDisable()
     {
@@ -63,13 +70,8 @@ public class CommandMgr : MonoBehaviour
     
     private void Update()
     {
-        
-        //if(Mouse)
-        //q,e로 회전가능 휠로 크기조절 가능 궁수숫자만큼 target생성
         if (skillIndicatorTr.Count>0)
-        {
-            
-                
+        { 
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
             {
@@ -80,7 +82,7 @@ public class CommandMgr : MonoBehaviour
                 }
             }
         }
-     }
+    }
     
    
 
@@ -88,26 +90,26 @@ public class CommandMgr : MonoBehaviour
     {
         if (InputSystemUtils.IsClickOnUI())
         {
-            Debug.Log("yes");
             return;
         }
-        else
-        {
-            Debug.Log("no");
-        }
-            Debug.Log("셀렉트");
         pressControl = false;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if(hit.transform.GetComponent<AllyUnit>()!=null)
+            if(hit.transform.GetComponent<Hero>()!=null)
+            {
+                ClearSelectedGroups();
+                UnitGroup unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
+                SelectedGroupList.Add(unitGroup);
+            }
+            else if(hit.transform.GetComponent<AllyUnit>()!=null)
             {
                 UnitGroup unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
                 if (unitGroup != null)
                 {
-                    if (Input.GetKey(KeyCode.LeftShift))
+                    if (Input.GetKey(KeyCode.LeftShift) && seletedGroupList.Count>0 &&(SelectedGroupList[0].UnitType != UnitType.hero))
                     {
                         if (seletedGroupList.Contains(unitGroup))
                         {
@@ -120,7 +122,7 @@ public class CommandMgr : MonoBehaviour
                     }
                     else
                     {
-                        ClearSelect();
+                        ClearSelectedGroups();
                         seletedGroupList.Add(unitGroup);
                     }
                 }
@@ -129,7 +131,7 @@ public class CommandMgr : MonoBehaviour
             {
                 Debug.Log(hit.transform.name);
                 if (!Input.GetKey(KeyCode.LeftShift))
-                    ClearSelect();
+                    ClearSelectedGroups();
             }
         }
         AllCheckSelected();
@@ -147,7 +149,7 @@ public class CommandMgr : MonoBehaviour
         
     }
 
-    public void ClearSelect()
+    public void ClearSelectedGroups()
     {
         seletedGroupList.Clear();
         GameMgr.Instance.uiMgr.ClearSkillButton();

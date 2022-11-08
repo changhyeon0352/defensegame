@@ -33,7 +33,6 @@ public class Arrow : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(transform.position);
         IHealth targetHP = other.gameObject.GetComponent<IHealth>();
         if (targetHP != null)
         {

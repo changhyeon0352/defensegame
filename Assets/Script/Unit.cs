@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour,IHealth
     protected float attackSpeed = 2.0f;
     protected int hp = 100;
     protected int attack = 20;
-    const float stopRange = 0.1f;
+    protected const float stopRange = 0.1f;
     protected const float searchRange = 4f;
     const float attackRange = 2f;
 
@@ -107,12 +107,8 @@ public class Unit : MonoBehaviour,IHealth
         SearchAndChase(searchRange);
         if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
         {
-
             ChangeState(UnitState.Idle);
         }
-        
-        
-
     }
     virtual protected void ChaseUpdate()
     {

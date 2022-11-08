@@ -18,10 +18,8 @@ public enum UnitShader
 public enum UnitType
 {
     none=0,
-    meleeSoldier,
-    rangeSoldier,
-    warrior,
-    mage,
+    soldier,
+    hero
 }
 [System.Flags]
 public enum SkillAvailable:byte

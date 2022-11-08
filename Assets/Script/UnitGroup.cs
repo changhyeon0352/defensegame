@@ -46,12 +46,16 @@ public class UnitGroup:MonoBehaviour
         {
             groupSkill |= SkillAvailable.MoveToSpot;
             groupSkill |= SkillAvailable.Charge;
-            unitType = UnitType.meleeSoldier;
+            unitType = UnitType.soldier;
         }
         else if (CompareTag("Range"))
         {
             groupSkill |= SkillAvailable.Shoot;
-            unitType = UnitType.rangeSoldier;
+            unitType = UnitType.soldier;
+        }
+        else if(CompareTag("Knight"))
+        {
+            unitType = UnitType.hero;
         }
     }
     public void RemoveUnitFromList(AllyUnit unit)

@@ -387,6 +387,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveorSetTarget"",
+                    ""type"": ""Button"",
+                    ""id"": ""187752ac-b1e9-45be-8767-43047109cc59"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -409,6 +418,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""skillClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32ab1fcd-2878-49db-979d-612dd317ce98"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveorSetTarget"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -471,6 +491,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Command = asset.FindActionMap("Command", throwIfNotFound: true);
         m_Command_Select = m_Command.FindAction("Select", throwIfNotFound: true);
         m_Command_skillClick = m_Command.FindAction("skillClick", throwIfNotFound: true);
+        m_Command_MoveorSetTarget = m_Command.FindAction("MoveorSetTarget", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -695,12 +716,14 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private ICommandActions m_CommandActionsCallbackInterface;
     private readonly InputAction m_Command_Select;
     private readonly InputAction m_Command_skillClick;
+    private readonly InputAction m_Command_MoveorSetTarget;
     public struct CommandActions
     {
         private @PlayerInput m_Wrapper;
         public CommandActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Select => m_Wrapper.m_Command_Select;
         public InputAction @skillClick => m_Wrapper.m_Command_skillClick;
+        public InputAction @MoveorSetTarget => m_Wrapper.m_Command_MoveorSetTarget;
         public InputActionMap Get() { return m_Wrapper.m_Command; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -716,6 +739,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @skillClick.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
                 @skillClick.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
                 @skillClick.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
+                @MoveorSetTarget.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnMoveorSetTarget;
+                @MoveorSetTarget.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnMoveorSetTarget;
+                @MoveorSetTarget.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnMoveorSetTarget;
             }
             m_Wrapper.m_CommandActionsCallbackInterface = instance;
             if (instance != null)
@@ -726,6 +752,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @skillClick.started += instance.OnSkillClick;
                 @skillClick.performed += instance.OnSkillClick;
                 @skillClick.canceled += instance.OnSkillClick;
+                @MoveorSetTarget.started += instance.OnMoveorSetTarget;
+                @MoveorSetTarget.performed += instance.OnMoveorSetTarget;
+                @MoveorSetTarget.canceled += instance.OnMoveorSetTarget;
             }
         }
     }
@@ -772,5 +801,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     {
         void OnSelect(InputAction.CallbackContext context);
         void OnSkillClick(InputAction.CallbackContext context);
+        void OnMoveorSetTarget(InputAction.CallbackContext context);
     }
 }

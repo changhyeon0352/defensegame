@@ -11,6 +11,7 @@ TagManager:
   - Melee
   - Range
   - UI
+  - Knight
   layers:
   - Default
   - TransparentFX

@@ -41,6 +41,8 @@ public class SettingMgr : MonoBehaviour
         inputActions.Setting.Click.performed            += OnCompleteSetting;
         inputActions.Setting.SwitchRow.performed        += OnSwitchRow;
         inputActions.Setting.ReSetting.performed        += OnResetting;
+        inputActions.Setting.SwitchRow.Disable();
+        inputActions.Setting.scrollUpDown.Disable();
     }
 
    
@@ -106,6 +108,7 @@ public class SettingMgr : MonoBehaviour
         inputActions.Setting.scrollUpDown.Disable();
         inputActions.Setting.ReSetting.Enable();
         inputActions.Command.Select.Enable();
+        inputActions.Setting.SwitchRow.Disable();
     }
     private void OnRotateUnitGroup(InputAction.CallbackContext obj)
     {
@@ -125,6 +128,24 @@ public class SettingMgr : MonoBehaviour
             inputActions.Setting.scrollUpDown.Enable();
             inputActions.Setting.Click.Enable();
             inputActions.Command.Select.Disable();
+            for(int i=0; i<unitPrefabs.Length;i++)
+            {
+                if(spawnUnitPrefab == unitPrefabs[i])
+                {
+                    if(i>1)
+                    {
+                        inputActions.Setting.scrollUpDown.Disable();
+                        inputActions.Setting.SwitchRow.Disable();
+                    }
+                    else
+                    {
+
+                        inputActions.Setting.scrollUpDown.Enable();
+                        inputActions.Setting.SwitchRow.Enable();
+                    }
+                }
+                
+            }
         }
         
     }
@@ -245,7 +266,7 @@ public class SettingMgr : MonoBehaviour
         unitGroup.InitializeUnitList();
         unitGroupTr = null;
         unitGroup = null;
-        
+        inputActions.Setting.scrollUpDown.Enable();
     }
     
     
