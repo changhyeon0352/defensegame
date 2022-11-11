@@ -46,9 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e2abef3ef583146ad51207daf724e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  units: {fileID: 5886800118312206825}
-  spots: {fileID: 2229170751241596368}
+  unitsTr: {fileID: 5886800118312206825}
+  spotsTr: {fileID: 2229170751241596368}
   AllyGroups: {fileID: 0}
+  rowColumn: {x: 0, y: 0}
 --- !u!1 &4713278166754726730
 GameObject:
   m_ObjectHideFlags: 0

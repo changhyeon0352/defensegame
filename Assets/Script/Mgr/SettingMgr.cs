@@ -173,18 +173,18 @@ public class SettingMgr : MonoBehaviour
             unitGroup = unitGroupTr.GetComponent<UnitGroup>();
             //unitspot제거
             
-            for(int i=0;i<unitGroup.spots.childCount;i++)
+            for(int i=0;i<unitGroup.spotsTr.childCount;i++)
             {
-                Destroy(unitGroup.spots.GetChild(i).gameObject);
+                Destroy(unitGroup.spotsTr.GetChild(i).gameObject);
             }
             
 
             unitGroupTr.parent = transform;
-            for (int i = 0; i < unitGroup.units.childCount; i++)
+            for (int i = 0; i < unitGroup.unitsTr.childCount; i++)
             {
-                unitSetList.Add(unitGroup.units.GetChild(i).gameObject);
+                unitSetList.Add(unitGroup.unitsTr.GetChild(i).gameObject);
             }
-            if (unitGroupTr != null && unitGroup.units.childCount == unitSetList.Count)
+            if (unitGroupTr != null && unitGroup.unitsTr.childCount == unitSetList.Count)
             {
                 ShaderChange(UnitShader.transparentShader);
             }
@@ -242,19 +242,19 @@ public class SettingMgr : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
         {
-            unitGroup.spots.position = hit.point;
+            unitGroup.spotsTr.position = hit.point;
         }
         
-        unitGroup.spots.forward = unitGroupTr.forward;
-        for (int i = 0; i < unitGroup.units.childCount; i++)
+        unitGroup.spotsTr.forward = unitGroupTr.forward;
+        for (int i = 0; i < unitGroup.unitsTr.childCount; i++)
         {
-            unitGroup.rowColumn=new Vector2Int(num_row,(int)(unitGroup.units.childCount/num_row));
+            unitGroup.rowColumn=new Vector2Int(num_row,(int)(unitGroup.unitsTr.childCount/num_row));
             GameObject spot = new GameObject();
             spot.name = $"spot{i}";
-            spot.transform.position = unitGroup.units.GetChild(i).position;
+            spot.transform.position = unitGroup.unitsTr.GetChild(i).position;
             spot.transform.rotation = unitGroupTr.rotation;
-            spot.transform.parent = unitGroup.spots;
-            Unit unit = unitGroup.units.GetChild(i).GetComponent<Unit>();
+            spot.transform.parent = unitGroup.spotsTr;
+            Unit unit = unitGroup.unitsTr.GetChild(i).GetComponent<Unit>();
             unit.goalTr = spot.transform;
             unit.ChangeState(UnitState.Move);
         }
@@ -294,7 +294,7 @@ public class SettingMgr : MonoBehaviour
     {
         for(int i=0;i<num_row;i++)
         {
-            GameObject obj = Instantiate(spawnUnitPrefab, unitGroup.units);
+            GameObject obj = Instantiate(spawnUnitPrefab, unitGroup.unitsTr);
             ShaderChange(UnitShader.transparentShader);
             unitSetList.Add(obj);
         }
@@ -320,7 +320,7 @@ public class SettingMgr : MonoBehaviour
     }
     void ShaderChange(UnitShader _type)
     {
-        SkinnedMeshRenderer[] skinRen = unitGroup.units.GetComponentsInChildren<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer[] skinRen = unitGroup.unitsTr.GetComponentsInChildren<SkinnedMeshRenderer>();
 
 
         for (int i = 0; i < skinRen.Length; i++)

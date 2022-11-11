@@ -61,7 +61,8 @@ public class CameraMove : MonoBehaviour
 
     private void OnCameraRotateOn(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        isRotating = true;
+        if(Input.GetKey(KeyCode.LeftShift))
+            isRotating = true;
     }
     private void OnCameraRotate(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {

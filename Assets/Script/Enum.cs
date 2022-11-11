@@ -22,11 +22,18 @@ public enum UnitType
     hero
 }
 [System.Flags]
-public enum SkillAvailable:byte
+public enum Skills:byte
 {
-    None        = 0b0000_0000,
-    MoveToSpot  = 0b0000_0001,
-    Charge      = 0b0000_0010,
-    Shoot       = 0b_0000_0100
-        //
+    None        = 0b_0000_0000,
+    MoveToSpot  = 0b_0000_0001,
+    Charge      = 0b_0000_0010,
+    Shoot       = 0b_0000_0100,
+    AttackMove  = 0b_0000_1000
+    //
+}
+public enum CursorType
+{
+    Default=0,
+    Sword,
+    targeting
 }

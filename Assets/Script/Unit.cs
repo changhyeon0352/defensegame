@@ -218,7 +218,7 @@ public class Unit : MonoBehaviour,IHealth
             case UnitState.Idle:
                 break;
             case UnitState.Move:
-                agent.ResetPath();
+                //agent.ResetPath();
                 break;
             case UnitState.Chase:
                 break;

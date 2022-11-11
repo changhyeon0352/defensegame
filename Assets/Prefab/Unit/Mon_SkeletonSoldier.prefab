@@ -521,6 +521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9085880239558289504}
   - component: {fileID: 2483749282430846178}
+  - component: {fileID: 9097893891522991812}
   - component: {fileID: 9085880239548663754}
   - component: {fileID: 9085880238419732540}
   - component: {fileID: 8614961877638879888}
@@ -565,6 +566,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   goalTr: {fileID: 0}
+--- !u!114 &9097893891522991812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085880239558194240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c52d0294da19ae94bab720979fefa2ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorDefault: {fileID: 2800000, guid: 28a2be9c38a7d2c45b75ff59fe466014, type: 3}
+  cursorSword: {fileID: 2800000, guid: 648d19204795bd9428e01a3fb0047f6a, type: 3}
 --- !u!95 &9085880239548663754
 Animator:
   serializedVersion: 4

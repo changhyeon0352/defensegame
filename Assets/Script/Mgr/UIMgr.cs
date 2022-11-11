@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIMgr : MonoBehaviour
-{ 
+{
+    [SerializeField] Texture2D cursorDefault;
+    [SerializeField] Texture2D cursorSword;
+    [SerializeField] Texture2D cursorTargeting;
     Transform commandUiTr =null;
     Transform spawnUiTr=null;
     Transform defenseStart = null;
@@ -40,7 +43,7 @@ public class UIMgr : MonoBehaviour
         defenseStart.GetComponent<Button>().onClick.AddListener(DefenseStart);
         ClearSkillButton();
     }
-    public void SetButtonAvailable(SkillAvailable groupsSkills)
+    public void SetButtonAvailable(Skills groupsSkills)
     {
         ClearSkillButton();
         int temp = (int)groupsSkills;
@@ -70,6 +73,21 @@ public class UIMgr : MonoBehaviour
         for(int i=0; i<spawnButtons.Count; i++)
         {
             spawnButtons[i].gameObject.SetActive(false);
+        }
+    }
+    public void ChangeCursor(CursorType cursor)
+    {
+        if(cursor==CursorType.Sword)
+        {
+            Cursor.SetCursor(cursorSword,new Vector2(cursorSword.width*0.25f,0), CursorMode.ForceSoftware);
+        }
+        else if(cursor == CursorType.Default)
+        {
+            Cursor.SetCursor(cursorDefault, new Vector2(cursorDefault.width*0.3f,cursorDefault.height*0.1f), CursorMode.ForceSoftware);
+        }
+        else
+        {
+            Cursor.SetCursor(cursorTargeting, new Vector2(cursorTargeting.width * 0.5f, cursorTargeting.height * 0.5f), CursorMode.ForceSoftware);
         }
     }
 }

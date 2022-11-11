@@ -4,14 +4,33 @@ using UnityEngine;
 
 public class Hero : AllyUnit
 {
+    public bool isattackMove = false;
+
     //무브업데이트땐 적추적 ㄴㄴ
     protected override void MoveUpdate()
     {
-        agent.SetDestination(goalTr.position);          //목표로 가기
-        if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
+        if(isattackMove)
         {
-            ChangeState(UnitState.Idle);
+            base.MoveUpdate();
         }
+        else
+        {
+            agent.SetDestination(goalTr.position);          //목표로 가기
+            if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
+            {
+                ChangeState(UnitState.Idle);
+            }
+        }       
+    }
+    public void MoveSpots(Vector3 position)
+    {
+        UnitGroup unitgroup =transform.parent.parent.GetComponent<UnitGroup>();
+        unitgroup.spotsTr.position = position;
+        ChangeState(UnitState.Move);
+    }
+    public void SetChaseTarget(Transform targetTr)
+    {
+        chaseTargetTr = targetTr;
     }
     //커맨드매니저에 영웅용 스킬
     //땅클릭하면 거기로 가기

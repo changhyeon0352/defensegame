@@ -3361,6 +3361,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LockOnEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 2412586242081842667, guid: 193201be5d5542249a4338c35fcf89af,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 193201be5d5542249a4338c35fcf89af, type: 3}
 --- !u!4 &1201833924593192492 stripped

@@ -7,14 +7,14 @@ public class UnitGroup:MonoBehaviour
 {
     List<AllyUnit> unitList;
     private UnitType unitType = UnitType.none;
-    public Transform units;
-    public Transform spots;
+    public Transform unitsTr;
+    public Transform spotsTr;
     public Transform AllyGroups;
     public Vector2Int rowColumn=Vector2Int.zero;
 
-    SkillAvailable groupSkill =SkillAvailable.None;
+    Skills groupSkill =Skills.None;
 
-    public SkillAvailable GroupSkill { get => groupSkill; }
+    public Skills GroupSkill { get => groupSkill; }
     public UnitType UnitType { get => unitType;}
 
     private void Awake()
@@ -25,17 +25,21 @@ public class UnitGroup:MonoBehaviour
     public void CheckSelected()
     {
         bool isSelected = (GameMgr.Instance.CommandMgr.SelectedGroupList.Contains(this));
-        
+        if(!isSelected&& GameMgr.Instance.CommandMgr.SelectedHero!=null)
+        {
+            isSelected= GameMgr.Instance.CommandMgr.SelectedHero==this.GetComponentInChildren<Hero>();
+        }
         for(int i=0;i<unitList.Count;i++)
         {
             unitList[i].IsSelectedUnit = isSelected;
         }
+        
     }
     public void InitializeUnitList()
     {
         unitList.Clear();
         
-        for (int i = 0; i < units.childCount; i++)
+        for (int i = 0; i < unitsTr.childCount; i++)
         {
             AllyUnit allyUnit = transform.GetChild(0).GetChild(i).GetComponent<AllyUnit>();
             unitList.Add(allyUnit);
@@ -44,13 +48,13 @@ public class UnitGroup:MonoBehaviour
         tag = transform.GetChild(0).GetChild(0).tag;
         if (CompareTag("Melee"))
         {
-            groupSkill |= SkillAvailable.MoveToSpot;
-            groupSkill |= SkillAvailable.Charge;
+            groupSkill |= Skills.MoveToSpot;
+            groupSkill |= Skills.Charge;
             unitType = UnitType.soldier;
         }
         else if (CompareTag("Range"))
         {
-            groupSkill |= SkillAvailable.Shoot;
+            groupSkill |= Skills.Shoot;
             unitType = UnitType.soldier;
         }
         else if(CompareTag("Knight"))
@@ -61,6 +65,11 @@ public class UnitGroup:MonoBehaviour
     public void RemoveUnitFromList(AllyUnit unit)
     {
         unitList.Remove(unit);
+        if(unitList.Count== 0)
+        {
+            GameMgr.Instance.CommandMgr.SelectedGroupList.Remove(this);
+            Destroy(gameObject);
+        }
     }
     
 }
