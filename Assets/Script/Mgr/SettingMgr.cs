@@ -8,7 +8,7 @@ using UnityEngine.InputSystem.Controls;
 
     
 
-public class SettingMgr : MonoBehaviour
+public class SettingMgr : Singleton<SettingMgr>
 {
     public GameObject[] unitPrefabs;
     private GameObject spawnUnitPrefab;
@@ -25,9 +25,10 @@ public class SettingMgr : MonoBehaviour
 
     public float UnitOffset { get => unitOffset; }
 
-    private void Awake()
+    override protected void Awake()
     {
-        inputActions= GameMgr.Instance.inputActions;
+        base.Awake();
+        inputActions = GameMgr.Instance.inputActions;
 
         unitSetList = new List<GameObject>();
     }

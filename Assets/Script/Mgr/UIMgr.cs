@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIMgr : MonoBehaviour
+public class UIMgr : Singleton<UIMgr>
 {
     [SerializeField] Texture2D cursorDefault;
     [SerializeField] Texture2D cursorSword;
@@ -17,8 +17,9 @@ public class UIMgr : MonoBehaviour
     List<Image> spawnImages = new();
 
 
-    private void Awake()
+    override protected void Awake()
     {
+        base.Awake();
         commandUiTr = transform.Find("CommandUI");
         spawnUiTr = transform.Find("SpawnUI");
         defenseStart = transform.Find("defenseStartButton");
@@ -31,14 +32,14 @@ public class UIMgr : MonoBehaviour
             spawnImages.Add(spawnUiTr.GetChild(i).GetComponent<Image>());
             spawnButtons.Add(spawnUiTr.GetChild(i).GetComponent<Button>());
             int index = i;
-            spawnButtons[i].onClick.AddListener(() => GameMgr.Instance.settingMgr.SelectSpawnUnitType(index));
+            spawnButtons[i].onClick.AddListener(() => SettingMgr.Instance.SelectSpawnUnitType(index));
         }
         for (int i = 0; i < commandUiTr.childCount; i++)
         {
             commandImages.Add(commandUiTr.GetChild(i).GetComponent<Image>());
             commandButtons.Add(commandUiTr.GetChild(i).GetComponent<Button>());
             int index =(int) Mathf.Pow(2, i);
-            commandButtons[i].onClick.AddListener(() => GameMgr.Instance.CommandMgr.UnitCommand(index));
+            commandButtons[i].onClick.AddListener(() => CommandMgr.Instance.UnitCommand(index));
         }
         defenseStart.GetComponent<Button>().onClick.AddListener(DefenseStart);
         ClearSkillButton();

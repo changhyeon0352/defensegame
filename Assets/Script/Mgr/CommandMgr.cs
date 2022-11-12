@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 
 
-public class CommandMgr : MonoBehaviour
+public class CommandMgr : Singleton<CommandMgr>
 {
     public GameObject[] skillIndicatorPrefabs;
     [SerializeField] GameObject moveToPrefabs;
@@ -28,8 +28,9 @@ public class CommandMgr : MonoBehaviour
     public Skills UsingSkill { get => usingSkill;}
     public Hero SelectedHero { get => selectedHero;}
 
-    private void Awake()
+    override protected void Awake()
     {
+        base.Awake();
         inputActions = GameMgr.Instance.inputActions;
         monsterOrGround = LayerMask.GetMask("Monster") | LayerMask.GetMask("Ground");
     }
@@ -76,7 +77,7 @@ public class CommandMgr : MonoBehaviour
             inputActions.Command.Select.Disable();
             inputActions.Command.skillClick.Enable();
             usingSkill = Skills.AttackMove;
-            GameMgr.Instance.uiMgr.ChangeCursor(CursorType.targeting);
+            UIMgr.Instance.ChangeCursor(CursorType.targeting);
         }
     }
 
@@ -179,7 +180,7 @@ public class CommandMgr : MonoBehaviour
         }
         if (seletedGroupList.Count > 0)
         {
-            GameMgr.Instance.uiMgr.SetButtonAvailable(groupsSkills);
+            UIMgr.Instance.SetButtonAvailable(groupsSkills);
         }
 
     }
@@ -194,7 +195,7 @@ public class CommandMgr : MonoBehaviour
         for (int i = 0; i < seletedGroupList.Count; i++)
         {
             skillIndicatorTrs.Add(Instantiate(skillIndicatorPrefabs[0]).transform);
-            skillIndicatorTrs[i].localScale = new Vector3(seletedGroupList[i].rowColumn.y, 1, seletedGroupList[i].rowColumn.x) * GameMgr.Instance.settingMgr.UnitOffset;
+            skillIndicatorTrs[i].localScale = new Vector3(seletedGroupList[i].rowColumn.y, 1, seletedGroupList[i].rowColumn.x) * SettingMgr.Instance.UnitOffset;
             spots.Add(Instantiate(seletedGroupList[i].spotsTr));
 
             spots[i].parent = skillIndicatorTrs[i];
@@ -220,7 +221,7 @@ public class CommandMgr : MonoBehaviour
         switch (UsingSkill)
         {
             case Skills.AttackMove:
-                GameMgr.Instance.uiMgr.ChangeCursor(CursorType.Default);
+                UIMgr.Instance.ChangeCursor(CursorType.Default);
                 SelectedHero.isattackMove = true;
                 MoveOrSetTarget(attackToPrefabs);
                 break;
@@ -307,7 +308,7 @@ public class CommandMgr : MonoBehaviour
     public void ClearSelectedGroups()
     {
         seletedGroupList.Clear();
-        GameMgr.Instance.uiMgr.ClearSkillButton();
+        UIMgr.Instance.ClearSkillButton();
     }
     //유닛에 셀렉트될때 이펙트를 킬지 끌지
     public void AllCheckSelected()
