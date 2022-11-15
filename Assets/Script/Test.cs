@@ -2,23 +2,18 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class Test : MonoBehaviour
 {
-    private void Update()
+    void Start()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f))
-            {
-                Debug.Log(hit.transform.name);
-            }
-        }
+        AllyUnit test1 = new AllyUnit();
+        int a = 0;
     }
-    public void ButtonClick()
-    {
-        Debug.Log("버튼 클릭됨");
-    }
+
+    
 }
+    
  

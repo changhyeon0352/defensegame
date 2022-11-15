@@ -11,18 +11,23 @@ public class UIMgr : Singleton<UIMgr>
     Transform commandUiTr =null;
     Transform spawnUiTr=null;
     Transform defenseStart = null;
+    Transform settingTr=null;
+    Transform commandTr = null;
     List<Button> commandButtons=new();
     List<Button> spawnButtons=new();
     List<Image> commandImages = new();
     List<Image> spawnImages = new();
 
 
+
     override protected void Awake()
     {
         base.Awake();
-        commandUiTr = transform.Find("CommandUI");
-        spawnUiTr = transform.Find("SpawnUI");
-        defenseStart = transform.Find("defenseStartButton");
+        commandTr = transform.Find("Command");
+        commandUiTr = commandTr.Find("CommandUI");
+        settingTr = transform.Find("Setting");
+        spawnUiTr = settingTr.Find("SpawnUI");
+        defenseStart = transform.Find("Setting").Find("defenseStartButton");
         InitializeUI();
     }
     void InitializeUI()
