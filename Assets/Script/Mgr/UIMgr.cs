@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,15 +9,18 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] Texture2D cursorDefault;
     [SerializeField] Texture2D cursorSword;
     [SerializeField] Texture2D cursorTargeting;
+    public GameObject heroCardPrefab;
     Transform commandUiTr =null;
     Transform spawnUiTr=null;
     Transform defenseStart = null;
     Transform settingTr=null;
     Transform commandTr = null;
+    Transform HeroSettingTr=null;
     List<Button> commandButtons=new();
     List<Button> spawnButtons=new();
     List<Image> commandImages = new();
     List<Image> spawnImages = new();
+
 
 
 
@@ -28,6 +32,12 @@ public class UIMgr : Singleton<UIMgr>
         settingTr = transform.Find("Setting");
         spawnUiTr = settingTr.Find("SpawnUI");
         defenseStart = transform.Find("Setting").Find("defenseStartButton");
+        HeroSettingTr = settingTr.Find("HeroSetting");
+
+        
+    }
+    private void Start()
+    {
         InitializeUI();
     }
     void InitializeUI()
@@ -48,6 +58,7 @@ public class UIMgr : Singleton<UIMgr>
         }
         defenseStart.GetComponent<Button>().onClick.AddListener(DefenseStart);
         ClearSkillButton();
+        InitializeHeroCardList();
     }
     public void SetButtonAvailable(Skills groupsSkills)
     {
@@ -94,6 +105,21 @@ public class UIMgr : Singleton<UIMgr>
         else
         {
             Cursor.SetCursor(cursorTargeting, new Vector2(cursorTargeting.width * 0.5f, cursorTargeting.height * 0.5f), CursorMode.ForceSoftware);
+        }
+    }
+    public void InitializeHeroCardList()
+    {
+        Transform heroCardListTr = HeroSettingTr.Find("HeroList");
+        List<HeroData> HeroDataList = HeroDataController.Instance.heroDatas.heroDataList;
+        foreach(HeroData heroData in HeroDataList)
+        {
+            Transform cardTr=Instantiate(heroCardPrefab, heroCardListTr).transform;
+            TextMeshProUGUI nameTMP =cardTr.Find("ImageName").GetComponentInChildren<TextMeshProUGUI>();         
+            TextMeshProUGUI weaponTMP = cardTr.Find("equipmentLevel").Find("LevelWeapon").GetComponent<TextMeshProUGUI>(); 
+            TextMeshProUGUI armorTMP = cardTr.Find("equipmentLevel").Find("LevelArmor").GetComponent<TextMeshProUGUI>();
+            nameTMP.text = heroData.name;
+            weaponTMP.text = heroData.level_Weapon.ToString();
+            armorTMP.text = heroData.level_Armor.ToString();
         }
     }
 }

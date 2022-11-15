@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using System;
 
-public class HeroDataController : MonoBehaviour
+public class HeroDataController : Singleton<HeroDataController>
 {
     public HeroData heroData;
     public HeroDatas heroDatas;
