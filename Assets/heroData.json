@@ -1,0 +1,15 @@
+{
+    "id": 0,
+    "heroClass": 1,
+    "name": "새벽의 기사",
+    "level": 0,
+    "level_Weapon": 0,
+    "level_Armor": 0,
+    "level_Skills": [
+        1,
+        1,
+        1,
+        1
+    ],
+    "isDead": false
+}

@@ -31,6 +31,13 @@ public enum Skills:byte
     AttackMove  = 0b_0000_1000
     //
 }
+public enum HeroClass
+{
+    None=0,
+    Knight,
+    Mage
+}
+
 public enum CursorType
 {
     Default=0,
