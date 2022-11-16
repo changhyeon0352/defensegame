@@ -9,6 +9,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] Texture2D cursorDefault;
     [SerializeField] Texture2D cursorSword;
     [SerializeField] Texture2D cursorTargeting;
+    public Sprite[] heroSprites;
     public GameObject heroCardPrefab;
     Transform commandUiTr =null;
     Transform spawnUiTr=null;
@@ -114,12 +115,7 @@ public class UIMgr : Singleton<UIMgr>
         foreach(HeroData heroData in HeroDataList)
         {
             Transform cardTr=Instantiate(heroCardPrefab, heroCardListTr).transform;
-            TextMeshProUGUI nameTMP =cardTr.Find("ImageName").GetComponentInChildren<TextMeshProUGUI>();         
-            TextMeshProUGUI weaponTMP = cardTr.Find("equipmentLevel").Find("LevelWeapon").GetComponent<TextMeshProUGUI>(); 
-            TextMeshProUGUI armorTMP = cardTr.Find("equipmentLevel").Find("LevelArmor").GetComponent<TextMeshProUGUI>();
-            nameTMP.text = heroData.name;
-            weaponTMP.text = heroData.level_Weapon.ToString();
-            armorTMP.text = heroData.level_Armor.ToString();
+            cardTr.GetComponent<HeroCard>().InitializeCard(heroData);
         }
     }
 }

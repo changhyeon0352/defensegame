@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CameraMove" Collapsed="true">
+    <Position X="21.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQBABAACCAACBAAAAAAAgAAAAAAAAIAEABgAAICEA=</HashCode>
+      <FileName>Assets\Script\CameraMove.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CommandMgr" Collapsed="true">
+    <Position X="7" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AESAAAAABAABAAAQAAEAGAAAAAAQCACYEMIAACDCOEE=</HashCode>
+      <FileName>Assets\Script\Mgr\CommandMgr.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameMgr" Collapsed="true">
+    <Position X="11.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAEA=</HashCode>
+      <FileName>Assets\Script\Mgr\GameMgr.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HeroDataController" Collapsed="true">
+    <Position X="13.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAACgAAAEAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Mgr\HeroDataController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SettingMgr" Collapsed="true">
+    <Position X="4.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAZBQCACAGAAAAABAACBCAAEigAAAAAICEJAQAwQSEA=</HashCode>
+      <FileName>Assets\Script\Mgr\SettingMgr.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIMgr" Collapsed="true">
+    <Position X="9.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACBAAAAAASAAAgQEAAAAAAkEAAIAAEABIC0AAAAIQkA=</HashCode>
+      <FileName>Assets\Script\Mgr\UIMgr.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AllyUnitGroups" Collapsed="true">
+    <Position X="16.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\simple\AllyUnitGroups.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Arrow" Collapsed="true">
+    <Position X="18" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAACAAAKAAAAIEAAAAAQAAQAAAAAAAQAAABAAIAEQ=</HashCode>
+      <FileName>Assets\Script\simple\Arrow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Goal" Collapsed="true">
+    <Position X="16.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\simple\Goal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SwordCursor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Assets\Script\simple\SwordCursor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Test" Collapsed="true">
+    <Position X="19.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Test.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestSpawner" Collapsed="true">
+    <Position X="21.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\TestSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AllyRange" Collapsed="true">
+    <Position X="7" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAAAAAAAQAAABAAAAIAAAAACAAAAAAACAAEA=</HashCode>
+      <FileName>Assets\Script\Unit\AllyRange.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AllyUnit" Collapsed="true">
+    <Position X="8" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAFCAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Unit\AllyUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BowLoadShot" Collapsed="true">
+    <Position X="19.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAABAACAAAIAgAIAIAAgCAgBAAAAAAAAAAAAAAAE4=</HashCode>
+      <FileName>Assets\Script\Unit\BowLoadShot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Hero" Collapsed="true">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAQAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Unit\Hero.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Monster" Collapsed="true">
+    <Position X="4.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Script\Unit\Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Unit" Collapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQWAAQAAAAABQAgBAwAABACAIAAACCEEQBAwACAQUA=</HashCode>
+      <FileName>Assets\Script\Unit\Unit.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="UnitGroup" Collapsed="true">
+    <Position X="16.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQAAAAAAAAAAAAAAABAAAIAAAAARAAAAAQAAAAEhEE=</HashCode>
+      <FileName>Assets\Script\Unit\UnitGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Singleton&lt;T&gt;" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Script\Utils\Singleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Utils" Collapsed="true">
+    <Position X="18" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Utils\Utils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="HeroData" Collapsed="true">
+    <Position X="16.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAABEEAAAAAAAAAAQECgA=</HashCode>
+      <FileName>Assets\Script\Mgr\HeroDataController.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HeroDatas" Collapsed="true">
+    <Position X="18" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Mgr\HeroDataController.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="IHealth" Collapsed="true">
+    <Position X="16.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAgAAAQAA=</HashCode>
+      <FileName>Assets\Script\Utils\IHealth.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="UnitState" Collapsed="true">
+    <Position X="16.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Assets\Script\Utils\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UnitShader" Collapsed="true">
+    <Position X="21.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Utils\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UnitType" Collapsed="true">
+    <Position X="18" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAEAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Utils\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Skills" Collapsed="true">
+    <Position X="19.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQABAEAAAAAAAAAAAAAAAAAAAAAAAUAAAA=</HashCode>
+      <FileName>Assets\Script\Utils\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HeroClass" Collapsed="true">
+    <Position X="18" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
+      <FileName>Assets\Script\Utils\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CursorType" Collapsed="true">
+    <Position X="16.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAIAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Utils\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

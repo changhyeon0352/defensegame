@@ -51,6 +51,7 @@ public struct HeroData
     public HeroClass heroClass;
     public string name;
     public int level;
+    public int exp;
     public int level_Weapon;
     public int level_Armor;
     public int[] level_Skills;

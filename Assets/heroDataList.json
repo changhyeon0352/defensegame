@@ -2,7 +2,7 @@
     "heroDataList": [
         {
             "id": 1,
-            "heroClass": 2,
+            "heroClass": 1,
             "name": "홍염의 마도사",
             "level": 2,
             "level_Weapon": 1,
@@ -17,7 +17,7 @@
         },
         {
             "id": 2,
-            "heroClass": 1,
+            "heroClass": 0,
             "name": "새벽의 기사",
             "level": 1,
             "level_Weapon": 0,
@@ -32,7 +32,7 @@
         },
         {
             "id": 3,
-            "heroClass": 1,
+            "heroClass": 0,
             "name": "광전사",
             "level": 3,
             "level_Weapon": 2,
@@ -47,7 +47,7 @@
         },
         {
             "id": 4,
-            "heroClass": 2,
+            "heroClass": 1,
             "name": "빙결술사",
             "level": 3,
             "level_Weapon": 4,

@@ -33,7 +33,6 @@ public enum Skills:byte
 }
 public enum HeroClass
 {
-    None=0,
     Knight,
     Mage
 }
