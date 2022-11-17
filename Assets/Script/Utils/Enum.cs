@@ -33,6 +33,7 @@ public enum Skills:byte
 }
 public enum HeroClass
 {
+    None,
     Knight,
     Mage
 }
@@ -42,4 +43,10 @@ public enum CursorType
     Default=0,
     Sword,
     targeting
+}
+public enum Phase
+{
+    town,
+    setting,
+    defense
 }

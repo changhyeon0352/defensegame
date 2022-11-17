@@ -21,6 +21,7 @@ public class UIMgr : Singleton<UIMgr>
     List<Button> spawnButtons=new();
     List<Image> commandImages = new();
     List<Image> spawnImages = new();
+    HeroSlot[] heroSlots;
 
 
 
@@ -34,6 +35,7 @@ public class UIMgr : Singleton<UIMgr>
         spawnUiTr = settingTr.Find("SpawnUI");
         defenseStart = transform.Find("Setting").Find("defenseStartButton");
         HeroSettingTr = settingTr.Find("HeroSetting");
+        heroSlots = GetComponentsInChildren<HeroSlot>();
 
         
     }
@@ -116,6 +118,23 @@ public class UIMgr : Singleton<UIMgr>
         {
             Transform cardTr=Instantiate(heroCardPrefab, heroCardListTr).transform;
             cardTr.GetComponent<HeroCard>().InitializeCard(heroData);
+        }
+    }
+    public Sprite GetHeroSprite(HeroData data)
+    {
+        return heroSprites[(int)data.heroClass-1];
+    }
+    public void AddHeroToHeroSolts(HeroData heroData)
+    {
+        for(int i=0;i<heroSlots.Length;i++)
+        {
+            HeroData data1 = heroSlots[i].Data;
+            if(data1.heroClass==HeroClass.None)
+            {
+                heroSlots[i].Data=heroData;
+                break;
+            }
+           
         }
     }
 }

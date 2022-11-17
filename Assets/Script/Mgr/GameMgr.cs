@@ -7,6 +7,25 @@ public class GameMgr : Singleton<GameMgr>
 {
     
     public PlayerInput inputActions;
+    private Phase phase;
+    public Phase Phase { get => phase; }
+    void ChangePhase(Phase _phase)
+    {
+        phase = _phase;
+        switch (_phase)
+        {
+            case Phase.town:
+                break;
+            case Phase.setting:
+                inputActions.Setting.Enable();
+                break;
+            case Phase.defense:
+                inputActions.Setting.Disable();
+                inputActions.Command.Enable();
+                break;
+        }
+
+    }
 
     override protected void Awake()
     {

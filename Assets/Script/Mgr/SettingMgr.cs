@@ -13,6 +13,7 @@ public class SettingMgr : Singleton<SettingMgr>
     public GameObject[] unitPrefabs;
     private GameObject spawnUnitPrefab;
     public GameObject unitGroupPrefab;
+    private List<HeroData> fightingHeroDataList=new();
     PlayerInput inputActions;
 
     List<GameObject> unitSetList;
@@ -23,6 +24,7 @@ public class SettingMgr : Singleton<SettingMgr>
     private Transform unitGroupTr;
     private UnitGroup unitGroup;
 
+    public int Num_FightingHeroDataList { get=>fightingHeroDataList.Count;}
     public float UnitOffset { get => unitOffset; }
 
     override protected void Awake()
@@ -202,7 +204,14 @@ public class SettingMgr : Singleton<SettingMgr>
     // 로컬 함수====================================================
     
 
-    
+    public void AddFightingHeroData(HeroData data)
+    {
+        if(fightingHeroDataList.Count<4)
+        {
+            fightingHeroDataList.Add(data);
+        }
+
+    }
     private void SortingUnit()
     {
         SortingUnit(Mouse.current.position.ReadValue());
