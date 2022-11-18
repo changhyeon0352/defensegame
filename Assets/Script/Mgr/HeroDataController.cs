@@ -45,7 +45,7 @@ public class HeroDataController : Singleton<HeroDataController>
     }
 }
 [Serializable]
-public struct HeroData
+public class HeroData
 {
     public int id;
     public HeroClass heroClass;
@@ -56,9 +56,10 @@ public struct HeroData
     public int level_Armor;
     public int[] level_Skills;
     public bool isDead;
+    
 }
 [Serializable]
-public struct HeroDatas
+public class HeroDatas
 {
     public List<HeroData> heroDataList;
 }

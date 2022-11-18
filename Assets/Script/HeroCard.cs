@@ -34,12 +34,31 @@ public class HeroCard : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     {
         if(SettingMgr.Instance.Num_FightingHeroDataList<4&&!isSelected)
         {
-            UIMgr.Instance.AddHeroToHeroSolts(heroData);
-            heroImage.color = Color.gray;
-            heroImage.transform.GetChild(0).GetComponent<Image>().enabled = true;
-            isSelected = true;
+            AddHeroToHeroSolts(heroData);
+            AddorRemoveFromList(true);
         }
-        
+    }
+    public void AddHeroToHeroSolts(HeroData heroData)
+    {
+        HeroSlot[] heroSlots=UIMgr.Instance.HeroSlots;
+        for (int i = 0; i < heroSlots.Length; i++)
+        {
+            HeroData data1 = heroSlots[i].Data;
+            if (data1 == null)
+            {
+                heroSlots[i].Data = heroData;
+                heroSlots[i].heroDataCard = this;
+                break;
+            }
+
+        }
+    }
+    public void AddorRemoveFromList(bool isFight)
+    {
+        heroImage.color = isFight ? Color.gray : Color.white;
+        heroImage.transform.GetChild(0).GetComponent<Image>().enabled = isFight;
+        isSelected = isFight;
+
     }
 
     public void OnPointerEnter(PointerEventData eventData)

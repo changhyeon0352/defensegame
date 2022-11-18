@@ -133,7 +133,7 @@ public class SettingMgr : Singleton<SettingMgr>
             inputActions.Command.Select.Disable();
             for(int i=0; i<unitPrefabs.Length;i++)
             {
-                if(spawnUnitPrefab == unitPrefabs[i])
+                if(spawnUnitPrefab == unitPrefabs[i])//0,1은 병졸 2번이상은 영웅
                 {
                     if(i>1)
                     {
@@ -142,7 +142,6 @@ public class SettingMgr : Singleton<SettingMgr>
                     }
                     else
                     {
-
                         inputActions.Setting.scrollUpDown.Enable();
                         inputActions.Setting.SwitchRow.Enable();
                     }
@@ -204,13 +203,19 @@ public class SettingMgr : Singleton<SettingMgr>
     // 로컬 함수====================================================
     
 
-    public void AddFightingHeroData(HeroData data)
+    public bool AddFightingHeroData(HeroData data)
     {
+        if(fightingHeroDataList.Contains(data))
+        {
+            fightingHeroDataList.Remove(data);
+            return false;
+        }
         if(fightingHeroDataList.Count<4)
         {
             fightingHeroDataList.Add(data);
+            
         }
-
+        return true;
     }
     private void SortingUnit()
     {

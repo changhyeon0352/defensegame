@@ -47,6 +47,7 @@ public enum CursorType
 public enum Phase
 {
     town,
+    selectHero,
     setting,
     defense
 }
