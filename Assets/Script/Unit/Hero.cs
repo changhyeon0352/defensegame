@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hero : AllyUnit
 {
-    private HeroData data;
+    public HeroData data;
     public bool isattackMove = false;
 
     //무브업데이트땐 적추적 ㄴㄴ

@@ -16,7 +16,6 @@ public class CommandMgr : Singleton<CommandMgr>
     List<UnitGroup> seletedGroupList = new List<UnitGroup>();
     Hero selectedHero;
     PlayerInput inputActions;
-    //public GameObject[] skillPrefabs;
     private List<Transform> skillIndicatorTrs = new List<Transform>();
     List<Transform> skillTargets = new List<Transform>();
     Skills usingSkill = Skills.None;

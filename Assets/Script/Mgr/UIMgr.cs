@@ -121,7 +121,7 @@ public class UIMgr : Singleton<UIMgr>
     }
     public Sprite GetHeroSprite(HeroData data)
     {
-        return heroSprites[(int)data.heroClass-1];
+        return heroSprites[(int)data.heroClass];
     }
     
     

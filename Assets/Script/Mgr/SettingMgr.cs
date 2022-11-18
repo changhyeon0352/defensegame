@@ -11,6 +11,7 @@ using UnityEngine.InputSystem.Controls;
 public class SettingMgr : Singleton<SettingMgr>
 {
     public GameObject[] unitPrefabs;
+    public GameObject[] heroPrefabs;
     private GameObject spawnUnitPrefab;
     public GameObject unitGroupPrefab;
     private List<HeroData> fightingHeroDataList=new();
@@ -23,6 +24,7 @@ public class SettingMgr : Singleton<SettingMgr>
     float dir = 0;
     private Transform unitGroupTr;
     private UnitGroup unitGroup;
+    public Transform heroSpawnSpots;
 
     public int Num_FightingHeroDataList { get=>fightingHeroDataList.Count;}
     public float UnitOffset { get => unitOffset; }
@@ -31,7 +33,6 @@ public class SettingMgr : Singleton<SettingMgr>
     {
         base.Awake();
         inputActions = GameMgr.Instance.inputActions;
-
         unitSetList = new List<GameObject>();
     }
     private void OnEnable()
@@ -47,17 +48,8 @@ public class SettingMgr : Singleton<SettingMgr>
         inputActions.Setting.SwitchRow.Disable();
         inputActions.Setting.scrollUpDown.Disable();
     }
-
-   
-
     private void OnDisable()
     {
-        inputActions.Setting.ReSetting.performed        -= OnResetting;
-        inputActions.Setting.Click.performed            -= OnCompleteSetting;
-        inputActions.Setting.RotateUnitGroup.canceled   -= (_) => dir = 0;
-        inputActions.Setting.scrollUpDown.performed     -= OnscrollUpDown;
-        inputActions.Setting.RotateUnitGroup.performed  -= OnRotateUnitGroup;
-        inputActions.Setting.NewUnitGroup.performed     -= OnStartSetting;
         inputActions.Setting.Disable();
     }
 
@@ -76,19 +68,10 @@ public class SettingMgr : Singleton<SettingMgr>
             unitGroupTr.rotation *= Quaternion.Euler(0f, dir * 360f * Time.deltaTime, 0f);
             //유닛 정렬해서 위치시키기
             SortingUnit();
-
-            
         }
-        //else // 유닛 세팅 고치기
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-                
-        //    }
-        //}
     }
     //inputActions 연결함수=======================================================================
-    private void OnSwitchRow(InputAction.CallbackContext obj)
+    private void OnSwitchRow(InputAction.CallbackContext _)
     {
         Keyboard kboard = Keyboard.current;
         if (kboard.anyKey.wasPressedThisFrame)
@@ -100,11 +83,10 @@ public class SettingMgr : Singleton<SettingMgr>
                     ChangeGroupRow((int)k.keyCode - 40);
                     break;
                 }
-
             }
         }
     }
-    private void OnCompleteSetting(InputAction.CallbackContext obj)
+    private void OnCompleteSetting(InputAction.CallbackContext _)
     {
         CompleteUnitSetting();
         inputActions.Setting.Click.Disable();
@@ -119,38 +101,27 @@ public class SettingMgr : Singleton<SettingMgr>
     }
     private void OnStartSetting(InputAction.CallbackContext _)
     {
-        
         if (unitSetList.Count == 0&&spawnUnitPrefab!=null)
         {
-            GameObject obj = Instantiate(unitGroupPrefab, Vector3.zero, Quaternion.identity);
-            unitGroupTr = obj.transform;
-            unitGroup=obj.GetComponent<UnitGroup>();
-            unitGroupTr.parent = transform;
-            num_row = 1;
-            AddUnitRow();
+            StartSetting();
             inputActions.Setting.scrollUpDown.Enable();
             inputActions.Setting.Click.Enable();
             inputActions.Command.Select.Disable();
-            for(int i=0; i<unitPrefabs.Length;i++)
-            {
-                if(spawnUnitPrefab == unitPrefabs[i])//0,1은 병졸 2번이상은 영웅
-                {
-                    if(i>1)
-                    {
-                        inputActions.Setting.scrollUpDown.Disable();
-                        inputActions.Setting.SwitchRow.Disable();
-                    }
-                    else
-                    {
-                        inputActions.Setting.scrollUpDown.Enable();
-                        inputActions.Setting.SwitchRow.Enable();
-                    }
-                }
-                
-            }
+            inputActions.Setting.scrollUpDown.Enable();
+            inputActions.Setting.SwitchRow.Enable();
         }
-        
     }
+
+    private void StartSetting(HeroData herodata=null)
+    {
+        GameObject obj = Instantiate(unitGroupPrefab, Vector3.zero, Quaternion.identity);
+        unitGroupTr = obj.transform;
+        unitGroup = obj.GetComponent<UnitGroup>();
+        unitGroupTr.parent = transform;
+        num_row = 1;
+        AddUnitRow(herodata);
+    }
+
     private void OnscrollUpDown(InputAction.CallbackContext obj)
     {
         if (!Input.GetKey(KeyCode.LeftShift))
@@ -179,8 +150,6 @@ public class SettingMgr : Singleton<SettingMgr>
             {
                 Destroy(unitGroup.spotsTr.GetChild(i).gameObject);
             }
-            
-
             unitGroupTr.parent = transform;
             for (int i = 0; i < unitGroup.unitsTr.childCount; i++)
             {
@@ -194,7 +163,6 @@ public class SettingMgr : Singleton<SettingMgr>
             inputActions.Setting.ReSetting.Disable();
             inputActions.Command.Select.Disable();
         }
-        
     }
     public void SelectSpawnUnitType(int i)
     {
@@ -202,7 +170,29 @@ public class SettingMgr : Singleton<SettingMgr>
     }
     // 로컬 함수====================================================
     
+    public void SpawnHeros()
+    {
+        int i = 0;
+        foreach(HeroData data in fightingHeroDataList)
+        {
+            
+            if(data!=null)
+            {
+                spawnUnitPrefab = heroPrefabs[(int)data.heroClass];
+                StartSetting(data);
+                Ray ray = new Ray();
+                ray.origin = heroSpawnSpots.GetChild(i).position;
+                ray.direction = Vector3.down;
+                if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
+                {
+                    unitSetList[0].transform.position = hit.point;
+                    CompleteUnitSetting();
+                }
 
+                i++;
+            }
+        }
+    }
     public bool AddFightingHeroData(HeroData data)
     {
         if(fightingHeroDataList.Contains(data))
@@ -213,14 +203,13 @@ public class SettingMgr : Singleton<SettingMgr>
         if(fightingHeroDataList.Count<4)
         {
             fightingHeroDataList.Add(data);
-            
         }
         return true;
-    }
+    }//HeroSlot에서 여기로 더해줌
     private void SortingUnit()
     {
         SortingUnit(Mouse.current.position.ReadValue());
-    }
+    }//오버로딩
     private void SortingUnit(Vector3 mousePosition)
     {
         //유닛그룹 정렬시키기
@@ -249,7 +238,6 @@ public class SettingMgr : Singleton<SettingMgr>
                 }
             }
         }
-        
     }
 
     private void CompleteUnitSetting()
@@ -259,7 +247,6 @@ public class SettingMgr : Singleton<SettingMgr>
         {
             unitGroup.spotsTr.position = hit.point;
         }
-        
         unitGroup.spotsTr.forward = unitGroupTr.forward;
         for (int i = 0; i < unitGroup.unitsTr.childCount; i++)
         {
@@ -273,9 +260,7 @@ public class SettingMgr : Singleton<SettingMgr>
             unit.goalTr = spot.transform;
             unit.ChangeState(UnitState.Move);
         }
-
         ShaderChange(UnitShader.normalShader);
-
         unitGroupTr.parent = unitGroup.AllyGroups;//원래 이거자식이 unitGroupTr인데 형제로 격상
         unitSetList.Clear();
         unitGroup.InitializeUnitList();
@@ -283,9 +268,6 @@ public class SettingMgr : Singleton<SettingMgr>
         unitGroup = null;
         inputActions.Setting.scrollUpDown.Enable();
     }
-    
-    
-
     void ChangeGroupRow(int iRow)
     {
         if(unitSetList.Count>0)
@@ -305,11 +287,16 @@ public class SettingMgr : Singleton<SettingMgr>
             RemoveLastToList();
         }
     }
-    void AddUnitRow()
+    void AddUnitRow(HeroData herodata=null)
     {
         for(int i=0;i<num_row;i++)
         {
             GameObject obj = Instantiate(spawnUnitPrefab, unitGroup.unitsTr);
+            Hero hero = obj.GetComponent<Hero>();
+            if (hero!=null)
+            {
+                hero.data = herodata;
+            }
             ShaderChange(UnitShader.transparentShader);
             unitSetList.Add(obj);
         }
@@ -336,8 +323,6 @@ public class SettingMgr : Singleton<SettingMgr>
     void ShaderChange(UnitShader _type)
     {
         SkinnedMeshRenderer[] skinRen = unitGroup.unitsTr.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-
         for (int i = 0; i < skinRen.Length; i++)
         {
             skinRen[i].material.SetInt("_IsSpawning", (int)_type);
@@ -348,9 +333,7 @@ public class SettingMgr : Singleton<SettingMgr>
             else
             {
                 skinRen[i].material.SetFloat("_Alpha", 1f);
-
             }
         }
     }
-
 }

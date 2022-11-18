@@ -21,7 +21,7 @@ public class HeroCard : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     public void InitializeCard(HeroData heroData)
     {
         this.heroData = heroData;
-        heroImage.sprite = heroSprites[(int)heroData.heroClass-1];
+        heroImage.sprite = heroSprites[(int)heroData.heroClass];
         nameTMP.text = heroData.name;
         weaponTMP.text = heroData.level_Weapon.ToString();
         armorTMP.text = heroData.level_Armor.ToString();
