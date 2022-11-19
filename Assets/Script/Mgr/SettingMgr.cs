@@ -88,7 +88,7 @@ public class SettingMgr : Singleton<SettingMgr>
     }
     private void OnCompleteSetting(InputAction.CallbackContext _)
     {
-        CompleteUnitSetting();
+        CompleteUnitSetting(Camera.main.ScreenPointToRay(Input.mousePosition));
         inputActions.Setting.Click.Disable();
         inputActions.Setting.scrollUpDown.Disable();
         inputActions.Setting.ReSetting.Enable();
@@ -186,7 +186,7 @@ public class SettingMgr : Singleton<SettingMgr>
                 if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
                 {
                     unitSetList[0].transform.position = hit.point;
-                    CompleteUnitSetting();
+                    CompleteUnitSetting(ray);
                 }
 
                 i++;
@@ -240,9 +240,8 @@ public class SettingMgr : Singleton<SettingMgr>
         }
     }
 
-    private void CompleteUnitSetting()
+    private void CompleteUnitSetting(Ray ray)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
         {
             unitGroup.spotsTr.position = hit.point;

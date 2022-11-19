@@ -20,6 +20,7 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.setting:
                 inputActions.Setting.Enable();
+                SettingMgr.Instance.SpawnHeros();
                 break;
             case Phase.defense:
                 inputActions.Setting.Disable();
