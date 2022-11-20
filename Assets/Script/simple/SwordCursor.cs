@@ -10,13 +10,13 @@ public class SwordCursor : MonoBehaviour,IPointerEnterHandler,IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (CommandMgr.Instance.UsingSkill != Skills.AttackMove)
+        if (GameMgr.Instance.commandMgr.UsingSkill != Skills.AttackMove)
             UIMgr.Instance.ChangeCursor(CursorType.Sword);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if(CommandMgr.Instance.UsingSkill !=Skills.AttackMove)
+        if(GameMgr.Instance.commandMgr.UsingSkill !=Skills.AttackMove)
             UIMgr.Instance.ChangeCursor(CursorType.Default);
     }
 }

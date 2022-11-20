@@ -24,10 +24,10 @@ public class UnitGroup:MonoBehaviour
     }
     public void CheckSelected()
     {
-        bool isSelected = (CommandMgr.Instance.SelectedGroupList.Contains(this));
-        if(!isSelected&& CommandMgr.Instance.SelectedHero!=null)
+        bool isSelected = (GameMgr.Instance.commandMgr.SelectedGroupList.Contains(this));
+        if(!isSelected&& GameMgr.Instance.commandMgr.SelectedHero!=null)
         {
-            isSelected= CommandMgr.Instance.SelectedHero==this.GetComponentInChildren<Hero>();
+            isSelected= GameMgr.Instance.commandMgr.SelectedHero==this.GetComponentInChildren<Hero>();
         }
         for(int i=0;i<unitList.Count;i++)
         {
@@ -67,7 +67,7 @@ public class UnitGroup:MonoBehaviour
         unitList.Remove(unit);
         if(unitList.Count== 0)
         {
-            CommandMgr.Instance.SelectedGroupList.Remove(this);
+            GameMgr.Instance.commandMgr.SelectedGroupList.Remove(this);
             Destroy(gameObject);
         }
     }

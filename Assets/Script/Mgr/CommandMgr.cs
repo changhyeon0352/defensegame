@@ -2,13 +2,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 
 
 
-public class CommandMgr : Singleton<CommandMgr>
+public class CommandMgr : MonoBehaviour
 {
     public GameObject[] skillIndicatorPrefabs;
     [SerializeField] GameObject moveToPrefabs;
@@ -27,9 +28,8 @@ public class CommandMgr : Singleton<CommandMgr>
     public Skills UsingSkill { get => usingSkill;}
     public Hero SelectedHero { get => selectedHero;}
 
-    override protected void Awake()
+    private void Awake()
     {
-        base.Awake();
         inputActions = GameMgr.Instance.inputActions;
         monsterOrGround = LayerMask.GetMask("Monster") | LayerMask.GetMask("Ground");
     }
@@ -194,7 +194,8 @@ public class CommandMgr : Singleton<CommandMgr>
         for (int i = 0; i < seletedGroupList.Count; i++)
         {
             skillIndicatorTrs.Add(Instantiate(skillIndicatorPrefabs[0]).transform);
-            skillIndicatorTrs[i].localScale = new Vector3(seletedGroupList[i].rowColumn.y, 1, seletedGroupList[i].rowColumn.x) * SettingMgr.Instance.UnitOffset;
+            skillIndicatorTrs[i].localScale = new Vector3(seletedGroupList[i].rowColumn.y, 1,
+                seletedGroupList[i].rowColumn.x) * GameMgr.Instance.settingMgr.UnitOffset;
             spots.Add(Instantiate(seletedGroupList[i].spotsTr));
 
             spots[i].parent = skillIndicatorTrs[i];

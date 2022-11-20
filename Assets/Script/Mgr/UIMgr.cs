@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIMgr : Singleton<UIMgr>
@@ -35,8 +36,7 @@ public class UIMgr : Singleton<UIMgr>
         spawnUiTr = settingTr.Find("SpawnUI");
         defenseStart = transform.Find("Setting").Find("defenseStartButton");
         HeroSettingTr = settingTr.Find("HeroSetting");
-        heroSlots = GetComponentsInChildren<HeroSlot>();
-
+        GameMgr.Instance.actionChangePhase += ChangePhase;
         
     }
     private void Start()
@@ -50,16 +50,15 @@ public class UIMgr : Singleton<UIMgr>
             spawnImages.Add(spawnUiTr.GetChild(i).GetComponent<Image>());
             spawnButtons.Add(spawnUiTr.GetChild(i).GetComponent<Button>());
             int index = i;
-            spawnButtons[i].onClick.AddListener(() => SettingMgr.Instance.SelectSpawnUnitType(index));
+            spawnButtons[i].onClick.AddListener(() => GameMgr.Instance.settingMgr.SelectSpawnUnitType(index));
         }
         for (int i = 0; i < commandUiTr.childCount; i++)
         {
             commandImages.Add(commandUiTr.GetChild(i).GetComponent<Image>());
             commandButtons.Add(commandUiTr.GetChild(i).GetComponent<Button>());
             int index =(int) Mathf.Pow(2, i);
-            commandButtons[i].onClick.AddListener(() => CommandMgr.Instance.UnitCommand(index));
+            commandButtons[i].onClick.AddListener(() => GameMgr.Instance.commandMgr.UnitCommand(index));
         }
-        defenseStart.GetComponent<Button>().onClick.AddListener(DefenseStart);
         ClearSkillButton();
         InitializeHeroCardList();
     }
@@ -86,14 +85,7 @@ public class UIMgr : Singleton<UIMgr>
             commandImages[i].color = Color.gray;
         }
     }
-    public void DefenseStart()
-    {
-        GameMgr.Instance.ChangePhase(Phase.defense);
-        for(int i=0; i<spawnButtons.Count; i++)
-        {
-            spawnButtons[i].gameObject.SetActive(false);
-        }
-    }
+    
     public void ChangeCursor(CursorType cursor)
     {
         if(cursor==CursorType.Sword)
@@ -123,6 +115,44 @@ public class UIMgr : Singleton<UIMgr>
     {
         return heroSprites[(int)data.heroClass];
     }
-    
-    
+    private void ChangePhase(Phase _phase)
+    {
+        switch (GameMgr.Instance.Phase)
+        {
+            case Phase.town:
+                break;
+            case Phase.selectHero:
+                HeroSettingTr.gameObject.SetActive(false);
+                settingTr.gameObject.SetActive(false);
+                heroSlots = null;
+                break;
+            case Phase.setting:
+                spawnUiTr.gameObject.SetActive(false);
+                defenseStart.gameObject.SetActive(false);
+                settingTr.gameObject.SetActive(false);
+                break;
+            case Phase.defense:
+                commandTr.gameObject.SetActive(false);
+                break;
+        }
+        switch (_phase)
+        {
+            case Phase.town:
+                break;
+            case Phase.selectHero:
+                settingTr.gameObject.SetActive(true);
+                HeroSettingTr.gameObject.SetActive(true);
+                heroSlots = GetComponentsInChildren<HeroSlot>();
+                break;
+            case Phase.setting:
+                settingTr.gameObject.SetActive(true);
+                spawnUiTr.gameObject.SetActive(true);
+                defenseStart.gameObject.SetActive(true);
+                break;
+            case Phase.defense:
+             
+                commandTr.gameObject.SetActive(true);
+                break;
+        }
+    }
 }

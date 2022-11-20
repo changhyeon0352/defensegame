@@ -9,8 +9,7 @@ public class Test : MonoBehaviour
 {
     void Start()
     {
-        AllyUnit test1 = new AllyUnit();
-        int a = 0;
+        GameMgr.Instance.ChangePhaseAction(1);
     }
 
     

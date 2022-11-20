@@ -5,13 +5,27 @@ using UnityEngine;
 
 public class GameMgr : Singleton<GameMgr>
 {
-    
+    public SettingMgr settingMgr;
+    public CommandMgr commandMgr;
     public PlayerInput inputActions;
     private Phase phase;
+    public Action<Phase> actionChangePhase;
     public Phase Phase { get => phase; }
-    public void ChangePhase(Phase _phase)
+    private void ChangePhase(Phase _phase)
     {
-        phase = _phase;
+        switch (phase)
+        {
+            case Phase.town:
+                break;
+            case Phase.selectHero:
+                break;
+            case Phase.setting:
+                settingMgr.enabled = false;
+                break;
+            case Phase.defense:
+                commandMgr.enabled = false;
+                break;
+        }
         switch (_phase)
         {
             case Phase.town:
@@ -19,22 +33,30 @@ public class GameMgr : Singleton<GameMgr>
             case Phase.selectHero:
                 break;
             case Phase.setting:
-                inputActions.Setting.Enable();
-                SettingMgr.Instance.SpawnHeros();
+                settingMgr.enabled = true;
+                GameMgr.Instance.settingMgr.SpawnHeros();
                 break;
             case Phase.defense:
-                inputActions.Setting.Disable();
+                commandMgr.enabled = true;
                 inputActions.Command.Enable();
                 break;
         }
 
+        phase = _phase;
     }
 
     override protected void Awake()
     {
         base.Awake();
         inputActions =new PlayerInput();
-        
+    }
+    private void Start()
+    {
+        actionChangePhase += ChangePhase;
+    }
+    public void ChangePhaseAction(int iPhase)
+    {
+        actionChangePhase.Invoke((Phase)iPhase);
     }
     
    

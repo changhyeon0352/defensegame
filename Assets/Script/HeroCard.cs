@@ -32,7 +32,7 @@ public class HeroCard : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(SettingMgr.Instance.Num_FightingHeroDataList<4&&!isSelected)
+        if(HeroDataMgr.Instance.FightingHeroDataList.Count<4&&!isSelected)
         {
             AddHeroToHeroSolts(heroData);
             AddorRemoveFromList(true);

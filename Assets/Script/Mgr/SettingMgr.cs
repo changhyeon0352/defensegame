@@ -8,13 +8,12 @@ using UnityEngine.InputSystem.Controls;
 
     
 
-public class SettingMgr : Singleton<SettingMgr>
+public class SettingMgr : MonoBehaviour
 {
     public GameObject[] unitPrefabs;
     public GameObject[] heroPrefabs;
     private GameObject spawnUnitPrefab;
     public GameObject unitGroupPrefab;
-    private List<HeroData> fightingHeroDataList=new();
     PlayerInput inputActions;
 
     List<GameObject> unitSetList;
@@ -26,12 +25,10 @@ public class SettingMgr : Singleton<SettingMgr>
     private UnitGroup unitGroup;
     public Transform heroSpawnSpots;
 
-    public int Num_FightingHeroDataList { get=>fightingHeroDataList.Count;}
     public float UnitOffset { get => unitOffset; }
 
-    override protected void Awake()
+    private void Awake()
     {
-        base.Awake();
         inputActions = GameMgr.Instance.inputActions;
         unitSetList = new List<GameObject>();
     }
@@ -45,8 +42,7 @@ public class SettingMgr : Singleton<SettingMgr>
         inputActions.Setting.Click.performed            += OnCompleteSetting;
         inputActions.Setting.SwitchRow.performed        += OnSwitchRow;
         inputActions.Setting.ReSetting.performed        += OnResetting;
-        inputActions.Setting.SwitchRow.Disable();
-        inputActions.Setting.scrollUpDown.Disable();
+
     }
     private void OnDisable()
     {
@@ -173,7 +169,7 @@ public class SettingMgr : Singleton<SettingMgr>
     public void SpawnHeros()
     {
         int i = 0;
-        foreach(HeroData data in fightingHeroDataList)
+        foreach(HeroData data in HeroDataMgr.Instance.FightingHeroDataList)
         {
             
             if(data!=null)
@@ -188,24 +184,11 @@ public class SettingMgr : Singleton<SettingMgr>
                     unitSetList[0].transform.position = hit.point;
                     CompleteUnitSetting(ray);
                 }
-
                 i++;
             }
         }
     }
-    public bool AddFightingHeroData(HeroData data)
-    {
-        if(fightingHeroDataList.Contains(data))
-        {
-            fightingHeroDataList.Remove(data);
-            return false;
-        }
-        if(fightingHeroDataList.Count<4)
-        {
-            fightingHeroDataList.Add(data);
-        }
-        return true;
-    }//HeroSlot에서 여기로 더해줌
+    
     private void SortingUnit()
     {
         SortingUnit(Mouse.current.position.ReadValue());
