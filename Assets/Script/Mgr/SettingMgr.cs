@@ -169,7 +169,7 @@ public class SettingMgr : MonoBehaviour
     public void SpawnHeros()
     {
         int i = 0;
-        foreach(HeroData data in HeroDataMgr.Instance.FightingHeroDataList)
+        foreach(HeroData data in DataMgr.Instance.FightingHeroDataList)
         {
             
             if(data!=null)

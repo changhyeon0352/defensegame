@@ -25,7 +25,7 @@ public class HeroSlot : MonoBehaviour,IPointerClickHandler
         get { return data; }
         set 
         { 
-            if(HeroDataMgr.Instance.AddFightingHeroData(value))//만약 이미 추가된걸 보내면 삭제됨
+            if(DataMgr.Instance.AddFightingHeroData(value))//만약 이미 추가된걸 보내면 삭제됨
             {
                 heroImage.sprite = UIMgr.Instance.GetHeroSprite(value);
                 heroImage.color = Color.white;

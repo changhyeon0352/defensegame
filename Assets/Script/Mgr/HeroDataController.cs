@@ -59,7 +59,7 @@ public class HeroData
     
 }
 [Serializable]
-public class HeroDatas
+public class HeroDatas:Data
 {
     public List<HeroData> heroDataList;
 }
