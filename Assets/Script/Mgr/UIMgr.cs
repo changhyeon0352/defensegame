@@ -23,6 +23,11 @@ public class UIMgr : Singleton<UIMgr>
     List<Image> commandImages = new();
     List<Image> spawnImages = new();
     HeroSlot[] heroSlots;
+    [SerializeField]
+    TextMeshProUGUI maxSpawnPoint;
+    [SerializeField]
+    TextMeshProUGUI nowSpawnPoint;
+
     public HeroSlot[] HeroSlots { get => heroSlots; }
 
 
@@ -33,34 +38,46 @@ public class UIMgr : Singleton<UIMgr>
         commandTr = transform.Find("Command");
         commandUiTr = commandTr.Find("CommandUI");
         settingTr = transform.Find("Setting");
-        spawnUiTr = settingTr.Find("SpawnUI");
-        defenseStart = transform.Find("Setting").Find("defenseStartButton");
-        HeroSettingTr = settingTr.Find("HeroSetting");
+        spawnUiTr = settingTr.Find("SpawnUnitButton");
+        defenseStart = settingTr.Find("defenseStartButton");
+        HeroSettingTr = transform.Find("HeroSetting");
         GameMgr.Instance.actionChangePhase += ChangePhase;
         
     }
     private void Start()
     {
-        InitializeUI();
     }
-    void InitializeUI()
+    void InitializeUI(Phase phase)
     {
-        for (int i = 0; i < spawnUiTr.childCount; i++)
+        switch(phase)
         {
-            spawnImages.Add(spawnUiTr.GetChild(i).GetComponent<Image>());
-            spawnButtons.Add(spawnUiTr.GetChild(i).GetComponent<Button>());
-            int index = i;
-            spawnButtons[i].onClick.AddListener(() => GameMgr.Instance.settingMgr.SelectSpawnUnitType(index));
+            case Phase.town:
+
+                break;
+            case Phase.selectHero:
+                InitializeHeroCardList();
+                break;
+            case Phase.setting:
+                for (int i = 0; i < spawnUiTr.childCount; i++)
+                {
+                    spawnImages.Add(spawnUiTr.GetChild(i).GetComponent<Image>());
+                    spawnButtons.Add(spawnUiTr.GetChild(i).GetComponent<Button>());
+                    int index = i;
+                    spawnButtons[i].onClick.AddListener(() => GameMgr.Instance.settingMgr.SelectSpawnUnitType(index));
+                    spawnButtons[i].onClick.AddListener(() => SelectedSpawnButton(index));
+                }
+                break;
+            case Phase.defense:
+                for (int i = 0; i < commandUiTr.childCount; i++)
+                {
+                    commandImages.Add(commandUiTr.GetChild(i).GetComponent<Image>());
+                    commandButtons.Add(commandUiTr.GetChild(i).GetComponent<Button>());
+                    int index = (int)Mathf.Pow(2, i);
+                    commandButtons[i].onClick.AddListener(() => GameMgr.Instance.commandMgr.UnitCommand(index));
+                }
+                ClearSkillButton();
+                break;
         }
-        for (int i = 0; i < commandUiTr.childCount; i++)
-        {
-            commandImages.Add(commandUiTr.GetChild(i).GetComponent<Image>());
-            commandButtons.Add(commandUiTr.GetChild(i).GetComponent<Button>());
-            int index =(int) Mathf.Pow(2, i);
-            commandButtons[i].onClick.AddListener(() => GameMgr.Instance.commandMgr.UnitCommand(index));
-        }
-        ClearSkillButton();
-        InitializeHeroCardList();
     }
     public void SetButtonAvailable(Skills groupsSkills)
     {
@@ -115,6 +132,20 @@ public class UIMgr : Singleton<UIMgr>
     {
         return heroSprites[(int)data.heroClass];
     }
+    public void SelectedSpawnButton(int index)
+    {
+        for(int i= 0; i < spawnImages.Count; i++)
+        {
+            if(i==index)
+            {
+                spawnImages[i].color = Color.yellow;
+            }
+            else
+            {
+                spawnImages[i].color = Color.white;
+            }
+        }
+    }
     private void ChangePhase(Phase _phase)
     {
         switch (GameMgr.Instance.Phase)
@@ -123,12 +154,9 @@ public class UIMgr : Singleton<UIMgr>
                 break;
             case Phase.selectHero:
                 HeroSettingTr.gameObject.SetActive(false);
-                settingTr.gameObject.SetActive(false);
                 heroSlots = null;
                 break;
             case Phase.setting:
-                spawnUiTr.gameObject.SetActive(false);
-                defenseStart.gameObject.SetActive(false);
                 settingTr.gameObject.SetActive(false);
                 break;
             case Phase.defense:
@@ -140,19 +168,23 @@ public class UIMgr : Singleton<UIMgr>
             case Phase.town:
                 break;
             case Phase.selectHero:
-                settingTr.gameObject.SetActive(true);
                 HeroSettingTr.gameObject.SetActive(true);
                 heroSlots = GetComponentsInChildren<HeroSlot>();
+                InitializeUI(_phase);
                 break;
             case Phase.setting:
                 settingTr.gameObject.SetActive(true);
-                spawnUiTr.gameObject.SetActive(true);
-                defenseStart.gameObject.SetActive(true);
+                InitializeUI(_phase);
                 break;
             case Phase.defense:
-             
                 commandTr.gameObject.SetActive(true);
+                InitializeUI(_phase);
                 break;
         }
+    }
+    public void UpdateSpawnPoint(int nowPoint,int maxPoint)
+    {
+        nowSpawnPoint.text = nowPoint.ToString();
+        maxSpawnPoint.text = maxPoint.ToString();
     }
 }

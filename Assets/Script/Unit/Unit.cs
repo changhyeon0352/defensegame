@@ -8,6 +8,7 @@ using UnityEditor;
 
 public class Unit : MonoBehaviour,IHealth
 {
+    public UnitData unitData;
     protected NavMeshAgent agent;
     protected Animator anim;
     protected Transform chaseTargetTr;

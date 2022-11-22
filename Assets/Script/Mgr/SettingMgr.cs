@@ -5,17 +5,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
-
-    
-
 public class SettingMgr : MonoBehaviour
 {
-    public GameObject[] unitPrefabs;
     public GameObject[] heroPrefabs;
-    private GameObject spawnUnitPrefab;
+    //public GameObject[] unitPrefabs;
+    private GameObject spawnHeroPrefab;
     public GameObject unitGroupPrefab;
     PlayerInput inputActions;
-
     List<GameObject> unitSetList;
     private float   unitOffset  = 1.5f;
     public  float   scrollSpeed = 1f;
@@ -24,14 +20,22 @@ public class SettingMgr : MonoBehaviour
     private Transform unitGroupTr;
     private UnitGroup unitGroup;
     public Transform heroSpawnSpots;
+    private int unitSpawnPoint = 4000;
+    private int nowUnitSpawnPoint;
+    public UnitData[] unitDatas;
+    private UnitData spawnUnitData;
 
+    public int NowUnitSpawnPoint { get { return nowUnitSpawnPoint; } 
+        set { nowUnitSpawnPoint = value; UIMgr.Instance.UpdateSpawnPoint(nowUnitSpawnPoint, unitSpawnPoint); } }
     public float UnitOffset { get => unitOffset; }
 
     private void Awake()
     {
         inputActions = GameMgr.Instance.inputActions;
-        unitSetList = new List<GameObject>();
+        unitSetList = new();
+        
     }
+
     private void OnEnable()
     {
         inputActions.Setting.Enable();
@@ -42,6 +46,7 @@ public class SettingMgr : MonoBehaviour
         inputActions.Setting.Click.performed            += OnCompleteSetting;
         inputActions.Setting.SwitchRow.performed        += OnSwitchRow;
         inputActions.Setting.ReSetting.performed        += OnResetting;
+        NowUnitSpawnPoint = unitSpawnPoint;
 
     }
     private void OnDisable()
@@ -97,7 +102,7 @@ public class SettingMgr : MonoBehaviour
     }
     private void OnStartSetting(InputAction.CallbackContext _)
     {
-        if (unitSetList.Count == 0&&spawnUnitPrefab!=null)
+        if (unitSetList.Count == 0&&spawnUnitData!=null)
         {
             StartSetting();
             inputActions.Setting.scrollUpDown.Enable();
@@ -115,7 +120,10 @@ public class SettingMgr : MonoBehaviour
         unitGroup = obj.GetComponent<UnitGroup>();
         unitGroupTr.parent = transform;
         num_row = 1;
-        AddUnitRow(herodata);
+        if(herodata==null)
+        {
+            AddUnitRow();
+        }
     }
 
     private void OnscrollUpDown(InputAction.CallbackContext obj)
@@ -162,7 +170,7 @@ public class SettingMgr : MonoBehaviour
     }
     public void SelectSpawnUnitType(int i)
     {
-        spawnUnitPrefab = unitPrefabs[i];
+        spawnUnitData = unitDatas[i];
     }
     // 로컬 함수====================================================
     
@@ -174,8 +182,17 @@ public class SettingMgr : MonoBehaviour
             
             if(data!=null)
             {
-                spawnUnitPrefab = heroPrefabs[(int)data.heroClass];
+                spawnHeroPrefab = heroPrefabs[(int)data.heroClass];
                 StartSetting(data);
+                GameObject obj = Instantiate(spawnHeroPrefab, unitGroup.unitsTr);
+                Hero hero = obj.GetComponent<Hero>();
+                
+                if (hero != null)
+                {
+                    hero.data = data;
+                }
+                ShaderChange(UnitShader.transparentShader);
+                unitSetList.Add(obj);
                 Ray ray = new Ray();
                 ray.origin = heroSpawnSpots.GetChild(i).position;
                 ray.direction = Vector3.down;
@@ -262,25 +279,19 @@ public class SettingMgr : MonoBehaviour
             }
         }
     }
-    void UnitListClear()
-    {
-        for(int i=0;i<unitSetList.Count;i++)
-        {
-            RemoveLastToList();
-        }
-    }
-    void AddUnitRow(HeroData herodata=null)
+    
+    void AddUnitRow()
     {
         for(int i=0;i<num_row;i++)
         {
-            GameObject obj = Instantiate(spawnUnitPrefab, unitGroup.unitsTr);
-            Hero hero = obj.GetComponent<Hero>();
-            if (hero!=null)
+            if(nowUnitSpawnPoint > spawnUnitData.Cost)
             {
-                hero.data = herodata;
+                NowUnitSpawnPoint-=spawnUnitData.Cost;
+                GameObject obj = Instantiate(spawnUnitData.unitPrefab, unitGroup.unitsTr);
+                obj.GetComponent<AllyUnit>().unitData = spawnUnitData;
+                ShaderChange(UnitShader.transparentShader);
+                unitSetList.Add(obj);
             }
-            ShaderChange(UnitShader.transparentShader);
-            unitSetList.Add(obj);
         }
     }
     void RemoveLastRow()
@@ -289,6 +300,7 @@ public class SettingMgr : MonoBehaviour
         { 
             for(int i=0; i<num_row;i++)
             {
+                NowUnitSpawnPoint += spawnUnitData.Cost;
                 RemoveLastToList();
             }
         }

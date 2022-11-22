@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class Data
-{
-
-}
+public class Data { }
 public enum DataType {HeroDatas,upgrade,inventory}
 public class Upgrade:Data
 {
@@ -17,13 +14,23 @@ public class Upgrade:Data
     int unitPoint;
     int hero_equipment;
     int hero_skill;
-
+}
+public class Inventory:Data
+{
+    
+}
+public class Property:Data
+{
+    public int money;
 }
 public class DataMgr : Singleton<DataMgr>
 {
     private List<HeroData> fightingHeroDataList = new();
-    private HeroDatas heroDatas;
-    private Upgrade upgrade;
+    private HeroDatas myHeroDatas;
+    private Upgrade myUpgrade;
+    private Inventory myInventory;
+    private Property myProperty;
+    public Property MyProperty { get { return myProperty; } }
     string heroDatafileName = "heroDataList.json";
     string inventoryfileName = "inventory.json";
     //인벤토리
@@ -54,7 +61,6 @@ public class DataMgr : Singleton<DataMgr>
             data = JsonUtility.FromJson<HeroDatas>(jsonData);
         }
         else if(data is Upgrade) { data = JsonUtility.FromJson<Upgrade>(jsonData); }
-        int a = 0;
     }
     private void SwitchData(DataType dataType, out Data data, out string fileName)
     {
@@ -63,11 +69,11 @@ public class DataMgr : Singleton<DataMgr>
         switch (dataType)
         {
             case DataType.HeroDatas:
-                data = (heroDatas!=null)?heroDatas:new HeroDatas();
+                data = (myHeroDatas!=null)?myHeroDatas:new HeroDatas();
                 fileName = heroDatafileName;
                 break;
             case DataType.upgrade:
-                data = (upgrade != null) ? upgrade : new Upgrade();
+                data = (myUpgrade != null) ? myUpgrade : new Upgrade();
                 fileName = inventoryfileName;
                 break;
         }
