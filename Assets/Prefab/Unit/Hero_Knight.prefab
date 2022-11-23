@@ -2105,6 +2105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 430410}
+  - component: {fileID: -4602934731411266727}
   - component: {fileID: -8081403056627435541}
   - component: {fileID: 9593232}
   - component: {fileID: 8430469705054338826}
@@ -2139,6 +2140,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-4602934731411266727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4734c7e1cbc8e429ee97bfdfaf3b6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillEffects:
+  - {fileID: 3208469172170980495, guid: b51b85f541cd1874bbfcdb4c6ab8e80f, type: 3}
+  - {fileID: 0}
 --- !u!114 &-8081403056627435541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2151,11 +2167,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 147e57a88b3ace249a049d6766d77a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitData: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
   goalTr: {fileID: 0}
   selectedMark: {fileID: 1201833924593192495}
+  data:
+    id: 0
+    heroClass: 0
+    name: 
+    level: 0
+    exp: 0
+    level_Weapon: 0
+    level_Armor: 0
+    level_Skills: 
+    isDead: 0
+  isattackMove: 0
 --- !u!95 &9593232
 Animator:
   serializedVersion: 4
@@ -2166,7 +2194,7 @@ Animator:
   m_GameObject: {fileID: 169604}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d288a0e4a2d923b46898986e979da643, type: 3}
-  m_Controller: {fileID: 22100000, guid: 1f4ac14a2bc33c54895d9e88cf7e4123, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7f11855890a201f43945b480172fa0d5, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
