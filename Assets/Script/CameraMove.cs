@@ -20,8 +20,6 @@ public class CameraMove : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Camera.Enable();
-        inputActions.Camera.CameraMove.performed += OnCameraMove;
-        inputActions.Camera.CameraMove.canceled += OnCameraStop;
         inputActions.Camera.CameraRotateOnOff.performed += OnCameraRotateOn;
         inputActions.Camera.CameraRotateOnOff.canceled += OnCameraRotateOff;
         inputActions.Camera.CameraRotate.performed += OnCameraRotate;
@@ -32,16 +30,7 @@ public class CameraMove : MonoBehaviour
 
     private void OnDisable()
     {
-        inputActions.Camera.CameraZoom.performed -= OnCameraZoom;
-        inputActions.Camera.CameraRotate.performed -= OnCameraRotate;
-        inputActions.Camera.CameraRotateOnOff.canceled -= OnCameraRotateOff;
-        inputActions.Camera.CameraRotateOnOff.performed -= OnCameraRotateOn;
-        inputActions.Camera.CameraMove.canceled -= OnCameraStop;
-        inputActions.Camera.CameraMove.performed -= OnCameraMove;
         inputActions.Camera.Disable();
-        
-        
-        
     }
 
     private void OnCameraZoom(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -75,18 +64,18 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    private void OnCameraStop(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    public void CameraStop()
     {
         dir = Vector2.zero;
     }
 
-    private void OnCameraMove(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    public void CameraGetDir(Vector2 dir)
     {
-        dir = obj.ReadValue<Vector2>().normalized;
+        this.dir = dir;
     }
     private void Update()
     {
         //transform.Translate(dir * cameraSpeed * Time.deltaTime);
-        transform.position += Vector3.right * -dir.y + Vector3.forward * dir.x;
+        transform.position += (Vector3.right * -dir.y + Vector3.forward * dir.x)*cameraSpeed*Time.deltaTime;
     }
 }

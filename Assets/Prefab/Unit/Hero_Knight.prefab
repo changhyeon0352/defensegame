@@ -2107,6 +2107,7 @@ GameObject:
   - component: {fileID: 430410}
   - component: {fileID: -4602934731411266727}
   - component: {fileID: -8081403056627435541}
+  - component: {fileID: 7078118432602968065}
   - component: {fileID: 9593232}
   - component: {fileID: 8430469705054338826}
   - component: {fileID: 7331461338978706186}
@@ -2153,8 +2154,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillEffects:
-  - {fileID: 3208469172170980495, guid: b51b85f541cd1874bbfcdb4c6ab8e80f, type: 3}
-  - {fileID: 0}
+  - {fileID: 3208469172170980495, guid: af156ba74f1b3874489ef724d4086102, type: 3}
+  - {fileID: 1882810805046240, guid: e9f0bd0c63d2c6c40a587e78acdb14de, type: 3}
+  - {fileID: 5335753327985139135, guid: 35f216b3aeec9e74489f81c9c8922f9a, type: 3}
+  - {fileID: 548984487552956191, guid: e4e27f3d940739144970508687c04c35, type: 3}
 --- !u!114 &-8081403056627435541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2184,6 +2187,24 @@ MonoBehaviour:
     level_Skills: 
     isDead: 0
   isattackMove: 0
+--- !u!114 &7078118432602968065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169604}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 0.52632606, b: 0.972549, a: 1}
+  outlineWidth: 4
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!95 &9593232
 Animator:
   serializedVersion: 4

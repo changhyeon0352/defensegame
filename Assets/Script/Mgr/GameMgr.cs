@@ -8,6 +8,7 @@ public class GameMgr : Singleton<GameMgr>
     public SettingMgr settingMgr;
     public CommandMgr commandMgr;
     public PlayerInput inputActions;
+    public CameraMove cameraMove;
     private Phase phase;
     public Action<Phase> actionChangePhase;
     public Phase Phase { get => phase; }
@@ -21,9 +22,11 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.setting:
                 settingMgr.enabled = false;
+                cameraMove.enabled = false;
                 break;
             case Phase.defense:
                 commandMgr.enabled = false;
+                cameraMove.enabled = false;
                 break;
         }
         switch (_phase)
@@ -33,10 +36,12 @@ public class GameMgr : Singleton<GameMgr>
             case Phase.selectHero:
                 break;
             case Phase.setting:
+                cameraMove.enabled = true;
                 settingMgr.enabled = true;
                 GameMgr.Instance.settingMgr.SpawnHeros();
                 break;
             case Phase.defense:
+                cameraMove.enabled = true;
                 commandMgr.enabled = true;
                 inputActions.Command.Enable();
                 break;

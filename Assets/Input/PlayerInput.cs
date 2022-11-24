@@ -28,15 +28,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             ""id"": ""e660cf6b-f9e1-4aa6-91c0-cfbfdd803b35"",
             ""actions"": [
                 {
-                    ""name"": ""CameraMove"",
-                    ""type"": ""Value"",
-                    ""id"": ""da7ab17d-8db3-470c-9c49-50fd5e3f1dbb"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""CameraRotate"",
                     ""type"": ""Value"",
                     ""id"": ""0cfa0a2e-77a5-49c0-b69e-8f4891880d0c"",
@@ -65,61 +56,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""ee301bdb-7fb8-419d-aac2-0807cdbf7582"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""CameraMove"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""47bdcfc3-6d0f-47bc-9f73-10b0e501f017"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""New control scheme"",
-                    ""action"": ""CameraMove"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""5f237667-19cf-4631-b5b3-965cb744bd82"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""New control scheme"",
-                    ""action"": ""CameraMove"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""6e890909-2ca1-4f36-86bb-7c17c4d3a44b"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""New control scheme"",
-                    ""action"": ""CameraMove"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""581a4e40-bb56-425b-8e98-99fa8cde1eba"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""New control scheme"",
-                    ""action"": ""CameraMove"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": """",
                     ""id"": ""07462963-c6f1-4d78-96a7-3fcb102acd1d"",
@@ -405,6 +341,42 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillButton1"",
+                    ""type"": ""Button"",
+                    ""id"": ""aa5d1554-d051-40ce-8220-2aee7dbaa967"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillButton2"",
+                    ""type"": ""Button"",
+                    ""id"": ""9326acae-cf0d-4bc6-a705-b06a5060a3d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillButton3"",
+                    ""type"": ""Button"",
+                    ""id"": ""5064be72-6ba1-4e58-bca6-64be1d00555f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillButton4"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9fe9b42-817c-49d1-b1b7-df25f616d9bc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -451,6 +423,50 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""AttackMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d318ee5-da26-4a74-b53a-baadf9dcc3e1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillButton1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""015f25de-df55-4354-ad64-9c4bbc61c55f"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillButton2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9155d027-0e6c-425c-b793-0f59fa7ad53b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillButton3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46a34a9f-befd-4dae-bb97-57fed1b6f8b1"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillButton4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -492,7 +508,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
 }");
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
-        m_Camera_CameraMove = m_Camera.FindAction("CameraMove", throwIfNotFound: true);
         m_Camera_CameraRotate = m_Camera.FindAction("CameraRotate", throwIfNotFound: true);
         m_Camera_CameraRotateOnOff = m_Camera.FindAction("CameraRotateOnOff", throwIfNotFound: true);
         m_Camera_CameraZoom = m_Camera.FindAction("CameraZoom", throwIfNotFound: true);
@@ -513,6 +528,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Command_skillClick = m_Command.FindAction("skillClick", throwIfNotFound: true);
         m_Command_MoveorSetTarget = m_Command.FindAction("MoveorSetTarget", throwIfNotFound: true);
         m_Command_AttackMove = m_Command.FindAction("AttackMove", throwIfNotFound: true);
+        m_Command_SkillButton1 = m_Command.FindAction("SkillButton1", throwIfNotFound: true);
+        m_Command_SkillButton2 = m_Command.FindAction("SkillButton2", throwIfNotFound: true);
+        m_Command_SkillButton3 = m_Command.FindAction("SkillButton3", throwIfNotFound: true);
+        m_Command_SkillButton4 = m_Command.FindAction("SkillButton4", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -572,7 +591,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     // Camera
     private readonly InputActionMap m_Camera;
     private ICameraActions m_CameraActionsCallbackInterface;
-    private readonly InputAction m_Camera_CameraMove;
     private readonly InputAction m_Camera_CameraRotate;
     private readonly InputAction m_Camera_CameraRotateOnOff;
     private readonly InputAction m_Camera_CameraZoom;
@@ -580,7 +598,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     {
         private @PlayerInput m_Wrapper;
         public CameraActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @CameraMove => m_Wrapper.m_Camera_CameraMove;
         public InputAction @CameraRotate => m_Wrapper.m_Camera_CameraRotate;
         public InputAction @CameraRotateOnOff => m_Wrapper.m_Camera_CameraRotateOnOff;
         public InputAction @CameraZoom => m_Wrapper.m_Camera_CameraZoom;
@@ -593,9 +610,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_CameraActionsCallbackInterface != null)
             {
-                @CameraMove.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraMove;
-                @CameraMove.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraMove;
-                @CameraMove.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraMove;
                 @CameraRotate.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotate;
                 @CameraRotate.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotate;
                 @CameraRotate.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraRotate;
@@ -609,9 +623,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @CameraMove.started += instance.OnCameraMove;
-                @CameraMove.performed += instance.OnCameraMove;
-                @CameraMove.canceled += instance.OnCameraMove;
                 @CameraRotate.started += instance.OnCameraRotate;
                 @CameraRotate.performed += instance.OnCameraRotate;
                 @CameraRotate.canceled += instance.OnCameraRotate;
@@ -739,6 +750,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Command_skillClick;
     private readonly InputAction m_Command_MoveorSetTarget;
     private readonly InputAction m_Command_AttackMove;
+    private readonly InputAction m_Command_SkillButton1;
+    private readonly InputAction m_Command_SkillButton2;
+    private readonly InputAction m_Command_SkillButton3;
+    private readonly InputAction m_Command_SkillButton4;
     public struct CommandActions
     {
         private @PlayerInput m_Wrapper;
@@ -747,6 +762,10 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @skillClick => m_Wrapper.m_Command_skillClick;
         public InputAction @MoveorSetTarget => m_Wrapper.m_Command_MoveorSetTarget;
         public InputAction @AttackMove => m_Wrapper.m_Command_AttackMove;
+        public InputAction @SkillButton1 => m_Wrapper.m_Command_SkillButton1;
+        public InputAction @SkillButton2 => m_Wrapper.m_Command_SkillButton2;
+        public InputAction @SkillButton3 => m_Wrapper.m_Command_SkillButton3;
+        public InputAction @SkillButton4 => m_Wrapper.m_Command_SkillButton4;
         public InputActionMap Get() { return m_Wrapper.m_Command; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -768,6 +787,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @AttackMove.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnAttackMove;
                 @AttackMove.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnAttackMove;
                 @AttackMove.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnAttackMove;
+                @SkillButton1.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton1;
+                @SkillButton1.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton1;
+                @SkillButton1.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton1;
+                @SkillButton2.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton2;
+                @SkillButton2.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton2;
+                @SkillButton2.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton2;
+                @SkillButton3.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton3;
+                @SkillButton3.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton3;
+                @SkillButton3.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton3;
+                @SkillButton4.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton4;
+                @SkillButton4.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton4;
+                @SkillButton4.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillButton4;
             }
             m_Wrapper.m_CommandActionsCallbackInterface = instance;
             if (instance != null)
@@ -784,6 +815,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @AttackMove.started += instance.OnAttackMove;
                 @AttackMove.performed += instance.OnAttackMove;
                 @AttackMove.canceled += instance.OnAttackMove;
+                @SkillButton1.started += instance.OnSkillButton1;
+                @SkillButton1.performed += instance.OnSkillButton1;
+                @SkillButton1.canceled += instance.OnSkillButton1;
+                @SkillButton2.started += instance.OnSkillButton2;
+                @SkillButton2.performed += instance.OnSkillButton2;
+                @SkillButton2.canceled += instance.OnSkillButton2;
+                @SkillButton3.started += instance.OnSkillButton3;
+                @SkillButton3.performed += instance.OnSkillButton3;
+                @SkillButton3.canceled += instance.OnSkillButton3;
+                @SkillButton4.started += instance.OnSkillButton4;
+                @SkillButton4.performed += instance.OnSkillButton4;
+                @SkillButton4.canceled += instance.OnSkillButton4;
             }
         }
     }
@@ -808,7 +851,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     }
     public interface ICameraActions
     {
-        void OnCameraMove(InputAction.CallbackContext context);
         void OnCameraRotate(InputAction.CallbackContext context);
         void OnCameraRotateOnOff(InputAction.CallbackContext context);
         void OnCameraZoom(InputAction.CallbackContext context);
@@ -832,5 +874,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnSkillClick(InputAction.CallbackContext context);
         void OnMoveorSetTarget(InputAction.CallbackContext context);
         void OnAttackMove(InputAction.CallbackContext context);
+        void OnSkillButton1(InputAction.CallbackContext context);
+        void OnSkillButton2(InputAction.CallbackContext context);
+        void OnSkillButton3(InputAction.CallbackContext context);
+        void OnSkillButton4(InputAction.CallbackContext context);
     }
 }

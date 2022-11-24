@@ -2106,6 +2106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 430410}
   - component: {fileID: 683032339152783975}
+  - component: {fileID: 1250563032517229997}
   - component: {fileID: 9593232}
   - component: {fileID: 8430469705054338826}
   - component: {fileID: 7331461338978706186}
@@ -2151,11 +2152,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67d18e7a9d029004c812d2bb7cc9aa55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitData: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
   goalTr: {fileID: 0}
   selectedMark: {fileID: 1201833924593192495}
+--- !u!114 &1250563032517229997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169604}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.36445373, g: 0.9716981, b: 0, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!95 &9593232
 Animator:
   serializedVersion: 4

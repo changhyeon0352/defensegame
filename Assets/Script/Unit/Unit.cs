@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using UnityEditor;
 
-public class Unit : MonoBehaviour,IHealth
+public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandler
 {
     public UnitData unitData;
     protected NavMeshAgent agent;
@@ -264,5 +263,13 @@ public class Unit : MonoBehaviour,IHealth
         Handles.DrawWireDisc(transform.position, transform.up, searchRange);
     }
 
-    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        transform.GetComponent<Outline>().enabled = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        transform.GetComponent<Outline>().enabled = false;
+    }
 }
