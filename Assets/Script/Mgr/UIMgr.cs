@@ -27,6 +27,7 @@ public class UIMgr : Singleton<UIMgr>
     TextMeshProUGUI maxSpawnPoint;
     [SerializeField]
     TextMeshProUGUI nowSpawnPoint;
+    public GameObject heroStatePrefab;
 
     public HeroSlot[] HeroSlots { get => heroSlots; }
 
@@ -70,11 +71,13 @@ public class UIMgr : Singleton<UIMgr>
             case Phase.defense:
                 for (int i = 0; i < commandUiTr.childCount; i++)
                 {
+                    
                     commandImages.Add(commandUiTr.GetChild(i).GetComponent<Image>());
                     commandButtons.Add(commandUiTr.GetChild(i).GetComponent<Button>());
                     int index = (int)Mathf.Pow(2, i);
                     commandButtons[i].onClick.AddListener(() => GameMgr.Instance.commandMgr.UnitCommand(index));
                 }
+                MakeHeroStates();
                 ClearSkillButton();
                 break;
         }
@@ -85,12 +88,12 @@ public class UIMgr : Singleton<UIMgr>
         int temp = (int)groupsSkills;
         for (int i = 0; i < commandButtons.Count; i++)     //선택된건 쓸 수 있게
         {
-            if ((temp & 1) == 1)
+            if ((temp & 1) == 1)//끝자리가 1인지 체크함 이진수 11101 이런거 체크
             {
                 commandButtons[i].enabled = true;
                 commandImages[i].color = Color.white;
             }
-            temp >>= 1;
+            temp >>= 1; // 1101 => 110/1 이렇게 민다
         }
     }
 
@@ -131,6 +134,17 @@ public class UIMgr : Singleton<UIMgr>
     public Sprite GetHeroSprite(HeroData data)
     {
         return heroSprites[(int)data.heroClass];
+    }
+    public void MakeHeroStates()
+    {
+        Transform heroListTr =commandTr.Find("HeroList");
+        foreach(HeroData heroData in DataMgr.Instance.FightingHeroDataList)
+        {
+            HeroState heroState = Instantiate(heroStatePrefab, heroListTr).GetComponent<HeroState>();
+            heroState.InitializeHeroState(heroData);
+        }
+        
+      
     }
     public void SelectedSpawnButton(int index)
     {

@@ -294,6 +294,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ChangeHero",
+                    "type": "Button",
+                    "id": "951b7070-dd79-4d0c-809a-a395784325f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "skillClick",
                     "type": "Button",
                     "id": "3b7da92a-2cab-4673-ab97-925f9fe092e5",
@@ -394,7 +403,7 @@
                 {
                     "name": "",
                     "id": "34874fe3-de95-42fc-b513-547e3c53a5a7",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -443,6 +452,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "SkillButton4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4109f629-d0c4-4961-ad76-85fb6ec7adf9",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeHero",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bde7f1a4-0c39-4d7f-88f5-9f1fb43fb0cc",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeHero",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d1e02bf6-bc94-4eab-960f-a521e3118062",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeHero",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4d38764-1cd8-4419-b790-0ff75e9ba75d",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeHero",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

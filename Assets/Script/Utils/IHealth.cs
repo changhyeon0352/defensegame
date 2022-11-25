@@ -6,6 +6,7 @@ public interface IHealth
 {
     int Hp { get; set; }
     int Attack { get; set; }
+    int Armor { get; set; }
 
     void TakeDamage(int damage);
 

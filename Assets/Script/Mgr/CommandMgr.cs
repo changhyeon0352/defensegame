@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 
 
@@ -21,12 +22,15 @@ public class CommandMgr : MonoBehaviour
     List<Transform> skillTargets = new List<Transform>();
     Skills usingSkill = Skills.None;
     LayerMask monsterOrGround;
+
+
     public List<UnitGroup> SelectedGroupList
     {
         get => seletedGroupList;
     }
     public Skills UsingSkill { get => usingSkill;}
     public Hero SelectedHero { get => selectedHero;}
+    
 
     private void Awake()
     {
@@ -40,8 +44,31 @@ public class CommandMgr : MonoBehaviour
         inputActions.Command.skillClick.performed += OnSkillClick;
         inputActions.Command.MoveorSetTarget.performed += OnMoveOrSetTarget;
         inputActions.Command.AttackMove.performed += OnAttackMove;
+        inputActions.Command.ChangeHero.performed += OnChangeHero;
         inputActions.Command.skillClick.Disable();
     }
+
+    private void OnChangeHero(InputAction.CallbackContext obj)//숫자 1~4 눌렀을때 히어로가 선택됨
+    {
+        Keyboard kboard = Keyboard.current;
+        if (kboard.anyKey.wasPressedThisFrame)
+        {
+            foreach (KeyControl k in kboard.allKeys)
+            {
+                if (k.wasPressedThisFrame)
+                {
+                    int a=(int)k.keyCode - 41;
+                    if(a<DataMgr.Instance.FightingHeroDataList.Count)
+                    {
+                        ClearSelectedGroups();
+                        selectedHero = Hero.FindHero(DataMgr.Instance.FightingHeroDataList[a]);
+                        AllCheckSelected();
+                    }
+                }
+            }
+        }
+    }
+
     private void OnDisable()
     {
         inputActions.Command.Disable();
@@ -121,7 +148,7 @@ public class CommandMgr : MonoBehaviour
     // 병사, 영웅 쉬프트,그냥 클릭
     private void OnSelect(InputAction.CallbackContext obj)
     {
-        if (Utils.IsClickOnUI())
+        if (Utils.IsClickOnUI())//UI 클릭 하는지
         {
             return;
         }
@@ -172,14 +199,14 @@ public class CommandMgr : MonoBehaviour
         AllCheckSelected();
         //유닛 그룹에 스킬 교집합 체크 스킬넘버배열을 넘겨주자
         //스킬 사용가능여부 비트연산자 이용할것
-        Skills groupsSkills = ~Skills.None;
+        Skills groupsSkills = ~Skills.None; //1111 1111 로 초기화
         foreach (UnitGroup selectGroup in seletedGroupList)
         {
-            groupsSkills &= selectGroup.GroupSkill;
+            groupsSkills &= selectGroup.GroupSkill; //유닛그룹들의 사용가능 스킬 교집합만 남긴다.
         }
         if (seletedGroupList.Count > 0)
         {
-            UIMgr.Instance.SetButtonAvailable(groupsSkills);
+            UIMgr.Instance.SetButtonAvailable(groupsSkills); //버튼에 사용사능 스킬만 활성화
         }
 
     }

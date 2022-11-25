@@ -316,6 +316,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ChangeHero"",
+                    ""type"": ""Button"",
+                    ""id"": ""951b7070-dd79-4d0c-809a-a395784325f9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""skillClick"",
                     ""type"": ""Button"",
                     ""id"": ""3b7da92a-2cab-4673-ab97-925f9fe092e5"",
@@ -416,7 +425,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""34874fe3-de95-42fc-b513-547e3c53a5a7"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -465,6 +474,50 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SkillButton4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4109f629-d0c4-4961-ad76-85fb6ec7adf9"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeHero"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bde7f1a4-0c39-4d7f-88f5-9f1fb43fb0cc"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeHero"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d1e02bf6-bc94-4eab-960f-a521e3118062"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeHero"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4d38764-1cd8-4419-b790-0ff75e9ba75d"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeHero"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -525,6 +578,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         // Command
         m_Command = asset.FindActionMap("Command", throwIfNotFound: true);
         m_Command_Select = m_Command.FindAction("Select", throwIfNotFound: true);
+        m_Command_ChangeHero = m_Command.FindAction("ChangeHero", throwIfNotFound: true);
         m_Command_skillClick = m_Command.FindAction("skillClick", throwIfNotFound: true);
         m_Command_MoveorSetTarget = m_Command.FindAction("MoveorSetTarget", throwIfNotFound: true);
         m_Command_AttackMove = m_Command.FindAction("AttackMove", throwIfNotFound: true);
@@ -747,6 +801,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Command;
     private ICommandActions m_CommandActionsCallbackInterface;
     private readonly InputAction m_Command_Select;
+    private readonly InputAction m_Command_ChangeHero;
     private readonly InputAction m_Command_skillClick;
     private readonly InputAction m_Command_MoveorSetTarget;
     private readonly InputAction m_Command_AttackMove;
@@ -759,6 +814,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         private @PlayerInput m_Wrapper;
         public CommandActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Select => m_Wrapper.m_Command_Select;
+        public InputAction @ChangeHero => m_Wrapper.m_Command_ChangeHero;
         public InputAction @skillClick => m_Wrapper.m_Command_skillClick;
         public InputAction @MoveorSetTarget => m_Wrapper.m_Command_MoveorSetTarget;
         public InputAction @AttackMove => m_Wrapper.m_Command_AttackMove;
@@ -778,6 +834,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Select.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSelect;
                 @Select.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSelect;
                 @Select.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSelect;
+                @ChangeHero.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnChangeHero;
+                @ChangeHero.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnChangeHero;
+                @ChangeHero.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnChangeHero;
                 @skillClick.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
                 @skillClick.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
                 @skillClick.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillClick;
@@ -806,6 +865,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
+                @ChangeHero.started += instance.OnChangeHero;
+                @ChangeHero.performed += instance.OnChangeHero;
+                @ChangeHero.canceled += instance.OnChangeHero;
                 @skillClick.started += instance.OnSkillClick;
                 @skillClick.performed += instance.OnSkillClick;
                 @skillClick.canceled += instance.OnSkillClick;
@@ -871,6 +933,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     public interface ICommandActions
     {
         void OnSelect(InputAction.CallbackContext context);
+        void OnChangeHero(InputAction.CallbackContext context);
         void OnSkillClick(InputAction.CallbackContext context);
         void OnMoveorSetTarget(InputAction.CallbackContext context);
         void OnAttackMove(InputAction.CallbackContext context);

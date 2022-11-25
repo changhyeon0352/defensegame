@@ -24,10 +24,15 @@ public class UnitGroup:MonoBehaviour
     }
     public void CheckSelected()
     {
-        bool isSelected = (GameMgr.Instance.commandMgr.SelectedGroupList.Contains(this));
-        if(!isSelected&& GameMgr.Instance.commandMgr.SelectedHero!=null)
+        bool isSelected = (GameMgr.Instance.commandMgr.SelectedGroupList.Contains(this));// this가 리스트에 속해 있다
+        if(!isSelected&& GameMgr.Instance.commandMgr.SelectedHero!=null) //선택되지 않았지만 히어로임
         {
-            isSelected= GameMgr.Instance.commandMgr.SelectedHero==this.GetComponentInChildren<Hero>();
+            //이것안에 히어로가 선택된 히어로랑 일치
+            isSelected = GameMgr.Instance.commandMgr.SelectedHero==this.GetComponentInChildren<Hero>();
+            if(isSelected)
+            {
+                HeroState.SelectedHeroUI();
+            }
         }
         for(int i=0;i<unitList.Count;i++)
         {

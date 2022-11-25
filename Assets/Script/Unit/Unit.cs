@@ -17,14 +17,18 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
     protected float timeCount;
     protected float attackSpeed = 2.0f;
-    protected int hp = 100;
+    protected int hp;
+    protected int hpMax = 100;
+    protected int mp;
+    protected int mpMax = 100;
     protected int attack = 20;
+    [SerializeField]protected int armor = 0;
     protected const float stopRange = 0.1f;
     protected const float searchRange = 4f;
     const float attackRange = 2f;
 
     public Transform goalTr;
-    public int Hp 
+    public virtual int Hp 
     { 
         get => hp;
         set
@@ -55,15 +59,23 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
 
     public int Attack { get => attack; set => attack=value; }
+    public int Armor { get => armor; set => armor = value; }
+
     public void TakeDamage(int damage)
     {
-       Hp-=damage;
+        double decreaseRate= 1-Math.Atan((double)armor/50)/(Math.PI/2);//아머가 50쯤 되면 50%
+        int netDamage = (int)(damage * decreaseRate);
+        Hp -= netDamage == 0 ? 1 : netDamage; 
+
+
     }
 
     virtual protected void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         anim= GetComponent<Animator>();
+        hp = hpMax;
+        mp = mpMax;
     }
     virtual protected void Update()
     {

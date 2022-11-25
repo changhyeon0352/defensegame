@@ -5,9 +5,40 @@ using UnityEngine.EventSystems;
 public class Hero : AllyUnit
 {
     public HeroData data;
+    public HeroState heroState;
     public bool isattackMove = false;
-
+    public override int Hp
+    {
+        get => hp;
+        set 
+        { 
+            base.Hp = value;
+            heroState.Hp(value,hpMax);
+        }
+    }
+    public int Mp
+    {
+        get => mp;
+        set
+        {
+            mp = value;
+            heroState.Mp(value, mpMax);
+        }
+    }
     //무브업데이트땐 적추적 ㄴㄴ
+    public static Hero FindHero(HeroData herodata)
+    {
+        Hero result = new();
+        Hero[] heros=FindObjectsOfType<Hero>();
+        foreach(Hero hero in heros)
+        {
+            if(hero.data == herodata)
+            {
+                result = hero;
+            }
+        }
+        return result;
+    }
     protected override void MoveUpdate()
     {
         if(isattackMove)

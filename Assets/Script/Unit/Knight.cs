@@ -14,6 +14,7 @@ public class Knight : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Command.SkillButton1.performed += UseSkill1;
+        
     }
 
     private void UseSkill1(UnityEngine.InputSystem.InputAction.CallbackContext obj)
