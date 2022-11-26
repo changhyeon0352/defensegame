@@ -22925,6 +22925,62 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 647591935}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &648949223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 648949225}
+  - component: {fileID: 648949224}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &648949224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648949223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4734c7e1cbc8e429ee97bfdfaf3b6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillEffects:
+  - {fileID: 3208469172170980495, guid: af156ba74f1b3874489ef724d4086102, type: 3}
+  - {fileID: 1882810805046240, guid: e9f0bd0c63d2c6c40a587e78acdb14de, type: 3}
+  - {fileID: 5335753327985139135, guid: 35f216b3aeec9e74489f81c9c8922f9a, type: 3}
+  - {fileID: 548984487552956191, guid: e4e27f3d940739144970508687c04c35, type: 3}
+  allyLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  shieldRadius: 5
+--- !u!4 &648949225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648949223}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 942226320}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &651188680
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31714,6 +31770,52 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 940546481}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &942226318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 942226320}
+  - component: {fileID: 942226319}
+  m_Layer: 0
+  m_Name: SkillMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &942226319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de40769b44099044aa0069176eb6af37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knight: {fileID: 648949224}
+--- !u!4 &942226320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.962696, y: -0.40332752, z: 23.694805}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 648949225}
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &944805008
 PrefabInstance:
   m_ObjectHideFlags: 0

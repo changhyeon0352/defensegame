@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public class Hero : AllyUnit
 {
     public HeroData data;
     public HeroState heroState;
+    public float range;
     public bool isattackMove = false;
     public override int Hp
     {
@@ -64,8 +66,9 @@ public class Hero : AllyUnit
     {
         chaseTargetTr = targetTr;
     }
-    //커맨드매니저에 영웅용 스킬
-    //땅클릭하면 거기로 가기
-    //몬스터 클릭하면 체이스타겟
-    //영웅 선택시 일반 유닛과는 동시선택 불과 영웅들과만 동시선택가능
+    private void OnDrawGizmos()
+    {
+        Handles.DrawWireDisc(transform.position, transform.up, range);
+    }
+
 }

@@ -23,6 +23,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     protected int mpMax = 100;
     protected int attack = 20;
     [SerializeField]protected int armor = 0;
+    public int armorPlus = 0;
     protected const float stopRange = 0.1f;
     protected const float searchRange = 4f;
     const float attackRange = 2f;
@@ -63,7 +64,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
     public void TakeDamage(int damage)
     {
-        double decreaseRate= 1-Math.Atan((double)armor/50)/(Math.PI/2);//아머가 50쯤 되면 50%
+        double decreaseRate= 1-Math.Atan((double)(armor+armorPlus)/50)/(Math.PI/2);//아머가 50쯤 되면 50%
         int netDamage = (int)(damage * decreaseRate);
         Hp -= netDamage == 0 ? 1 : netDamage; 
 
@@ -272,7 +273,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     
     private void OnDrawGizmos()
     {
-        Handles.DrawWireDisc(transform.position, transform.up, searchRange);
+        //Handles.DrawWireDisc(transform.position, transform.up, searchRange);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
