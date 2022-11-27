@@ -29,6 +29,12 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     const float attackRange = 2f;
 
     public Transform goalTr;
+
+    public void  ProvokedBy(Transform tr)
+    {
+        chaseTargetTr = tr;
+        ChangeState(UnitState.Chase);
+    }
     public virtual int Hp 
     { 
         get => hp;

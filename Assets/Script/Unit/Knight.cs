@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.UIElements;
 
 public enum KnightSkill{shieldAura,provoke,frenzy,finishMove }
 public class Knight : MonoBehaviour
@@ -59,6 +60,25 @@ public class Knight : MonoBehaviour
         }    
     }
 
+    public IEnumerator ProvokeCor(float sec)
+    {
+        Collider[] cols = Physics.OverlapSphere(GameMgr.Instance.commandMgr.SelectedHero.transform.position, provokeRadius, enemyLayerMask);
+        foreach (Collider col in cols)
+        {
+            Monster mon = col.gameObject.GetComponent<Monster>();
+            mon.ProvokedBy(GameMgr.Instance.commandMgr.SelectedHero.transform);
+        }
+        yield return new WaitForSeconds(sec);
+        foreach (Collider col in cols)
+        {
+            if(col.enabled)
+            {
+                Monster mon = col.gameObject.GetComponent<Monster>();
+                mon.ChangeState(UnitState.Move);
+            }
+            
+        }
+    }
     
 
     private void SetShiedPlus(int range,int armorPlus)

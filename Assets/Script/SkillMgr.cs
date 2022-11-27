@@ -5,8 +5,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SkillMgr : MonoBehaviour
-{ 
-
+{
+    float knightskill1Duration=15;
+    float knightskill2Duration=10;
+    float knightskill3Duration=5;
+    float knightskill4Duration;
     //모든 스킬의 정보 관리
     // 쿨타임 관리
     //이펙트 소환
@@ -26,19 +29,20 @@ public class SkillMgr : MonoBehaviour
 
     private void OnSkill1(InputAction.CallbackContext obj)
     {
-        StartCoroutine(PlaySkillOnHero(KnightSkill.shieldAura, 15));
-        StartCoroutine(knight.EnumeratorTimer(knight.shieldAuraCor, 15));
+        StartCoroutine(PlaySkillOnHero(KnightSkill.shieldAura, knightskill1Duration));
+        StartCoroutine(knight.EnumeratorTimer(knight.shieldAuraCor, knightskill1Duration));
     }
 
     private void OnSkill2(InputAction.CallbackContext obj)
     {
-        StartCoroutine(PlaySkillOnHero(KnightSkill.provoke, 5));
+        StartCoroutine(PlaySkillOnHero(KnightSkill.provoke, knightskill2Duration));
+        StartCoroutine(knight.ProvokeCor(knightskill2Duration));
     }
 
     private void OnSkill3(InputAction.CallbackContext obj)
     {
-        StartCoroutine(PlaySkillOnHero(KnightSkill.frenzy, 5));
-        StartCoroutine(knight.EnumeratorTimer(knight.frenzyCor, 5));
+        StartCoroutine(PlaySkillOnHero(KnightSkill.frenzy, knightskill3Duration));
+        StartCoroutine(knight.EnumeratorTimer(knight.frenzyCor, knightskill3Duration));
     }
 
     private void OnSkill4(InputAction.CallbackContext obj)
