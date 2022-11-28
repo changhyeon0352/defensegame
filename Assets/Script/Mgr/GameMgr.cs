@@ -7,8 +7,10 @@ public class GameMgr : Singleton<GameMgr>
 {
     public SettingMgr settingMgr;
     public CommandMgr commandMgr;
+    public SkillMgr skillMgr;
     public PlayerInput inputActions;
     public CameraMove cameraMove;
+    
     private Phase phase;
     public Action<Phase> actionChangePhase;
     public Phase Phase { get => phase; }
@@ -43,6 +45,7 @@ public class GameMgr : Singleton<GameMgr>
             case Phase.defense:
                 cameraMove.enabled = true;
                 commandMgr.enabled = true;
+                skillMgr.enabled = true;
                 inputActions.Command.Enable();
                 break;
         }

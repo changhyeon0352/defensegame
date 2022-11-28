@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEditor;
+using System.Collections;
 
 public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandler
 {
@@ -14,7 +15,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     protected Transform attackTargetTr;
     protected UnitState state = UnitState.Idle;
     public LayerMask enemyLayer;
-
+    public bool isProvoked = false;
     protected float timeCount;
     protected float attackSpeed = 2.0f;
     protected int hp;
@@ -26,14 +27,21 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     public int armorPlus = 0;
     protected const float stopRange = 0.1f;
     protected const float searchRange = 4f;
-    const float attackRange = 2f;
+    protected const float attackRange = 2f;
 
+    
     public Transform goalTr;
 
-    public void  ProvokedBy(Transform tr)
+    public IEnumerator ProvokedBy(Transform tr,float sec)
     {
         chaseTargetTr = tr;
         ChangeState(UnitState.Chase);
+        isProvoked = true;
+        GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.provoked], transform);
+        yield return new WaitForSeconds(sec);
+        isProvoked = false;
+        Destroy(obj);
+        
     }
     public virtual int Hp 
     { 
@@ -113,7 +121,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         // 아군유닛 이동으로 전환
         //궁수는  Attack 전환
         //전사는  Chase 전환
-        SearchAndChase(searchRange);
+        if(SearchAndChase(searchRange))
+            ChangeState(UnitState.Chase);
         if(goalTr!=null)
             transform.LookAt(goalTr.forward+transform.position);
     }
@@ -123,7 +132,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     virtual protected void MoveUpdate()
     {
         agent.SetDestination(goalTr.position);          //목표로 가기
-        SearchAndChase(searchRange);
+        if (SearchAndChase(searchRange))
+            ChangeState(UnitState.Chase);
         if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
         {
             ChangeState(UnitState.Idle);
@@ -131,7 +141,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     virtual protected void ChaseUpdate()
     {
-        if (chaseTargetTr != null)
+        
+        if ((isProvoked&&chaseTargetTr!=null)||SearchAndChase(searchRange))
         {
             agent.SetDestination(chaseTargetTr.position);
         }
@@ -139,10 +150,26 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         {
             ChangeState(UnitState.Move);
         }
-        if (agent.remainingDistance<attackRange && !agent.pathPending)
+        if (agent.remainingDistance < attackRange && !agent.pathPending)
         {
             ChangeState(UnitState.Attack);
         }
+        //{
+        //    if (!isProvoked && Vector3.Distance(transform.position, chaseTargetTr.position) > searchRange)
+        //    {
+        //        ChangeState(UnitState.Move);
+        //    }
+        //    else
+        //    {
+        //        
+        //    }
+        //}
+        //else
+        //{
+        //    ChangeState(UnitState.Move);
+        //}
+
+
     }
     public void MeleeAttack()
     {
@@ -206,7 +233,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         if (enemyTr != null)
         {
             chaseTargetTr = enemyTr;                    //적을 표적으로
-            ChangeState(UnitState.Chase);               //표적 추적으로 변경
             result = true;
         }
         return result;

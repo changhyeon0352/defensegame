@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4337956289271597672}
   - component: {fileID: 2576963997558223891}
   m_Layer: 8
-  m_Name: fireball indicator
+  m_Name: skill_Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1589513323223802465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -32.68142, y: 5.2036347, z: -14.554078}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
