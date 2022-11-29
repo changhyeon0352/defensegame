@@ -6,20 +6,23 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UIElements;
 
-public enum KnightSkill{shieldAura,provoke,frenzy,finishMove }
+
 public class Knight : MonoBehaviour
 {
     public GameObject[] skillEffects;
     [SerializeField]LayerMask allyLayerMask;
     [SerializeField] LayerMask enemyLayerMask;
-    [SerializeField] int shieldRadius = 5;
-    float frenzyRadius = 4.5f;
     int frenzyDamage = 20;
-    float provokeRadius = 9f;
+    int finishDamage = 15;
+    float[] skillRadius = { 5, 9, 3, 5 };
+    float[] skillDurations = {15,10,5,0};
+    public float[] SkillDurations { get => skillDurations; }
+    public float[] SkillRadius { get => skillRadius; }
 
 
     public IEnumerator shieldAuraCor;
     public IEnumerator frenzyCor;
+    public IEnumerator finishMoveCor;
     private void Awake()
     {
         shieldAuraCor = ShieldAuraCor();
@@ -32,7 +35,7 @@ public class Knight : MonoBehaviour
         yield return new WaitForSeconds(sec);
         if(enumerator==shieldAuraCor)
         {
-            SetShiedPlus(shieldRadius + 2, 0);
+            SetShiedPlus(skillRadius[0] + 2, 0);
         }
         StopCoroutine(enumerator);
     }
@@ -40,8 +43,8 @@ public class Knight : MonoBehaviour
     {
         for(int i=0;i<10000;i++)
         {
-            SetShiedPlus(shieldRadius+2,0);
-            SetShiedPlus(shieldRadius,10);
+            SetShiedPlus(skillRadius[0] + 2,0);
+            SetShiedPlus(skillRadius[0], 10);
             yield return null;
         }
     }
@@ -49,7 +52,7 @@ public class Knight : MonoBehaviour
     {
         for (int i = 0; i < 10000; i++)
         {
-            Collider[] cols = Physics.OverlapSphere(GameMgr.Instance.commandMgr.SelectedHero.transform.position, frenzyRadius, enemyLayerMask);
+            Collider[] cols = Physics.OverlapSphere(GameMgr.Instance.commandMgr.SelectedHero.transform.position, skillRadius[2], enemyLayerMask);
             foreach (Collider col in cols)
             {
                 Unit unit = col.gameObject.GetComponent<Unit>();
@@ -60,38 +63,35 @@ public class Knight : MonoBehaviour
         }    
     }
 
-    public IEnumerator ProvokeCor(float sec)
+    public void Provoke(float sec)
     {
-        Collider[] cols = Physics.OverlapSphere(GameMgr.Instance.commandMgr.SelectedHero.transform.position, provokeRadius, enemyLayerMask);
+        Collider[] cols = Physics.OverlapSphere(GameMgr.Instance.commandMgr.SelectedHero.transform.position, skillRadius[1], enemyLayerMask);
         foreach (Collider col in cols)
         {
             Monster mon = col.gameObject.GetComponent<Monster>();
             StartCoroutine(mon.ProvokedBy(GameMgr.Instance.commandMgr.SelectedHero.transform, sec));
             mon.isProvoked = true;
         }
-        yield return new WaitForSeconds(sec);
-        foreach (Collider col in cols)
+       
+    }
+    public IEnumerator FinishMove(Unit targetUnit)
+    {
+        WaitForSeconds sec = new WaitForSeconds(0.1f);
+        for (int i = 0; i < 16; i++)
         {
-            if(col.enabled)
-            {
-                Monster mon = col.gameObject.GetComponent<Monster>();
-                mon.ChangeState(UnitState.Move);
-                mon.isProvoked = false;
-            }
-            
+            yield return sec;
+            targetUnit.TakeDamage(finishDamage);
         }
     }
-    
-
-    private void SetShiedPlus(int range,int armorPlus)
+    private void SetShiedPlus(float range,int armorPlus)
     {
         Collider[] cols = Physics.OverlapSphere(GameMgr.Instance.commandMgr.SelectedHero.transform.position, range, allyLayerMask);
         foreach (Collider col in cols)
         {
             AllyUnit ally = col.gameObject.GetComponent<AllyUnit>();
-            ally.armorPlus = 0;
+            ally.ArmorPlus = armorPlus;
         }
-        GameMgr.Instance.commandMgr.SelectedHero.armorPlus = armorPlus * 2;
+        GameMgr.Instance.commandMgr.SelectedHero.ArmorPlus = armorPlus * 2;
     }
 
     

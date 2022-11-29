@@ -10,6 +10,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] Texture2D cursorDefault;
     [SerializeField] Texture2D cursorSword;
     [SerializeField] Texture2D cursorTargeting;
+    [SerializeField] Texture2D cursorFindTarget;
     public Sprite[] heroSprites;
     public GameObject heroCardPrefab;
     Transform commandUiTr =null;
@@ -82,7 +83,7 @@ public class UIMgr : Singleton<UIMgr>
                 break;
         }
     }
-    public void SetButtonAvailable(Skills groupsSkills)
+    public void SetButtonAvailable(BasicSkills groupsSkills)
     {
         ClearSkillButton();
         int temp = (int)groupsSkills;
@@ -116,9 +117,13 @@ public class UIMgr : Singleton<UIMgr>
         {
             Cursor.SetCursor(cursorDefault, new Vector2(cursorDefault.width*0.3f,cursorDefault.height*0.1f), CursorMode.ForceSoftware);
         }
-        else
+        else if(cursor == CursorType.targeting)
         {
             Cursor.SetCursor(cursorTargeting, new Vector2(cursorTargeting.width * 0.5f, cursorTargeting.height * 0.5f), CursorMode.ForceSoftware);
+        }
+        else
+        {
+            Cursor.SetCursor(cursorFindTarget, new Vector2(cursorTargeting.width * 0.5f, cursorTargeting.height * 0.5f), CursorMode.ForceSoftware);
         }
     }
     public void InitializeHeroCardList()
@@ -143,8 +148,6 @@ public class UIMgr : Singleton<UIMgr>
             HeroState heroState = Instantiate(heroStatePrefab, heroListTr).GetComponent<HeroState>();
             heroState.InitializeHeroState(heroData);
         }
-        
-      
     }
     public void SelectedSpawnButton(int index)
     {

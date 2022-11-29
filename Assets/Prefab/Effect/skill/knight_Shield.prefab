@@ -19660,6 +19660,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: knight_ShielZone
       objectReference: {fileID: 0}
+    - target: {fileID: 1448971607870028, guid: b811f5a1a43ee2f43b3430cff94ba026, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4341449868645458, guid: b811f5a1a43ee2f43b3430cff94ba026, type: 3}
       propertyPath: m_RootOrder
       value: 3

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEditor;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandler
 {
@@ -24,10 +25,28 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     protected int mpMax = 100;
     protected int attack = 20;
     [SerializeField]protected int armor = 0;
-    public int armorPlus = 0;
+    protected int armorPlus = 0;
+    public int ArmorPlus { get { return armorPlus; }
+        set
+        {
+            armorPlus = value;
+            if (armorPlus > 0)
+            {
+                if(!shieldbuff.isPlaying)
+                    shieldbuff.Play();
+            }
+            else
+            {
+                if (shieldbuff.isPlaying)
+                    shieldbuff.Stop();
+            }
+                
+        }
+    } 
     protected const float stopRange = 0.1f;
     protected const float searchRange = 4f;
     protected const float attackRange = 2f;
+    public ParticleSystem shieldbuff;
 
     
     public Transform goalTr;
@@ -39,10 +58,14 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         isProvoked = true;
         GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.provoked], transform);
         yield return new WaitForSeconds(sec);
-        isProvoked = false;
+        if(state!=UnitState.Dead)
+        {
+            ChangeState(UnitState.Move);
+            isProvoked = false;
+        }
         Destroy(obj);
-        
     }
+    
     public virtual int Hp 
     { 
         get => hp;
@@ -57,7 +80,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 {
                     Die();
                 }
-                
             }
             Debug.Log($"{transform.name}의 hp: {hp}");
             
@@ -69,7 +91,11 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         GetComponent<Collider>().enabled = false;
         agent.enabled = false;
         ChangeState(UnitState.Dead);
-        
+        ParticleSystem[] psArray =GetComponentsInChildren<ParticleSystem>();
+        foreach(ParticleSystem ps in psArray)
+        {
+            ps.Stop();
+        }
         //Destroy(gameObject);
     }
 

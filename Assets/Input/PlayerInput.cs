@@ -395,6 +395,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HeroSkillClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""c96d209e-dc46-4ba4-b443-d0c607b9ab9a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -540,6 +549,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""SkillCancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dd80f40c-0176-42a3-9edd-1b0bb7da2488"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HeroSkillClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -607,6 +627,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Command_SkillButton3 = m_Command.FindAction("SkillButton3", throwIfNotFound: true);
         m_Command_SkillButton4 = m_Command.FindAction("SkillButton4", throwIfNotFound: true);
         m_Command_SkillCancel = m_Command.FindAction("SkillCancel", throwIfNotFound: true);
+        m_Command_HeroSkillClick = m_Command.FindAction("HeroSkillClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -831,6 +852,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Command_SkillButton3;
     private readonly InputAction m_Command_SkillButton4;
     private readonly InputAction m_Command_SkillCancel;
+    private readonly InputAction m_Command_HeroSkillClick;
     public struct CommandActions
     {
         private @PlayerInput m_Wrapper;
@@ -845,6 +867,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @SkillButton3 => m_Wrapper.m_Command_SkillButton3;
         public InputAction @SkillButton4 => m_Wrapper.m_Command_SkillButton4;
         public InputAction @SkillCancel => m_Wrapper.m_Command_SkillCancel;
+        public InputAction @HeroSkillClick => m_Wrapper.m_Command_HeroSkillClick;
         public InputActionMap Get() { return m_Wrapper.m_Command; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -884,6 +907,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @SkillCancel.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillCancel;
                 @SkillCancel.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillCancel;
                 @SkillCancel.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnSkillCancel;
+                @HeroSkillClick.started -= m_Wrapper.m_CommandActionsCallbackInterface.OnHeroSkillClick;
+                @HeroSkillClick.performed -= m_Wrapper.m_CommandActionsCallbackInterface.OnHeroSkillClick;
+                @HeroSkillClick.canceled -= m_Wrapper.m_CommandActionsCallbackInterface.OnHeroSkillClick;
             }
             m_Wrapper.m_CommandActionsCallbackInterface = instance;
             if (instance != null)
@@ -918,6 +944,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @SkillCancel.started += instance.OnSkillCancel;
                 @SkillCancel.performed += instance.OnSkillCancel;
                 @SkillCancel.canceled += instance.OnSkillCancel;
+                @HeroSkillClick.started += instance.OnHeroSkillClick;
+                @HeroSkillClick.performed += instance.OnHeroSkillClick;
+                @HeroSkillClick.canceled += instance.OnHeroSkillClick;
             }
         }
     }
@@ -971,5 +1000,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnSkillButton3(InputAction.CallbackContext context);
         void OnSkillButton4(InputAction.CallbackContext context);
         void OnSkillCancel(InputAction.CallbackContext context);
+        void OnHeroSkillClick(InputAction.CallbackContext context);
     }
 }

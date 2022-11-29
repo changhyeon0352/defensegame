@@ -20,7 +20,7 @@ public class CommandMgr : MonoBehaviour
     PlayerInput inputActions;
     private List<Transform> skillIndicatorTrs = new List<Transform>();
     List<Transform> skillTargets = new List<Transform>();
-    Skills usingSkill = Skills.None;
+    BasicSkills usingSkill = BasicSkills.None;
     LayerMask monsterOrGround;
 
 
@@ -28,8 +28,8 @@ public class CommandMgr : MonoBehaviour
     {
         get => seletedGroupList;
     }
-    public Skills UsingSkill { get => usingSkill;}
-    public Hero SelectedHero { get => selectedHero;}
+    public BasicSkills UsingSkill { get => usingSkill;}
+    public Hero SelectedHero { get => selectedHero;set { selectedHero = value;GameMgr.Instance.skillMgr.selectedHero = value; AllCheckSelected(); } }
     
 
     private void Awake()
@@ -46,6 +46,8 @@ public class CommandMgr : MonoBehaviour
         inputActions.Command.AttackMove.performed += OnAttackMove;
         inputActions.Command.ChangeHero.performed += OnChangeHero;
         inputActions.Command.skillClick.Disable();
+        SelectedHero= Hero.FindHero(DataMgr.Instance.FightingHeroDataList[0]);
+
     }
 
     private void OnChangeHero(InputAction.CallbackContext obj)//숫자 1~4 눌렀을때 히어로가 선택됨
@@ -61,8 +63,7 @@ public class CommandMgr : MonoBehaviour
                     if(a<DataMgr.Instance.FightingHeroDataList.Count)
                     {
                         ClearSelectedGroups();
-                        selectedHero = Hero.FindHero(DataMgr.Instance.FightingHeroDataList[a]);
-                        AllCheckSelected();
+                        SelectedHero = Hero.FindHero(DataMgr.Instance.FightingHeroDataList[a]);
                     }
                 }
             }
@@ -102,7 +103,7 @@ public class CommandMgr : MonoBehaviour
 
             inputActions.Command.Select.Disable();
             inputActions.Command.skillClick.Enable();
-            usingSkill = Skills.AttackMove;
+            usingSkill = BasicSkills.AttackMove;
             UIMgr.Instance.ChangeCursor(CursorType.targeting);
         }
     }
@@ -163,7 +164,7 @@ public class CommandMgr : MonoBehaviour
                 if (hit.transform.GetComponent<Hero>() != null)
                 {
                     ClearSelectedGroups();
-                    selectedHero= hit.transform.GetComponent<Hero>();
+                    SelectedHero= hit.transform.GetComponent<Hero>();
                 }
                 else //병사들이 클릭 됐으면
                 {
@@ -199,7 +200,7 @@ public class CommandMgr : MonoBehaviour
         AllCheckSelected();
         //유닛 그룹에 스킬 교집합 체크 스킬넘버배열을 넘겨주자
         //스킬 사용가능여부 비트연산자 이용할것
-        Skills groupsSkills = ~Skills.None; //1111 1111 로 초기화
+        BasicSkills groupsSkills = ~BasicSkills.None; //1111 1111 로 초기화
         foreach (UnitGroup selectGroup in seletedGroupList)
         {
             groupsSkills &= selectGroup.GroupSkill; //유닛그룹들의 사용가능 스킬 교집합만 남긴다.
@@ -214,7 +215,7 @@ public class CommandMgr : MonoBehaviour
     //스킬실행중 셀렉트클릭잠금,스킬인디케이터 생성 스팟복사해서 인디케이터 안에 넣음 스킬타겟즈에 스팟즈를 넣음
     public void SelectShotSpot()
     {
-        usingSkill = Skills.Shoot;
+        usingSkill = BasicSkills.Shoot;
         inputActions.Command.Select.Disable();
         inputActions.Command.skillClick.Enable();
         List<Transform> spots = new();
@@ -247,12 +248,12 @@ public class CommandMgr : MonoBehaviour
         UnitCommand((usingSkill));
         switch (UsingSkill)
         {
-            case Skills.AttackMove:
+            case BasicSkills.AttackMove:
                 UIMgr.Instance.ChangeCursor(CursorType.Default);
                 SelectedHero.isattackMove = true;
                 MoveOrSetTarget(attackToPrefabs);
                 break;
-            case Skills.Shoot:
+            case BasicSkills.Shoot:
                 foreach (var indicator in skillIndicatorTrs)
                 {
                     indicator.GetChild(1).parent = null;
@@ -264,7 +265,7 @@ public class CommandMgr : MonoBehaviour
         
         inputActions.Command.Select.Enable();
         inputActions.Command.skillClick.Disable();
-        usingSkill = Skills.None;
+        usingSkill = BasicSkills.None;
         skillIndicatorTrs.Clear();
         skillTargets.Clear();
     }
@@ -272,9 +273,9 @@ public class CommandMgr : MonoBehaviour
     //잡====================================================================================================
     public void UnitCommand(int command)
     {
-        UnitCommand((Skills)command);
+        UnitCommand((BasicSkills)command);
     }
-    public void UnitCommand(Skills command)
+    public void UnitCommand(BasicSkills command)
     {
         if(seletedGroupList.Count>0)
         {
@@ -289,13 +290,13 @@ public class CommandMgr : MonoBehaviour
                 {
                     switch (command)
                     {
-                        case (Skills.MoveToSpot):
+                        case (BasicSkills.MoveToSpot):
                             units[i].ChangeState(UnitState.Move);
                             break;
-                        case (Skills.Charge):
+                        case (BasicSkills.Charge):
                             units[i].ChargeToEnemy();
                             break;
-                        case (Skills.Shoot):
+                        case (BasicSkills.Shoot):
                             if (!inputActions.Command.skillClick.enabled)
                             {
                                 SelectShotSpot();
@@ -314,7 +315,7 @@ public class CommandMgr : MonoBehaviour
         {
             switch (command)
             {
-                case(Skills.AttackMove):
+                case(BasicSkills.AttackMove):
                     break;
 
                 default:

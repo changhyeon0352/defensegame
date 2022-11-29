@@ -12,9 +12,9 @@ public class UnitGroup:MonoBehaviour
     public Transform AllyGroups;
     public Vector2Int rowColumn=Vector2Int.zero;
 
-    Skills groupSkill =Skills.None;
+    BasicSkills groupSkill =BasicSkills.None;
 
-    public Skills GroupSkill { get => groupSkill; }
+    public BasicSkills GroupSkill { get => groupSkill; }
     public UnitType UnitType { get => unitType;}
 
     private void Awake()
@@ -53,13 +53,13 @@ public class UnitGroup:MonoBehaviour
         tag = transform.GetChild(0).GetChild(0).tag;
         if (CompareTag("Melee"))
         {
-            groupSkill |= Skills.MoveToSpot;
-            groupSkill |= Skills.Charge;
+            groupSkill |= BasicSkills.MoveToSpot;
+            groupSkill |= BasicSkills.Charge;
             unitType = UnitType.soldier;
         }
         else if (CompareTag("Range"))
         {
-            groupSkill |= Skills.Shoot;
+            groupSkill |= BasicSkills.Shoot;
             unitType = UnitType.soldier;
         }
         else if(CompareTag("Knight"))
