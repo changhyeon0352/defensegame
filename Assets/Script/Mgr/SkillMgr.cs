@@ -15,6 +15,8 @@ public class SkillMgr : MonoBehaviour
     public GameObject skillRangePrefab;
     HeroSkill usingSkill;
     SkillMode skillMode;
+    bool isUsingSkill = false;
+    public bool IsUsingSkill { get { return isUsingSkill; } }
     public SkillMode SkillMode { get { return skillMode; } }
     Unit skillTarget;
     public Hero selectedHero;
@@ -64,7 +66,7 @@ public class SkillMgr : MonoBehaviour
                 return;
             }
         }
-        switch(selectedHero.data.heroClass)
+        switch(selectedHero.Data.heroClass)
         {
             case (HeroClass.Knight):
                 {
@@ -72,19 +74,20 @@ public class SkillMgr : MonoBehaviour
                     {
                         StartCoroutine(knight.FinishMove(skillTarget));
                         StartCoroutine(PlaySkillOnHero(HeroSkill.finishMove, 2, false));
+                        StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(3, knight.SkillCools[3]));
                     }
                     break;
                 }
         }
-        SkillCanEnd(false);
+        SkillEnd(false);
     }
 
     private void OnSkillCancel(InputAction.CallbackContext obj)
     {
-        SkillCanEnd(true);
+        SkillEnd(true);
     }
 
-    private void SkillCanEnd(bool isCancel)
+    public void SkillEnd(bool isCancel)
     {
         if (!isCancel)
         {
@@ -97,29 +100,40 @@ public class SkillMgr : MonoBehaviour
         skillMode = SkillMode.OnHero;
         UIMgr.Instance.ChangeCursor(CursorType.Default);
         skillTarget = null;
-        
+        isUsingSkill = false;
     }
 
     private void OnSkill1(InputAction.CallbackContext obj)
     {
+        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[0])
+            return;
         StartCoroutine(PlaySkillOnHero(HeroSkill.shieldAura, knight.SkillDurations[0]));
         StartCoroutine(knight.EnumeratorTimer(knight.shieldAuraCor, knight.SkillDurations[0]));
+        StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(0,knight.SkillCools[0]));
     }
 
     private void OnSkill2(InputAction.CallbackContext obj)
     {
+        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[1])
+            return;
         StartCoroutine(PlaySkillOnHero(HeroSkill.provoke, knight.SkillDurations[1]));
         knight.Provoke(knight.SkillDurations[1]);
+        StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(1, knight.SkillCools[1]));
     }
 
     private void OnSkill3(InputAction.CallbackContext obj)
     {
+        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[2])
+            return;
         StartCoroutine(PlaySkillOnHero(HeroSkill.frenzy, knight.SkillDurations[2]));
         StartCoroutine(knight.EnumeratorTimer(knight.frenzyCor, knight.SkillDurations[2]));
+        StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(2, knight.SkillCools[2]));
     }
 
     private void OnSkill4(InputAction.CallbackContext obj)
     {
+        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[3])
+            return;
         UseClickingSkill(SkillMode.Targrt, knight.SkillRadius[3]);
         //StartCoroutine(PlaySkillOnHero(KnightSkill.finishMove, 5));
     }
@@ -148,6 +162,7 @@ public class SkillMgr : MonoBehaviour
         skillRange = range;
         GameMgr.Instance.inputActions.Command.Select.Disable();
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Enable();
+        isUsingSkill = true;
         if (mode == SkillMode.Targrt)
         {
             skillMode=SkillMode.Targrt;

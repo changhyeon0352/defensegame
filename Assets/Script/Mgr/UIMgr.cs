@@ -11,6 +11,8 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] Texture2D cursorSword;
     [SerializeField] Texture2D cursorTargeting;
     [SerializeField] Texture2D cursorFindTarget;
+
+    public SkillbarUI skillbarUI;
     public Sprite[] heroSprites;
     public GameObject heroCardPrefab;
     Transform commandUiTr =null;

@@ -189,7 +189,7 @@ public class SettingMgr : MonoBehaviour
                 
                 if (hero != null)
                 {
-                    hero.data = data;
+                    hero.Data = data;
                 }
                 ShaderChange(UnitShader.transparentShader);
                 unitSetList.Add(obj);

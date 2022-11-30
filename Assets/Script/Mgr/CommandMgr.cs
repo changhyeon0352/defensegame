@@ -17,6 +17,7 @@ public class CommandMgr : MonoBehaviour
     [SerializeField] GameObject attackToPrefabs;
     List<UnitGroup> seletedGroupList = new List<UnitGroup>();
     Hero selectedHero;
+    List<Hero> fightingHeroList= new List<Hero>();
     PlayerInput inputActions;
     private List<Transform> skillIndicatorTrs = new List<Transform>();
     List<Transform> skillTargets = new List<Transform>();
@@ -46,7 +47,11 @@ public class CommandMgr : MonoBehaviour
         inputActions.Command.AttackMove.performed += OnAttackMove;
         inputActions.Command.ChangeHero.performed += OnChangeHero;
         inputActions.Command.skillClick.Disable();
-        SelectedHero= Hero.FindHero(DataMgr.Instance.FightingHeroDataList[0]);
+        foreach(var herodata in DataMgr.Instance.FightingHeroDataList)
+        {
+            fightingHeroList.Add(Hero.FindHero(herodata));
+        }
+        SelectHero(0);
 
     }
 
@@ -62,12 +67,18 @@ public class CommandMgr : MonoBehaviour
                     int a=(int)k.keyCode - 41;
                     if(a<DataMgr.Instance.FightingHeroDataList.Count)
                     {
-                        ClearSelectedGroups();
-                        SelectedHero = Hero.FindHero(DataMgr.Instance.FightingHeroDataList[a]);
+                        SelectHero(a);
                     }
                 }
             }
         }
+    }
+
+    private void SelectHero(int a)
+    {
+        ClearSelectedGroups();
+        SelectedHero = fightingHeroList[a];
+        UIMgr.Instance.skillbarUI.ChangeHeroSkill(selectedHero);
     }
 
     private void OnDisable()
@@ -111,10 +122,14 @@ public class CommandMgr : MonoBehaviour
     /// 우클릭시 실행됨 땅찍으면 그쪽에 이펙트 보여주고 무브 적이면 추격
     private void OnMoveOrSetTarget(InputAction.CallbackContext _)
     {
+        if (GameMgr.Instance.skillMgr.IsUsingSkill)
+        {
+            GameMgr.Instance.skillMgr.SkillEnd(true);
+            return;
+        }
         ClearSelectedGroups();
         if (IsHeroSelected())
         {
-
             selectedHero.isattackMove = false;
             MoveOrSetTarget(moveToPrefabs);
         }
@@ -153,6 +168,7 @@ public class CommandMgr : MonoBehaviour
         {
             return;
         }
+        
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

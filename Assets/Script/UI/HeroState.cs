@@ -34,7 +34,7 @@ public class HeroState : MonoBehaviour
         HeroState[] heroStates = FindObjectsOfType<HeroState>();
         foreach(HeroState heroState in heroStates)
         {
-            heroState.selectedImage.enabled = heroState.heroData == GameMgr.Instance.commandMgr.SelectedHero.data;
+            heroState.selectedImage.enabled = heroState.heroData == GameMgr.Instance.commandMgr.SelectedHero.Data;
         }
     }
 

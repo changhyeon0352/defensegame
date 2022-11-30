@@ -5,10 +5,50 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class Hero : AllyUnit
 {
-    public HeroData data;
+    private HeroData data;
+    public HeroData Data { get=>data;  
+        set { data = value;
+            for(int i=0;i<skillCools.Length;i++)
+            {
+                skillCools[i] = GameMgr.Instance.skillMgr.knight.SkillCools[i];
+            }
+        } 
+    }
     public HeroState heroState;
     public float range;
     public bool isattackMove = false;
+    float[] skillCoolsLeft = { -1, -1, -1, -1 };
+    public float[] SkillCoolLeft { get => skillCoolsLeft; }
+    float[] skillCools = new float[4];
+    public float[] SkillCools { get => skillCools; }
+    bool[] skillCanUse = { true, true, true, true };
+    public bool[] SkillCanUse { get { return skillCanUse; } }
+    public IEnumerator SkillCoolCor(int num,float coolTime)
+    {
+        skillCanUse[num] = false;
+        skillCoolsLeft[num]=coolTime;
+        for (int i=0; i<10000;i++)
+        {
+            skillCoolsLeft[num]-=Time.deltaTime;
+            if (skillCoolsLeft[num] < 0)
+            {
+                skillCanUse[num]=true;
+                Debug.Log($"{num + 1}번째 스킬사용가능");
+                break;
+            }
+                
+            yield return null;
+        }
+    }
+    public bool CheckSkillCool(int skillNum)
+    {
+        bool result = false;
+        if (skillCoolsLeft[skillNum]<0)
+        {
+            result = true;
+        }
+        return result;
+    }
     public override int Hp
     {
         get => hp;
@@ -27,6 +67,17 @@ public class Hero : AllyUnit
             heroState.Mp(value, mpMax);
         }
     }
+
+    protected override void Update()
+    {
+        base.Update();
+        for(int i=0;i<4;i++)
+        {
+           
+        }
+
+    }
+
     //무브업데이트땐 적추적 ㄴㄴ
     public static Hero FindHero(HeroData herodata)
     {

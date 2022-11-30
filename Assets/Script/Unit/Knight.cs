@@ -15,7 +15,9 @@ public class Knight : MonoBehaviour
     int frenzyDamage = 20;
     int finishDamage = 15;
     float[] skillRadius = { 5, 9, 3, 5 };
-    float[] skillDurations = {15,10,5,0};
+    float[] skillDurations = {10,10,5,0};
+    float[] skillCools = { 20, 15, 10, 50 };
+    public float[] SkillCools { get { return skillCools; } }
     public float[] SkillDurations { get => skillDurations; }
     public float[] SkillRadius { get => skillRadius; }
 
