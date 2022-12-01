@@ -187,7 +187,7 @@ public class CommandMgr : MonoBehaviour
                     UnitGroup unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
                     if (unitGroup != null)
                     {
-                        if (Input.GetKey(KeyCode.LeftShift) && seletedGroupList.Count > 0 && (SelectedGroupList[0].UnitType != UnitType.hero))
+                        if (Input.GetKey(KeyCode.LeftShift) && seletedGroupList.Count > 0 && (SelectedGroupList[0].unitType != UnitType.hero))
                         {
                             if (seletedGroupList.Contains(unitGroup))
                             {

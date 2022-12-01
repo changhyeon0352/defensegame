@@ -2113,7 +2113,7 @@ GameObject:
   - component: {fileID: -4051608606167370399}
   m_Layer: 3
   m_Name: Hero_Knight
-  m_TagString: Knight
+  m_TagString: Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2162,16 +2162,6 @@ MonoBehaviour:
   shieldbuff: {fileID: 768877361864639878}
   goalTr: {fileID: 0}
   selectedMark: {fileID: 1201833924593192495}
-  data:
-    id: 0
-    heroClass: 0
-    name: 
-    level: 0
-    exp: 0
-    level_Weapon: 0
-    level_Armor: 0
-    level_Skills: 
-    isDead: 0
   heroState: {fileID: 0}
   range: 0
   isattackMove: 0

@@ -10,6 +10,7 @@ public class Monster : Unit
     {
         base.Awake();
         goalTr = FindObjectOfType<Goal>().transform;
+        UIMgr.Instance.hpbar.AddHpBar(this);
        
     }
     

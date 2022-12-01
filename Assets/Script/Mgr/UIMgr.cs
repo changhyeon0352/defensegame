@@ -7,12 +7,14 @@ using UnityEngine.UI;
 
 public class UIMgr : Singleton<UIMgr>
 {
+
     [SerializeField] Texture2D cursorDefault;
     [SerializeField] Texture2D cursorSword;
     [SerializeField] Texture2D cursorTargeting;
     [SerializeField] Texture2D cursorFindTarget;
 
     public SkillbarUI skillbarUI;
+    public HPbar hpbar;
     public Sprite[] heroSprites;
     public GameObject heroCardPrefab;
     Transform commandUiTr =null;
@@ -31,6 +33,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField]
     TextMeshProUGUI nowSpawnPoint;
     public GameObject heroStatePrefab;
+
 
     public HeroSlot[] HeroSlots { get => heroSlots; }
 

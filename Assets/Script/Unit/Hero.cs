@@ -55,7 +55,16 @@ public class Hero : AllyUnit
         set 
         { 
             base.Hp = value;
-            heroState.Hp(value,hpMax);
+            if (hp <= 0)
+            {
+                hp = 0;
+                //죽음
+                if (state != UnitState.Dead)
+                {
+                    Die();
+                }
+            }
+            heroState.Hp(value, hpMax);
         }
     }
     public int Mp

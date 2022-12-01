@@ -262,6 +262,8 @@ public class SettingMgr : MonoBehaviour
         ShaderChange(UnitShader.normalShader);
         unitGroupTr.parent = unitGroup.AllyGroups;//원래 이거자식이 unitGroupTr인데 형제로 격상
         unitSetList.Clear();
+        if(spawnUnitData != null)
+            unitGroup.unitType = spawnUnitData.unitType;                      //유닛타입결정
         unitGroup.InitializeUnitList();
         unitGroupTr = null;
         unitGroup = null;

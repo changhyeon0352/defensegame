@@ -81,6 +81,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                     Die();
                 }
             }
+            UIMgr.Instance.hpbar.ChangeHPbar(this, (float)hp / (float)hpMax);
             Debug.Log($"{transform.name}의 hp: {hp}");
             
         }
@@ -292,6 +293,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 //agent.ResetPath();
                 break;
             case UnitState.Chase:
+                isProvoked = false;
                 break;
             case UnitState.Attack:
                 attackTargetTr = null;

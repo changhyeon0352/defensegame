@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitGroup:MonoBehaviour
 {
     List<AllyUnit> unitList;
-    private UnitType unitType = UnitType.none;
+    public UnitType unitType = UnitType.none;
     public Transform unitsTr;
     public Transform spotsTr;
     public Transform AllyGroups;
@@ -15,7 +15,6 @@ public class UnitGroup:MonoBehaviour
     BasicSkills groupSkill =BasicSkills.None;
 
     public BasicSkills GroupSkill { get => groupSkill; }
-    public UnitType UnitType { get => unitType;}
 
     private void Awake()
     {
@@ -50,21 +49,15 @@ public class UnitGroup:MonoBehaviour
             unitList.Add(allyUnit);
         }
         
-        tag = transform.GetChild(0).GetChild(0).tag;
-        if (CompareTag("Melee"))
+        //tag = transform.GetChild(0).GetChild(0).tag;
+        if (unitType==UnitType.soldier_Melee)
         {
             groupSkill |= BasicSkills.MoveToSpot;
             groupSkill |= BasicSkills.Charge;
-            unitType = UnitType.soldier;
         }
-        else if (CompareTag("Range"))
+        else if (unitType == UnitType.soldier_Range)
         {
             groupSkill |= BasicSkills.Shoot;
-            unitType = UnitType.soldier;
-        }
-        else if(CompareTag("Knight"))
-        {
-            unitType = UnitType.hero;
         }
     }
     public void RemoveUnitFromList(AllyUnit unit)

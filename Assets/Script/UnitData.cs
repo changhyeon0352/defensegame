@@ -5,6 +5,9 @@ using UnityEngine;
 public class UnitData : ScriptableObject
 {
     [SerializeField]
+    private UnitType type;
+    public UnitType unitType { get { return type; } }
+    [SerializeField] 
     private string unitName;
     public string UnitName { get { return unitName; } }
     [SerializeField]

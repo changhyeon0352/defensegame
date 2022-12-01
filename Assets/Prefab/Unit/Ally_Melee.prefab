@@ -2113,7 +2113,7 @@ GameObject:
   - component: {fileID: -4051608606167370399}
   m_Layer: 3
   m_Name: Ally_Melee
-  m_TagString: Melee
+  m_TagString: Soldier
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

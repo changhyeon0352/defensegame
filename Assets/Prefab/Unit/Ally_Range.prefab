@@ -2115,7 +2115,7 @@ GameObject:
   - component: {fileID: -4051608606167370399}
   m_Layer: 3
   m_Name: Ally_Range
-  m_TagString: Range
+  m_TagString: Soldier
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2159,6 +2159,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  isProvoked: 0
+  armor: 0
+  shieldbuff: {fileID: 0}
   goalTr: {fileID: 0}
   selectedMark: {fileID: 4772200002249250832}
   shotRange: 10

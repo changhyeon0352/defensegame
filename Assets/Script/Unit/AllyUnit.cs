@@ -27,6 +27,7 @@ public class AllyUnit : Unit
             if (SearchAndChase(searchRange*multipleNum))
             {
                 ChangeState(UnitState.Chase);
+                isProvoked = true;
                 break;
             }
             multipleNum *= multipleNum;

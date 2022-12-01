@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
   m_Name: Soldier_Range
   m_EditorClassIdentifier: 
+  type: 3
   unitName: "\uAD81\uBCD1"
   hp: 50
   moveSpeed: 5

@@ -18,7 +18,9 @@ public enum UnitShader
 public enum UnitType
 {
     none=0,
-    soldier,
+    Monster,
+    soldier_Melee,
+    soldier_Range,
     hero
 }
 [System.Flags]

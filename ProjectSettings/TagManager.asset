@@ -12,6 +12,8 @@ TagManager:
   - Range
   - UI
   - Knight
+  - Soldier
+  - Hero
   layers:
   - Default
   - TransparentFX
