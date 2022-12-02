@@ -15,8 +15,10 @@ MonoBehaviour:
   type: 3
   unitName: "\uAD81\uBCD1"
   hp: 50
+  mp: 0
   moveSpeed: 5
   atk: 10
-  attackSpeed: 0
+  armor: 0
+  attackSpeed: 2
   cost: 80
   unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}

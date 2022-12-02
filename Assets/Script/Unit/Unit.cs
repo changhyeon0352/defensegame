@@ -111,13 +111,22 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
 
     }
+    public void InitializeUnitStat()
+    {
+        hpMax = unitData.HP;
+        hp = hpMax;
+        mpMax=unitData.HP;
+        mp = mpMax;
+        attack = unitData.Atk;
+        armor = unitData.Armor;
+        agent.speed = unitData.MoveSpeed;
+        anim.SetFloat("attackSpeed",unitData.AttackSpeed);
+    }
 
     virtual protected void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         anim= GetComponent<Animator>();
-        hp = hpMax;
-        mp = mpMax;
     }
     virtual protected void Update()
     {
@@ -150,7 +159,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         //전사는  Chase 전환
         if(SearchAndChase(searchRange))
             ChangeState(UnitState.Chase);
-        if(goalTr!=null)
+        if(goalTr!=null&&unitData.unitType!=UnitType.hero)
             transform.LookAt(goalTr.forward+transform.position);
     }
 

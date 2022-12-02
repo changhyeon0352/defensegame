@@ -113,14 +113,14 @@ public class SettingMgr : MonoBehaviour
         }
     }
 
-    private void StartSetting(HeroData herodata=null)
+    private void StartSetting(bool isHero=false)
     {
         GameObject obj = Instantiate(unitGroupPrefab, Vector3.zero, Quaternion.identity);
         unitGroupTr = obj.transform;
         unitGroup = obj.GetComponent<UnitGroup>();
         unitGroupTr.parent = transform;
         num_row = 1;
-        if(herodata==null)
+        if(!isHero)
         {
             AddUnitRow();
         }
@@ -182,14 +182,16 @@ public class SettingMgr : MonoBehaviour
             
             if(data!=null)
             {
-                spawnHeroPrefab = heroPrefabs[(int)data.heroClass];
-                StartSetting(data);
+                int classNum = (int)data.heroClass;
+                spawnHeroPrefab = heroPrefabs[classNum];
+                StartSetting(true);
                 GameObject obj = Instantiate(spawnHeroPrefab, unitGroup.unitsTr);
                 Hero hero = obj.GetComponent<Hero>();
-                
                 if (hero != null)
                 {
                     hero.Data = data;
+                    hero.unitData = unitDatas[2 + classNum];
+                    hero.InitializeUnitStat();
                 }
                 ShaderChange(UnitShader.transparentShader);
                 unitSetList.Add(obj);
@@ -258,6 +260,7 @@ public class SettingMgr : MonoBehaviour
             Unit unit = unitGroup.unitsTr.GetChild(i).GetComponent<Unit>();
             unit.goalTr = spot.transform;
             unit.ChangeState(UnitState.Move);
+            unit.InitializeUnitStat();
         }
         ShaderChange(UnitShader.normalShader);
         unitGroupTr.parent = unitGroup.AllyGroups;//원래 이거자식이 unitGroupTr인데 형제로 격상

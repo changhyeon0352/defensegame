@@ -14,14 +14,20 @@ public class UnitData : ScriptableObject
     private int hp;
     public int HP { get { return hp; } }
     [SerializeField]
+    private int mp;
+    public int MP { get { return mp; } }
+    [SerializeField]
     private float moveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
     [SerializeField]
     private int atk;
-    public int Atk { get { return atk; } }  
+    public int Atk { get { return atk; } }
     [SerializeField]
-    private int attackSpeed;
-    public int AttackSpeed { get { return attackSpeed; } }
+    private int armor;
+    public int Armor { get { return armor; } }
+    [SerializeField]
+    private float attackSpeed;
+    public float AttackSpeed { get { return attackSpeed; } }
     [SerializeField]
     private int cost;
     public int Cost { get { return cost; } }
