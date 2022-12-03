@@ -155,6 +155,7 @@ public class CommandMgr : MonoBehaviour
             }
             else//적클릭
             {
+                selectedHero.isProvoked = true;
                 selectedHero.ChangeState(UnitState.Chase);
                 selectedHero.SetChaseTarget(hit.transform);
             }
@@ -174,6 +175,12 @@ public class CommandMgr : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            Unit unit = hit.transform.GetComponent<Unit>();
+            if (unit!=null)
+            {
+                UIMgr.Instance.unitStatUI.gameObject.SetActive(true);
+                UIMgr.Instance.unitStatUI.RefreshUnitStatWindow(unit);
+            }
             if ((int)MathF.Pow(2, hit.transform.gameObject.layer) == LayerMask.GetMask("Ally")) //hit한게 ally layer라면
             {
                 //영웅이 클릭됐는지

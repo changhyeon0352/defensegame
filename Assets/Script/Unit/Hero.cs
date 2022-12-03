@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.Rendering.DebugUI;
+
 public class Hero : AllyUnit
 {
     private HeroData data;
@@ -64,16 +66,16 @@ public class Hero : AllyUnit
                     Die();
                 }
             }
-            heroState.Hp(value, hpMax);
+            heroState.ShowHpMp(this);
         }
     }
-    public int Mp
+    public new int Mp
     {
         get => mp;
         set
         {
             mp = value;
-            heroState.Mp(value, mpMax);
+            heroState.ShowHpMp(this);
         }
     }
 
@@ -131,4 +133,5 @@ public class Hero : AllyUnit
         Handles.DrawWireDisc(transform.position, transform.up, range);
     }
 
+   
 }

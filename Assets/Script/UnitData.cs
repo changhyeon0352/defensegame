@@ -7,6 +7,9 @@ public class UnitData : ScriptableObject
     [SerializeField]
     private UnitType type;
     public UnitType unitType { get { return type; } }
+    [SerializeField]
+    private Sprite unitPortrait;
+    public Sprite UnitPortrait { get { return unitPortrait; } }
     [SerializeField] 
     private string unitName;
     public string UnitName { get { return unitName; } }

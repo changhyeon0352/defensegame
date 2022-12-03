@@ -12,15 +12,24 @@ public class HeroState : MonoBehaviour
     public Image mpImage;
     public Image heroImage;
     public Image selectedImage;
+    public TextMeshProUGUI hpTmp;
+    public TextMeshProUGUI mpTmp;
+
     private HeroData heroData;
-    public void Hp(int hp,int hpMax)
+
+    public void ShowHpMp(Hero hero)
     {
-        hpImage.fillAmount =(float)hp/(float)hpMax;
+        hpImage.fillAmount =(float)hero.Hp/(float)hero.HpMax;
+        mpImage.fillAmount = (float)hero.Mp / (float)hero.MpMax;
+        hpTmp.text = $"{hero.Hp} / {hero.HpMax}";
+        mpTmp.text = $"{hero.Mp} / {hero.MpMax}";
     }
-    public void Mp(int mp, int mpMax)
+    public void ShowHpMp(HeroData herodata)
     {
-        hpImage.fillAmount = (float)mp / (float)mpMax;
+        ShowHpMp(Hero.FindHero(herodata));
     }
+    
+
     public void InitializeHeroState(HeroData heroData)
     {
         nameTmp.text=heroData.name;
@@ -28,6 +37,7 @@ public class HeroState : MonoBehaviour
         heroImage.sprite = UIMgr.Instance.GetHeroSprite(heroData);
         this.heroData = heroData;
         Hero.FindHero(heroData).heroState = this;
+        ShowHpMp(heroData);
     }
     public static void SelectedHeroUI()
     {

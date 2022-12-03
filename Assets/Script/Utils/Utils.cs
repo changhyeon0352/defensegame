@@ -18,7 +18,7 @@ public static class Utils
         EventSystem.current.RaycastAll(pointerEventData, raycastResultsList);
         //return raycastResultsList.Any(result => result.gameObject is GameObject);//게임오브젝트로 캐스팅되는게 한게라도 있으면 true인듯?
 
-        return (raycastResultsList.Count > 0) && (raycastResultsList[0].gameObject.layer!=3);
+        return (raycastResultsList.Count > 0) && (raycastResultsList[0].gameObject.layer!=3&& raycastResultsList[0].gameObject.layer != 7);
         //일반적인 오브젝트는 피직스레이캐스트올하고 raycasthit에 받는데
     }
 }

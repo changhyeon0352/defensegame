@@ -86,6 +86,9 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             
         }
     }
+    public int HpMax { get => hpMax; }
+    public  int Mp { get => mp; }
+    public int MpMax { get => mpMax; }
 
     virtual protected void Die()
     {
@@ -111,11 +114,11 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
 
     }
-    public void InitializeUnitStat()
+    virtual public void InitializeUnitStat()
     {
         hpMax = unitData.HP;
         hp = hpMax;
-        mpMax=unitData.HP;
+        mpMax=unitData.MP;
         mp = mpMax;
         attack = unitData.Atk;
         armor = unitData.Armor;

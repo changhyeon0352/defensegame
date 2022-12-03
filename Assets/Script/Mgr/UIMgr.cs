@@ -13,6 +13,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] Texture2D cursorTargeting;
     [SerializeField] Texture2D cursorFindTarget;
 
+    public UnitStat unitStatUI;
     public SkillbarUI skillbarUI;
     public HPbar hpbar;
     public Sprite[] heroSprites;

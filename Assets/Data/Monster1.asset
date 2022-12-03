@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Monster1
   m_EditorClassIdentifier: 
   type: 1
+  unitPortrait: {fileID: 21300000, guid: 1bd8553401f3d73409c94fc3c2dac999, type: 3}
   unitName: "\uD574\uACE8\uBCD1"
   hp: 100
   mp: 0

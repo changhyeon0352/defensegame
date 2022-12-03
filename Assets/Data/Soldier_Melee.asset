@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Soldier_Melee
   m_EditorClassIdentifier: 
   type: 2
+  unitPortrait: {fileID: 21300000, guid: 6b53d432c764e3945a2004edcaffe80b, type: 3}
   unitName: "\uBCF4\uBCD1"
   hp: 100
   mp: 0
