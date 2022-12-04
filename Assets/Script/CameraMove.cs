@@ -24,9 +24,15 @@ public class CameraMove : MonoBehaviour
         inputActions.Camera.CameraRotateOnOff.canceled += OnCameraRotateOff;
         inputActions.Camera.CameraRotate.performed += OnCameraRotate;
         inputActions.Camera.CameraZoom.performed += OnCameraZoom;
+        inputActions.Camera.ShowHero.performed += OnShowHero;
+        inputActions.Camera.ShowHero.Disable();
     }
 
-    
+    private void OnShowHero(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        Transform heroTr = GameMgr.Instance.commandMgr.SelectedHero.transform;
+        transform.position=new Vector3(heroTr.position.x+3, transform.position.y, heroTr.position.z);
+    }
 
     private void OnDisable()
     {
@@ -35,11 +41,9 @@ public class CameraMove : MonoBehaviour
 
     private void OnCameraZoom(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
+        
             float y = obj.ReadValue<float>();
             transform.position += Vector3.up * -y * zoomSpeed;
-        }
             
     }
 

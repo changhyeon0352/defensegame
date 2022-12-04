@@ -92,6 +92,7 @@ public class SettingMgr : MonoBehaviour
         CompleteUnitSetting(Camera.main.ScreenPointToRay(Input.mousePosition));
         inputActions.Setting.Click.Disable();
         inputActions.Setting.scrollUpDown.Disable();
+        inputActions.Camera.CameraZoom.Enable();
         inputActions.Setting.ReSetting.Enable();
         inputActions.Command.Select.Enable();
         inputActions.Setting.SwitchRow.Disable();
@@ -105,10 +106,10 @@ public class SettingMgr : MonoBehaviour
         if (unitSetList.Count == 0&&spawnUnitData!=null)
         {
             StartSetting();
-            inputActions.Setting.scrollUpDown.Enable();
             inputActions.Setting.Click.Enable();
             inputActions.Command.Select.Disable();
             inputActions.Setting.scrollUpDown.Enable();
+            inputActions.Camera.CameraZoom.Disable();
             inputActions.Setting.SwitchRow.Enable();
         }
     }
@@ -166,6 +167,9 @@ public class SettingMgr : MonoBehaviour
             inputActions.Setting.Click.Enable();
             inputActions.Setting.ReSetting.Disable();
             inputActions.Command.Select.Disable();
+            inputActions.Setting.scrollUpDown.Enable();
+            inputActions.Camera.CameraZoom.Disable();
+            inputActions.Setting.SwitchRow.Enable();
         }
     }
     public void SelectSpawnUnitType(int i)
@@ -270,7 +274,6 @@ public class SettingMgr : MonoBehaviour
         unitGroup.InitializeUnitList();
         unitGroupTr = null;
         unitGroup = null;
-        inputActions.Setting.scrollUpDown.Enable();
     }
     void ChangeGroupRow(int iRow)
     {

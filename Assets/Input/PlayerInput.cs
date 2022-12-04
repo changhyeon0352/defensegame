@@ -53,6 +53,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ShowHero"",
+                    ""type"": ""Button"",
+                    ""id"": ""6e6b7b0b-28fd-404a-aaa4-e299edfceb3d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -86,6 +95,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CameraZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8bccabb9-ba9a-410b-995d-30cae5d8fc71"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowHero"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -604,6 +624,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Camera_CameraRotate = m_Camera.FindAction("CameraRotate", throwIfNotFound: true);
         m_Camera_CameraRotateOnOff = m_Camera.FindAction("CameraRotateOnOff", throwIfNotFound: true);
         m_Camera_CameraZoom = m_Camera.FindAction("CameraZoom", throwIfNotFound: true);
+        m_Camera_ShowHero = m_Camera.FindAction("ShowHero", throwIfNotFound: true);
         // Setting
         m_Setting = asset.FindActionMap("Setting", throwIfNotFound: true);
         m_Setting_NewUnitGroup = m_Setting.FindAction("NewUnitGroup", throwIfNotFound: true);
@@ -690,6 +711,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Camera_CameraRotate;
     private readonly InputAction m_Camera_CameraRotateOnOff;
     private readonly InputAction m_Camera_CameraZoom;
+    private readonly InputAction m_Camera_ShowHero;
     public struct CameraActions
     {
         private @PlayerInput m_Wrapper;
@@ -697,6 +719,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @CameraRotate => m_Wrapper.m_Camera_CameraRotate;
         public InputAction @CameraRotateOnOff => m_Wrapper.m_Camera_CameraRotateOnOff;
         public InputAction @CameraZoom => m_Wrapper.m_Camera_CameraZoom;
+        public InputAction @ShowHero => m_Wrapper.m_Camera_ShowHero;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -715,6 +738,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @CameraZoom.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnCameraZoom;
+                @ShowHero.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnShowHero;
+                @ShowHero.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnShowHero;
+                @ShowHero.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnShowHero;
             }
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -728,6 +754,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @CameraZoom.started += instance.OnCameraZoom;
                 @CameraZoom.performed += instance.OnCameraZoom;
                 @CameraZoom.canceled += instance.OnCameraZoom;
+                @ShowHero.started += instance.OnShowHero;
+                @ShowHero.performed += instance.OnShowHero;
+                @ShowHero.canceled += instance.OnShowHero;
             }
         }
     }
@@ -974,6 +1003,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnCameraRotate(InputAction.CallbackContext context);
         void OnCameraRotateOnOff(InputAction.CallbackContext context);
         void OnCameraZoom(InputAction.CallbackContext context);
+        void OnShowHero(InputAction.CallbackContext context);
     }
     public interface ISettingActions
     {

@@ -47,7 +47,8 @@ public class CommandMgr : MonoBehaviour
         inputActions.Command.AttackMove.performed += OnAttackMove;
         inputActions.Command.ChangeHero.performed += OnChangeHero;
         inputActions.Command.skillClick.Disable();
-        foreach(var herodata in DataMgr.Instance.FightingHeroDataList)
+        inputActions.Camera.ShowHero.Enable();
+        foreach (var herodata in DataMgr.Instance.FightingHeroDataList)
         {
             fightingHeroList.Add(Hero.FindHero(herodata));
         }
