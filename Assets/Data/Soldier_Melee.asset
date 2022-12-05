@@ -22,4 +22,5 @@ MonoBehaviour:
   armor: 0
   attackSpeed: 1
   cost: 50
+  attackRange: 2
   unitPrefab: {fileID: 169604, guid: 51eae40567d3ff847bafc22ed4abaa6a, type: 3}

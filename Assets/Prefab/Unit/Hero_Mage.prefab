@@ -741,7 +741,10 @@ MonoBehaviour:
   goalTr: {fileID: 0}
   selectedMark: {fileID: 6101159476739162706}
   heroState: {fileID: 0}
-  range: 0
+  energyBoltPrefab: {fileID: 1136871183823626, guid: ce2dcc1e43943004eb931b59eba8e52f,
+    type: 3}
+  tipOfStaff: {fileID: 3789588931821636389}
+  rangeforGizmo: 0
   isattackMove: 0
 --- !u!54 &3641313431695282749
 Rigidbody:
@@ -1083,7 +1086,8 @@ Transform:
   m_LocalPosition: {x: 1.077446, y: 0.13124698, z: -0.91843855}
   m_LocalScale: {x: 100, y: 100.000046, z: 100.00007}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3789588931821636389}
   m_Father: {fileID: 4697918775314360}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -2669,6 +2673,37 @@ Transform:
   m_Father: {fileID: 4320116383092368}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3243087383399610790
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3789588931821636389}
+  m_Layer: 3
+  m_Name: tipofStaff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3789588931821636389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3243087383399610790}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -1.24, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4891505152052632}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1001 &930679483881926806
 PrefabInstance:
   m_ObjectHideFlags: 0

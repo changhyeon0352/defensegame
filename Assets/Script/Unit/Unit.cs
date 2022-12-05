@@ -40,16 +40,16 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 if (shieldbuff.isPlaying)
                     shieldbuff.Stop();
             }
-                
         }
     } 
     protected const float stopRange = 0.1f;
     protected const float searchRange = 4f;
-    protected const float attackRange = 2f;
+    protected float attackRange = 2f;
     public ParticleSystem shieldbuff;
 
-    
     public Transform goalTr;
+
+    //=====================================================================================================================
 
     public IEnumerator ProvokedBy(Transform tr,float sec)
     {
@@ -124,6 +124,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         armor = unitData.Armor;
         agent.speed = unitData.MoveSpeed;
         anim.SetFloat("attackSpeed",unitData.AttackSpeed);
+        attackRange = unitData.AttackRange;
+        
     }
 
     virtual protected void Awake()
@@ -181,7 +183,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     virtual protected void ChaseUpdate()
     {
         
-        if ((isProvoked&&chaseTargetTr!=null)||SearchAndChase(searchRange))
+        if ((isProvoked&&chaseTargetTr!=null)||SearchAndChase(searchRange)) //도발되었고 쫒는놈이 있다면 혹은 서칭거리안에 있다면
         {
             agent.SetDestination(chaseTargetTr.position);
         }
@@ -189,26 +191,14 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         {
             ChangeState(UnitState.Move);
         }
+        if(GameMgr.Instance.skillMgr.IsChasingForSkill&& agent.remainingDistance < attackRange && !agent.pathPending)
+        {
+            //ChangeState(UnitState.Attack);
+        }
         if (agent.remainingDistance < attackRange && !agent.pathPending)
         {
             ChangeState(UnitState.Attack);
         }
-        //{
-        //    if (!isProvoked && Vector3.Distance(transform.position, chaseTargetTr.position) > searchRange)
-        //    {
-        //        ChangeState(UnitState.Move);
-        //    }
-        //    else
-        //    {
-        //        
-        //    }
-        //}
-        //else
-        //{
-        //    ChangeState(UnitState.Move);
-        //}
-
-
     }
     public void MeleeAttack()
     {
@@ -293,7 +283,12 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         }
         return enemyTr;
     }
-    
+    public void ChaseTarget(Transform tr)
+    {
+        isProvoked = true;
+        chaseTargetTr = tr;
+        ChangeState(UnitState.Chase);
+    }
 
     public void ChangeState(UnitState newState)
     {

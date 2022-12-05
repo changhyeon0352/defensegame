@@ -106,13 +106,13 @@ public class CommandMgr : MonoBehaviour
         }
     }
     //인풋 연결 함수or 스킬================================================================================
-    //영웅 어택땅(F키)
+    //영웅 어택땅(a키)
     private void OnAttackMove(InputAction.CallbackContext _)
     {
         ClearSelectedGroups();
         if (IsHeroSelected())
         {
-
+            GameMgr.Instance.skillMgr.ShowSkillRange(SelectedHero.unitData.AttackRange);
             inputActions.Command.Select.Disable();
             inputActions.Command.skillClick.Enable();
             usingSkill = BasicSkills.AttackMove;
@@ -125,7 +125,7 @@ public class CommandMgr : MonoBehaviour
     {
         if (GameMgr.Instance.skillMgr.IsUsingSkill)
         {
-            GameMgr.Instance.skillMgr.SkillEnd(true);
+            GameMgr.Instance.skillMgr.SkillEnd();
             return;
         }
         ClearSelectedGroups();
@@ -276,6 +276,7 @@ public class CommandMgr : MonoBehaviour
                 UIMgr.Instance.ChangeCursor(CursorType.Default);
                 SelectedHero.isattackMove = true;
                 MoveOrSetTarget(attackToPrefabs);
+                GameMgr.Instance.skillMgr.SkillEnd();
                 break;
             case BasicSkills.Shoot:
                 foreach (var indicator in skillIndicatorTrs)

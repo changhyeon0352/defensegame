@@ -8,16 +8,18 @@ using static UnityEngine.Rendering.DebugUI;
 public class Hero : AllyUnit
 {
     private HeroData data;
-    public HeroData Data { get=>data;  
+    public HeroData Data { get => data;
         set { data = value;
-            for(int i=0;i<skillCools.Length;i++)
+            for (int i = 0; i < skillCools.Length; i++)
             {
                 skillCools[i] = GameMgr.Instance.skillMgr.knight.SkillCools[i];
             }
-        } 
+        }
     }
     public HeroState heroState;
-    public float range;
+    [SerializeField] GameObject energyBoltPrefab;
+    [SerializeField] Transform tipOfStaff;
+    public float rangeforGizmo;
     public bool isattackMove = false;
     float[] skillCoolsLeft = { -1, -1, -1, -1 };
     public float[] SkillCoolLeft { get => skillCoolsLeft; }
@@ -51,6 +53,7 @@ public class Hero : AllyUnit
         }
         return result;
     }
+ 
     public override int Hp
     {
         get => hp;
@@ -118,6 +121,27 @@ public class Hero : AllyUnit
             }
         }       
     }
+    override protected void ChaseUpdate()
+    {
+
+        if ((isProvoked && chaseTargetTr != null) || SearchAndChase(searchRange)) //도발되었고 쫒는놈이 있다면 혹은 서칭거리안에 있다면
+        {
+            agent.SetDestination(chaseTargetTr.position);
+        }
+        else
+        {
+            ChangeState(UnitState.Move);
+        }
+        if (GameMgr.Instance.skillMgr.IsChasingForSkill && agent.remainingDistance < GameMgr.Instance.skillMgr.SkillRange && !agent.pathPending)
+        {
+            GameMgr.Instance.skillMgr.ExecuteSkill(chaseTargetTr);
+            ChangeState(UnitState.Idle);
+        }
+        else if (agent.remainingDistance < attackRange && !agent.pathPending)
+        {
+            ChangeState(UnitState.Attack);
+        }
+    }
     public void MoveSpots(Vector3 position)
     {
         UnitGroup unitgroup =transform.parent.parent.GetComponent<UnitGroup>();
@@ -128,9 +152,15 @@ public class Hero : AllyUnit
     {
         chaseTargetTr = targetTr;
     }
+    public void RangeAttack()
+    {
+        GameObject obj=Instantiate(energyBoltPrefab,tipOfStaff.position,Quaternion.identity);
+        obj.GetComponent<EnergyBolt>().SetTargetAndDamage(attackTargetTr, attack);
+
+    }
     private void OnDrawGizmos()
     {
-        Handles.DrawWireDisc(transform.position, transform.up, range);
+        Handles.DrawWireDisc(transform.position, transform.up, rangeforGizmo);
     }
 
    

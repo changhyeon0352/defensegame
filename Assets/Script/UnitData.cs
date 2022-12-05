@@ -34,5 +34,7 @@ public class UnitData : ScriptableObject
     [SerializeField]
     private int cost;
     public int Cost { get { return cost; } }
+    [SerializeField]private float attackRange;
+    public float AttackRange { get { return attackRange; } }
     public GameObject unitPrefab;
 }
