@@ -30,7 +30,12 @@ public class CommandMgr : MonoBehaviour
         get => seletedGroupList;
     }
     public BasicSkills UsingSkill { get => usingSkill;}
-    public Hero SelectedHero { get => selectedHero;set { selectedHero = value;GameMgr.Instance.skillMgr.selectedHero = value; AllCheckSelected(); } }
+    public Hero SelectedHero { get => selectedHero;
+        set { selectedHero = value;
+            GameMgr.Instance.skillMgr.selectedHero = value; 
+            AllCheckSelected(); 
+        } 
+    }
     
 
     private void Awake()

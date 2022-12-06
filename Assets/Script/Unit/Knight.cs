@@ -31,16 +31,16 @@ public class Knight : MonoBehaviour
         frenzyCor = FrenzyCor();
     }
 
-    public IEnumerator EnumeratorTimer(IEnumerator enumerator,float sec)
-    {
-        StartCoroutine(enumerator);
-        yield return new WaitForSeconds(sec);
-        if(enumerator==shieldAuraCor)
-        {
-            SetShiedPlus(skillRadius[0] + 2, 0);
-        }
-        StopCoroutine(enumerator);
-    }
+    //public IEnumerator EnumeratorTimer(IEnumerator enumerator,float sec)
+    //{
+    //    StartCoroutine(enumerator);
+    //    yield return new WaitForSeconds(sec);
+    //    if(enumerator==shieldAuraCor)
+    //    {
+    //        SetShiedPlus(skillRadius[0] + 2, 0);
+    //    }
+    //    StopCoroutine(enumerator);
+    //}
     IEnumerator ShieldAuraCor()// 히어로에 방어력 적용이 안됨
     {
         for(int i=0;i<10000;i++)
@@ -85,7 +85,7 @@ public class Knight : MonoBehaviour
             targetUnit.TakeDamage(finishDamage);
         }
     }
-    private void SetShiedPlus(float range,int armorPlus)
+    public void SetShiedPlus(float range,int armorPlus)
     {
         Collider[] cols = Physics.OverlapSphere(GameMgr.Instance.commandMgr.SelectedHero.transform.position, range, allyLayerMask);
         foreach (Collider col in cols)

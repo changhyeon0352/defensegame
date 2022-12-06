@@ -43,6 +43,7 @@ public class SkillMgr : MonoBehaviour
         GameMgr.Instance.inputActions.Command.HeroSkillClick.performed += HeroSkillClick;
         GameMgr.Instance.inputActions.Command.SkillCancel.performed += OnSkillCancel;
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
+        selectedHero = GameMgr.Instance.commandMgr.SelectedHero;
 
     }
 
@@ -65,7 +66,7 @@ public class SkillMgr : MonoBehaviour
                 {
                     isChasingForSkill = true;
                     SkillEnd(true);
-                    GameMgr.Instance.commandMgr.SelectedHero.ChaseTarget(skillTarget.transform);
+                    selectedHero.ChaseTarget(skillTarget.transform);
                     return;
                 }
                 ExecuteSkill(skillTarget,usingSkill);
@@ -75,7 +76,6 @@ public class SkillMgr : MonoBehaviour
                 return;//무반응하기
             }
         }
-        
     }
     public void ExecuteSkill(Transform skillTarget)
     {
@@ -90,7 +90,7 @@ public class SkillMgr : MonoBehaviour
                 {
                     StartCoroutine(knight.FinishMove(skillTarget));
                     StartCoroutine(PlaySkillOnTr(HeroSkill.finishMove, 2, skillTarget.transform));
-                    StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(3, knight.SkillCools[3]));
+                    StartCoroutine(selectedHero.SkillCoolCor(3, knight.SkillCools[3]));
                     break;
                 }
         }
@@ -120,41 +120,80 @@ public class SkillMgr : MonoBehaviour
 
     private void OnSkill1(InputAction.CallbackContext obj)
     {
-        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[0])
+        if (!selectedHero.SkillCanUse[0])
             return;
-        StartCoroutine(PlaySkillOnTr(HeroSkill.shieldAura, knight.SkillDurations[0], GameMgr.Instance.commandMgr.SelectedHero.transform));
-        StartCoroutine(knight.EnumeratorTimer(knight.shieldAuraCor, knight.SkillDurations[0]));
-        StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(0,knight.SkillCools[0]));
+        switch(selectedHero.Data.heroClass)
+        {
+            case (HeroClass.Knight):
+                StartCoroutine(PlaySkillOnTr(HeroSkill.shieldAura, knight.SkillDurations[0], selectedHero.transform));
+                StartCoroutine(EnumeratorTimer(knight.shieldAuraCor, knight.SkillDurations[0]));
+                StartCoroutine(selectedHero.SkillCoolCor(0, knight.SkillCools[0]));
+                break;
+            case (HeroClass.Mage):
+                break;
+        }
+        
     }
 
     private void OnSkill2(InputAction.CallbackContext obj)
     {
-        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[1])
+        if (!selectedHero.SkillCanUse[1])
             return;
-        StartCoroutine(PlaySkillOnTr(HeroSkill.provoke, knight.SkillDurations[1], GameMgr.Instance.commandMgr.SelectedHero.transform));
-        knight.Provoke(knight.SkillDurations[1]);
-        StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(1, knight.SkillCools[1]));
+        
+        switch (selectedHero.Data.heroClass)
+        {
+            case (HeroClass.Knight):
+                StartCoroutine(PlaySkillOnTr(HeroSkill.provoke, knight.SkillDurations[1], selectedHero.transform));
+                knight.Provoke(knight.SkillDurations[1]);
+                StartCoroutine(selectedHero.SkillCoolCor(1, knight.SkillCools[1]));
+                break;
+            case (HeroClass.Mage):
+                break;
+        }
     }
 
     private void OnSkill3(InputAction.CallbackContext obj)
     {
-        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[2])
+        if (!selectedHero.SkillCanUse[2])
             return;
-        StartCoroutine(PlaySkillOnTr(HeroSkill.frenzy, knight.SkillDurations[2],GameMgr.Instance.commandMgr.SelectedHero.transform));
-        StartCoroutine(knight.EnumeratorTimer(knight.frenzyCor, knight.SkillDurations[2]));
-        StartCoroutine(GameMgr.Instance.commandMgr.SelectedHero.SkillCoolCor(2, knight.SkillCools[2]));
+        switch (selectedHero.Data.heroClass)
+        {
+            case (HeroClass.Knight):
+                StartCoroutine(PlaySkillOnTr(HeroSkill.frenzy, knight.SkillDurations[2], selectedHero.transform));
+                StartCoroutine(EnumeratorTimer(knight.frenzyCor, knight.SkillDurations[2]));
+                StartCoroutine(selectedHero.SkillCoolCor(2, knight.SkillCools[2]));
+                break;
+            case (HeroClass.Mage):
+                break;
+        }
+       
     }
 
     private void OnSkill4(InputAction.CallbackContext obj)
     {
-        if (!GameMgr.Instance.commandMgr.SelectedHero.SkillCanUse[3])
+        if (!selectedHero.SkillCanUse[3])
             return;
-        UseClickingSkill(SkillMode.Targrt, knight.SkillRadius[3]);
-        usingSkill = HeroSkill.finishMove;
-        //StartCoroutine(PlaySkillOnHero(KnightSkill.finishMove, 5));
+        switch (selectedHero.Data.heroClass)
+        {
+            case (HeroClass.Knight):
+                UseClickingSkill(SkillMode.Targrt, knight.SkillRadius[3]);
+                usingSkill = HeroSkill.finishMove;
+                break;
+            case (HeroClass.Mage):
+                break;
+        }
+    }
+    public IEnumerator EnumeratorTimer(IEnumerator enumerator, float sec)
+    {
+        StartCoroutine(enumerator);
+        yield return new WaitForSeconds(sec);
+        if (enumerator == knight.shieldAuraCor)
+        {
+            knight.SetShiedPlus(knight.SkillRadius[0] + 2, 0);
+        }
+        StopCoroutine(enumerator);
     }
 
-  
     public IEnumerator PlaySkillOnTr(HeroSkill skill, float sec,Transform tr)
     {
         GameObject obj = Instantiate(knight.skillEffects[(int)skill-1],tr);
@@ -168,7 +207,7 @@ public class SkillMgr : MonoBehaviour
         skillRangeObj.transform.localScale=new Vector3(skillRange*2,0,skillRange * 2);
         isUsingSkill = true;
     }
-    public void UseClickingSkill(SkillMode mode,float range)
+    public void UseClickingSkill(SkillMode mode,float range,float radius=0)
     {
         ShowSkillRange(range);
         skillRange = range;
@@ -182,6 +221,7 @@ public class SkillMgr : MonoBehaviour
         else
         {
             skillMode = SkillMode.NonTarget;
+
         }
     }
    
