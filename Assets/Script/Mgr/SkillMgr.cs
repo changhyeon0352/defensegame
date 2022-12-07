@@ -6,20 +6,23 @@ using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public enum HeroSkill { none,shieldAura, provoke, frenzy, finishMove }
-public enum SkillMode { OnHero, Targrt, NonTarget }
+public enum HeroSkill { none,shieldAura, provoke, vortex, finishMove }
+public enum SkillType { OnHero, Targrt, NonTarget }
 public enum Buff { provoked,sleep,shield}
 public class SkillMgr : MonoBehaviour
 {
     public GameObject[] Buffs;
     public GameObject skillRangePrefab;
-    HeroSkill usingSkill;
-    SkillMode skillMode;
+    [SerializeField]
+    Skill[] knigjtSkills;
+    Skill[] mageSkills;
+    Skill usingSkill;
+    SkillType skillMode;
     bool isUsingSkill = false;
     public bool IsUsingSkill { get { return isUsingSkill; } }
     bool isChasingForSkill=false;
     public bool IsChasingForSkill { get { return isChasingForSkill; } }
-    public SkillMode SkillMode { get { return skillMode; } }
+    public SkillType SkillMode { get { return skillMode; } }
     public Hero selectedHero;
     float skillRange;
     public float SkillRange { get { return skillRange; } }
@@ -49,7 +52,7 @@ public class SkillMgr : MonoBehaviour
 
     private void HeroSkillClick(InputAction.CallbackContext obj)
     {
-        if (skillMode == SkillMode.Targrt)
+        if (skillMode == SkillType.Targrt)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Monster")))
@@ -69,7 +72,7 @@ public class SkillMgr : MonoBehaviour
                     selectedHero.ChaseTarget(skillTarget.transform);
                     return;
                 }
-                ExecuteSkill(skillTarget,usingSkill);
+                //ExecuteSkill(skillTarget,usingSkill);
             }
             else
             {
@@ -80,7 +83,7 @@ public class SkillMgr : MonoBehaviour
     public void ExecuteSkill(Transform skillTarget)
     {
         Unit unit = skillTarget.GetComponent<Unit>();
-        ExecuteSkill(unit,usingSkill);
+        //ExecuteSkill(unit,usingSkill);
     }
     public void ExecuteSkill(Unit skillTarget,HeroSkill skill)
     {
@@ -89,7 +92,7 @@ public class SkillMgr : MonoBehaviour
             case (HeroSkill.finishMove):
                 {
                     StartCoroutine(knight.FinishMove(skillTarget));
-                    StartCoroutine(PlaySkillOnTr(HeroSkill.finishMove, 2, skillTarget.transform));
+                    StartCoroutine(PlaySkillOnTr(skillTarget.transform));
                     StartCoroutine(selectedHero.SkillCoolCor(3, knight.SkillCools[3]));
                     break;
                 }
@@ -112,12 +115,29 @@ public class SkillMgr : MonoBehaviour
         {
             return;
         }
-        usingSkill = HeroSkill.none;
-        skillMode = SkillMode.OnHero;
+        usingSkill = null;
+        skillMode = SkillType.OnHero;
         isUsingSkill = false;
         isChasingForSkill = false;
     }
-
+    
+    public void UseSkill(int index,Transform tr)
+    {
+        if (!selectedHero.SkillCanUse[index])
+            return;
+        switch(selectedHero.Data.heroClass)
+        {
+            case(HeroClass.Knight):
+                usingSkill = knigjtSkills[index];
+                break;
+            case (HeroClass.Mage):
+                usingSkill = mageSkills[index];
+                break;
+        }
+        StartCoroutine(EnumeratorTimer(usingSkill.SkillCor(tr,selectedHero), usingSkill.data.duration));
+        StartCoroutine(PlaySkillOnTr(tr));
+        StartCoroutine(selectedHero.SkillCoolCor(index, usingSkill.data.coolTime));
+    }
     private void OnSkill1(InputAction.CallbackContext obj)
     {
         if (!selectedHero.SkillCanUse[0])
@@ -125,9 +145,8 @@ public class SkillMgr : MonoBehaviour
         switch(selectedHero.Data.heroClass)
         {
             case (HeroClass.Knight):
-                StartCoroutine(PlaySkillOnTr(HeroSkill.shieldAura, knight.SkillDurations[0], selectedHero.transform));
+                StartCoroutine(PlaySkillOnTr(selectedHero.transform));
                 StartCoroutine(EnumeratorTimer(knight.shieldAuraCor, knight.SkillDurations[0]));
-                StartCoroutine(selectedHero.SkillCoolCor(0, knight.SkillCools[0]));
                 break;
             case (HeroClass.Mage):
                 break;
@@ -143,7 +162,7 @@ public class SkillMgr : MonoBehaviour
         switch (selectedHero.Data.heroClass)
         {
             case (HeroClass.Knight):
-                StartCoroutine(PlaySkillOnTr(HeroSkill.provoke, knight.SkillDurations[1], selectedHero.transform));
+                StartCoroutine(PlaySkillOnTr( selectedHero.transform));
                 knight.Provoke(knight.SkillDurations[1]);
                 StartCoroutine(selectedHero.SkillCoolCor(1, knight.SkillCools[1]));
                 break;
@@ -159,7 +178,7 @@ public class SkillMgr : MonoBehaviour
         switch (selectedHero.Data.heroClass)
         {
             case (HeroClass.Knight):
-                StartCoroutine(PlaySkillOnTr(HeroSkill.frenzy, knight.SkillDurations[2], selectedHero.transform));
+                StartCoroutine(PlaySkillOnTr( selectedHero.transform));
                 StartCoroutine(EnumeratorTimer(knight.frenzyCor, knight.SkillDurations[2]));
                 StartCoroutine(selectedHero.SkillCoolCor(2, knight.SkillCools[2]));
                 break;
@@ -176,8 +195,8 @@ public class SkillMgr : MonoBehaviour
         switch (selectedHero.Data.heroClass)
         {
             case (HeroClass.Knight):
-                UseClickingSkill(SkillMode.Targrt, knight.SkillRadius[3]);
-                usingSkill = HeroSkill.finishMove;
+                UseClickingSkill(SkillType.Targrt, knight.SkillRadius[3]);
+                //usingSkill = HeroSkill.finishMove;
                 break;
             case (HeroClass.Mage):
                 break;
@@ -194,11 +213,11 @@ public class SkillMgr : MonoBehaviour
         StopCoroutine(enumerator);
     }
 
-    public IEnumerator PlaySkillOnTr(HeroSkill skill, float sec,Transform tr)
+    public IEnumerator PlaySkillOnTr(Transform tr)
     {
-        GameObject obj = Instantiate(knight.skillEffects[(int)skill-1],tr);
+        GameObject obj = Instantiate(usingSkill.SkillPrefab,tr);
         //skillNow=knight.FinishMove(
-        yield return new WaitForSeconds(sec);
+        yield return new WaitForSeconds(usingSkill.data.duration);
         Destroy(obj);
     }
     public void ShowSkillRange(float skillRange)
@@ -207,20 +226,20 @@ public class SkillMgr : MonoBehaviour
         skillRangeObj.transform.localScale=new Vector3(skillRange*2,0,skillRange * 2);
         isUsingSkill = true;
     }
-    public void UseClickingSkill(SkillMode mode,float range,float radius=0)
+    public void UseClickingSkill(SkillType mode,float range,float radius=0)
     {
         ShowSkillRange(range);
         skillRange = range;
         GameMgr.Instance.inputActions.Command.Select.Disable();
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Enable();
-        if (mode == SkillMode.Targrt)
+        if (mode == SkillType.Targrt)
         {
-            skillMode=SkillMode.Targrt;
+            skillMode=SkillType.Targrt;
             UIMgr.Instance.ChangeCursor(CursorType.findTarget);
         }
         else
         {
-            skillMode = SkillMode.NonTarget;
+            skillMode = SkillType.NonTarget;
 
         }
     }

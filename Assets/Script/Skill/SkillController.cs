@@ -11,16 +11,16 @@ public class SkillController : MonoBehaviour
     [SerializeField] GameObject skillRangePrefab;
     GameObject skillRangeObj;
     bool isShowRange=false;
-    SkillMode skillMode;
+    SkillType skillType;
     float skillRange;
     //===================================================================================
 
-
+    
 
     //=====================================================================================
     public IEnumerator PlaySkillOnTr(Skill skill, float sec, Transform tr)
     {
-        GameObject obj = Instantiate(skill.data.skillEffect, tr);
+        GameObject obj = Instantiate(skill.SkillPrefab, tr);
         yield return new WaitForSeconds(sec);
         Destroy(obj);
     }
@@ -30,26 +30,26 @@ public class SkillController : MonoBehaviour
         skillRangeObj.transform.localScale = new Vector3(skillRange * 2, 0, skillRange * 2);
         isShowRange = true;
     }
-    public void UseClickingSkill(SkillMode mode, float range, float radius = 0)
+    public void UseClickingSkill(SkillType mode, float range, float radius = 0)
     {
         ShowSkillRange(range);
         skillRange = range;
         GameMgr.Instance.inputActions.Command.Select.Disable();
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Enable();
-        if (mode == SkillMode.Targrt)
+        if (mode == SkillType.Targrt)
         {
-            skillMode = SkillMode.Targrt;
+            skillType = SkillType.Targrt;
             UIMgr.Instance.ChangeCursor(CursorType.findTarget);
         }
         else
         {
-            skillMode = SkillMode.NonTarget;
+            skillType = SkillType.NonTarget;
 
         }
     }
     private void HeroSkillClick(InputAction.CallbackContext obj)
     {
-        if (skillMode == SkillMode.Targrt)
+        if (skillType == SkillType.Targrt)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Monster")))
@@ -106,7 +106,7 @@ public class SkillController : MonoBehaviour
             return;
         }
         usingSkill = HeroSkill.none;
-        skillMode = SkillMode.OnHero;
+        skillType = SkillType.OnHero;
         //isUsingSkill = false;
         //isChasingForSkill = false;
     }

@@ -17,10 +17,13 @@ public class Hero : AllyUnit
         }
     }
     public HeroState heroState;
+    bool isSelected = false;
+    public bool IsSelected{ get => isSelected; }
     [SerializeField] GameObject energyBoltPrefab;
     [SerializeField] Transform tipOfStaff;
     public float rangeforGizmo;
     public bool isattackMove = false;
+    
     float[] skillCoolsLeft = { -1, -1, -1, -1 };
     public float[] SkillCoolLeft { get => skillCoolsLeft; }
     float[] skillCools = new float[4];

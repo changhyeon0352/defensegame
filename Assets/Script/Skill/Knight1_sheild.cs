@@ -5,33 +5,37 @@ using UnityEngine;
 
 public class Knight1_sheild : Skill
 {
+    public override void EffectOnUnit(Unit unit, Hero hero)
+    {
+        unit.ArmorPlus = data.damage;
+    }
+
     public override void InitSetting()
     {
-        data.skillMode = SkillMode.OnHero;
+        data.skillType = SkillType.OnHero;
         data.coolTime = 20f;
         data.range = 5f;
         data.damage = 10;
         data.duration = 10f;
         data.order = 0;
-        data.skillEffect = skillPrefab;
     }
-    IEnumerator ShieldAuraCor()// 히어로에 방어력 적용이 안됨
+
+    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
-        for (int i = 0; i < 10000; i++)
-        {
-            //SetShiedPlus(data.range + 2, 0);
-            //SetShiedPlus(data.range, 10);
-            yield return null;
-        }
+        yield return null;
     }
-    public void SetShiedPlus(Transform heroTr,float range, int armorPlus)
+
+    public override void UsingSkill( Transform skillTr,Hero hero)
     {
-        Collider[] cols = Physics.OverlapSphere(heroTr.position, range,targetLayer );
+        Collider[] cols = Physics.OverlapSphere(skillTr.position, data.range+2, targetLayer);
         foreach (Collider col in cols)
         {
-            AllyUnit ally = col.gameObject.GetComponent<AllyUnit>();
-            ally.ArmorPlus = armorPlus;
+            Unit unit = col.gameObject.GetComponent<Unit>();
+            unit.ArmorPlus = 0;
         }
-        GameMgr.Instance.commandMgr.SelectedHero.ArmorPlus = armorPlus * 2;
+        hero.ArmorPlus = data.damage*2;
+        AoeSkill(skillTr, hero);
+
     }
+
 }
