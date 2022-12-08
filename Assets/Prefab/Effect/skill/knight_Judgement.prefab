@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6339829693155745779}
   - component: {fileID: 5327151758238242341}
   m_Layer: 0
-  m_Name: knight_FinishMove
+  m_Name: knight_Judgement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

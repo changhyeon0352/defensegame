@@ -71,7 +71,7 @@ public class Knight : MonoBehaviour
         foreach (Collider col in cols)
         {
             Monster mon = col.gameObject.GetComponent<Monster>();
-            StartCoroutine(mon.ProvokedBy(GameMgr.Instance.commandMgr.SelectedHero.transform, sec));
+            StartCoroutine(mon.Provoked(GameMgr.Instance.commandMgr.SelectedHero.transform, sec));
             mon.isProvoked = true;
         }
        

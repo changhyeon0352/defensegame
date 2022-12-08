@@ -31719,6 +31719,12 @@ GameObject:
   m_Component:
   - component: {fileID: 942226320}
   - component: {fileID: 942226319}
+  - component: {fileID: 942226323}
+  - component: {fileID: 942226322}
+  - component: {fileID: 942226321}
+  - component: {fileID: 942226324}
+  - component: {fileID: 942226326}
+  - component: {fileID: 942226325}
   m_Layer: 0
   m_Name: SkillMgr
   m_TagString: Untagged
@@ -31744,6 +31750,14 @@ MonoBehaviour:
   - {fileID: 3208469172170980495, guid: 4dce3432376cccc4790d8a3630e9518f, type: 3}
   skillRangePrefab: {fileID: 1589513323223802465, guid: 60c72ba0cb12f5c49967a1e392eae074,
     type: 3}
+  knigjtSkills:
+  - {fileID: 942226323}
+  - {fileID: 942226322}
+  - {fileID: 942226321}
+  - {fileID: 942226324}
+  mageSkills:
+  - {fileID: 0}
+  - {fileID: 942226325}
   selectedHero: {fileID: 0}
   knight: {fileID: 648949224}
 --- !u!4 &942226320
@@ -31762,6 +31776,109 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &942226321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09310a02caf8c8e4e804bd27b7584c43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  skillPrefab: {fileID: 5335753327985139135, guid: 35f216b3aeec9e74489f81c9c8922f9a,
+    type: 3}
+  indicator: {fileID: 0}
+--- !u!114 &942226322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21cf145169f1d824d9de825cb57ec739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  skillPrefab: {fileID: 1882810805046240, guid: e9f0bd0c63d2c6c40a587e78acdb14de,
+    type: 3}
+  indicator: {fileID: 0}
+--- !u!114 &942226323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ad320b3cc120aa48a62e1f23f195659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  skillPrefab: {fileID: 1448971607870028, guid: b811f5a1a43ee2f43b3430cff94ba026,
+    type: 3}
+  indicator: {fileID: 0}
+--- !u!114 &942226324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa74e49d2b12ba24b92283e2e8b5f8f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  skillPrefab: {fileID: 548984487552956191, guid: e4e27f3d940739144970508687c04c35,
+    type: 3}
+  indicator: {fileID: 0}
+--- !u!114 &942226325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6e442489c45b2e45a10a467c87b8a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  skillPrefab: {fileID: 1921541771461104, guid: e18ec5f7b5e58a24a8f5164cf77c6e5e,
+    type: 3}
+  indicator: {fileID: 1589513323223802465, guid: 60c72ba0cb12f5c49967a1e392eae074,
+    type: 3}
+--- !u!114 &942226326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbc82b8157b77541b37f9faee86b44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &944805008
 PrefabInstance:
   m_ObjectHideFlags: 0

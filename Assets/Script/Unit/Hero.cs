@@ -137,7 +137,7 @@ public class Hero : AllyUnit
         }
         if (GameMgr.Instance.skillMgr.IsChasingForSkill && agent.remainingDistance < GameMgr.Instance.skillMgr.SkillRange && !agent.pathPending)
         {
-            GameMgr.Instance.skillMgr.ExecuteSkill(chaseTargetTr);
+            GameMgr.Instance.skillMgr.UseClinkingSkill(chaseTargetTr);
             ChangeState(UnitState.Idle);
         }
         else if (agent.remainingDistance < attackRange && !agent.pathPending)

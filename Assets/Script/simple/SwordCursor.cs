@@ -11,7 +11,7 @@ public class SwordCursor : MonoBehaviour,IPointerEnterHandler,IPointerExitHandle
     public void OnPointerEnter(PointerEventData eventData)
     {
         
-        if(GameMgr.Instance.skillMgr.SkillMode==SkillType.Targrt)
+        if(GameMgr.Instance.skillMgr.SkillType == SkillType.Targrt)
         {
             UIMgr.Instance.ChangeCursor(CursorType.targeting);
         }
@@ -21,7 +21,7 @@ public class SwordCursor : MonoBehaviour,IPointerEnterHandler,IPointerExitHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (GameMgr.Instance.skillMgr.SkillMode == SkillType.Targrt)
+        if (GameMgr.Instance.skillMgr.SkillType == SkillType.Targrt)
         {
             UIMgr.Instance.ChangeCursor(CursorType.findTarget);
         }

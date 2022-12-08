@@ -17,15 +17,30 @@ public class Knight1_sheild : Skill
         data.range = 5f;
         data.damage = 10;
         data.duration = 10f;
-        data.order = 0;
     }
 
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
-        yield return null;
+        double timer = data.duration;
+        while(true)
+        {
+            timer -= Time.deltaTime;
+            UseSkill(skillTr, hero);
+            yield return null;
+            if (timer < 0)
+            {
+                Collider[] cols = Physics.OverlapSphere(skillTr.position, data.range + 2, targetLayer);
+                foreach (Collider col in cols)
+                {
+                    Unit unit = col.gameObject.GetComponent<Unit>();
+                    unit.ArmorPlus = 0;
+                }
+                break;
+            }
+        }
     }
 
-    public override void UsingSkill( Transform skillTr,Hero hero)
+    public override void UseSkill( Transform skillTr,Hero hero)
     {
         Collider[] cols = Physics.OverlapSphere(skillTr.position, data.range+2, targetLayer);
         foreach (Collider col in cols)
@@ -33,9 +48,8 @@ public class Knight1_sheild : Skill
             Unit unit = col.gameObject.GetComponent<Unit>();
             unit.ArmorPlus = 0;
         }
-        hero.ArmorPlus = data.damage*2;
         AoeSkill(skillTr, hero);
-
+        hero.ArmorPlus = data.damage * 2;
     }
 
 }

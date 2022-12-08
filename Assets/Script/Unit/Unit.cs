@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     protected UnitState state = UnitState.Idle;
     public LayerMask enemyLayer;
     public bool isProvoked = false;
+    public bool isSleep = false;
     protected float timeCount;
     protected float attackSpeed = 2.0f;
     protected int hp;
@@ -51,7 +52,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
     //=====================================================================================================================
 
-    public IEnumerator ProvokedBy(Transform tr,float sec)
+    public IEnumerator Provoked(Transform tr,float sec)
     {
         chaseTargetTr = tr;
         ChangeState(UnitState.Chase);
@@ -63,6 +64,19 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             ChangeState(UnitState.Move);
             isProvoked = false;
         }
+        Destroy(obj);
+    }
+    public IEnumerator Sleep(float sec)
+    {
+        isSleep = true;
+        anim.SetBool("isSleep", true);
+        agent.enabled=false;
+        GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.sleep], transform);
+        yield return new WaitForSeconds(sec);
+        isSleep = false;
+        agent.enabled = true;
+        anim.SetBool("isSleep", false);
+        ChangeState(UnitState.Move);
         Destroy(obj);
     }
     
@@ -135,6 +149,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     virtual protected void Update()
     {
+        if(isSleep)
+            return;
         switch (state)
         {
             case UnitState.Idle:
@@ -153,7 +169,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             default:
                 break;
         }
-
     }
     //==============================================================================
     virtual protected void IdleUpdate()
@@ -227,7 +242,14 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 }
                 else
                 {
-                    ChangeState(UnitState.Move);
+                    if (isProvoked)
+                    {
+                        ChaseTarget(attackTargetTr);
+                    }
+                    else
+                    {
+                        ChangeState(UnitState.Move);
+                    }
                 }
 
             }
@@ -300,7 +322,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 //agent.ResetPath();
                 break;
             case UnitState.Chase:
-                isProvoked = false;
                 break;
             case UnitState.Attack:
                 attackTargetTr = null;
@@ -313,6 +334,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 anim.SetInteger("iState", 0);
                 break;
             case UnitState.Move:
+                isProvoked = false;
                 chaseTargetTr = null;
                 anim.SetInteger("iState", 1);
                 agent.stoppingDistance = 0;
