@@ -32,8 +32,7 @@ public class SkillMgr : MonoBehaviour
     bool isChasingForSkill=false;
     public bool IsChasingForSkill { get { return isChasingForSkill; } }
     public Hero selectedHero;
-    float skillRange;
-    public float SkillRange { get { return skillRange; } }
+    public float SkillRange { get { return usingSkill.data.range; } }
     GameObject nontargetObj;
     GameObject skillRangeObj;
     public GameObject SkillRangeObj { get => skillRangeObj; }
@@ -117,7 +116,7 @@ public class SkillMgr : MonoBehaviour
         {
             if (usingSkill.data.skillType != SkillType.OnHero)
             {
-                StartClickingSkill(usingSkill.data.range);
+                StartClickingSkill();
                 return;
             }
                 
@@ -155,10 +154,6 @@ public class SkillMgr : MonoBehaviour
     {
         StartCoroutine(enumerator);
         yield return new WaitForSeconds(sec);
-        if (enumerator == knight.shieldAuraCor)
-        {
-            knight.SetShiedPlus(knight.SkillRadius[0] + 2, 0);
-        }
         StopCoroutine(enumerator);
     }
 
@@ -178,12 +173,11 @@ public class SkillMgr : MonoBehaviour
     public void ShowNontargetRange()
     {
         nontargetObj = Instantiate(usingSkill.Indicator);
-        nontargetObj.transform.localScale= new Vector3(skillRange * 2, 0, skillRange * 2);
+        nontargetObj.transform.localScale= new Vector3(usingSkill.data.nonTargetRange * 2, 0, usingSkill.data.nonTargetRange * 2);
     }
-    public void StartClickingSkill(float range,float radius=0)
+    public void StartClickingSkill()
     {
-        ShowSkillRange(range);
-        skillRange = range;
+        ShowSkillRange(usingSkill.data.range);
         GameMgr.Instance.inputActions.Command.Select.Disable();
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Enable();
         if (SkillType == SkillType.Targrt)
@@ -201,7 +195,7 @@ public class SkillMgr : MonoBehaviour
         if (SkillType != SkillType.OnHero)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f))
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f,usingSkill.TargetLayer))
             {
                 Vector3 heroPos = selectedHero.transform.position;
                 float distance = Vector2.Distance(new Vector2(heroPos.x, heroPos.z), new Vector2(hit.point.x, hit.point.z));
@@ -223,7 +217,7 @@ public class SkillMgr : MonoBehaviour
                 }
                 
                 
-                if (distance > skillRange)//사거리 밖일때
+                if (distance > usingSkill.data.range)//사거리 밖일때
                 {
                     isChasingForSkill = true;
                     SkillEnd(true);

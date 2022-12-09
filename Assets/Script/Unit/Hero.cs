@@ -88,11 +88,6 @@ public class Hero : AllyUnit
     protected override void Update()
     {
         base.Update();
-        for(int i=0;i<4;i++)
-        {
-           
-        }
-
     }
 
     //무브업데이트땐 적추적 ㄴㄴ
@@ -138,9 +133,9 @@ public class Hero : AllyUnit
         if (GameMgr.Instance.skillMgr.IsChasingForSkill && agent.remainingDistance < GameMgr.Instance.skillMgr.SkillRange && !agent.pathPending)
         {
             GameMgr.Instance.skillMgr.UseClinkingSkill(chaseTargetTr);
-            ChangeState(UnitState.Idle);
+            MoveSpots(transform.position);
         }
-        else if (agent.remainingDistance < attackRange && !agent.pathPending)
+        else if (agent.remainingDistance < attackRange && !agent.pathPending&&chaseTargetTr.CompareTag("Monster"))
         {
             ChangeState(UnitState.Attack);
         }

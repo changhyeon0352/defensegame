@@ -8,7 +8,7 @@ public class Knight2_Provoke : Skill
     {
         data.skillType = SkillType.OnHero;
         data.coolTime = 20f;
-        data.range = 5f;
+        data.nonTargetRange = 5f;
         data.damage = 0;
         data.duration = 10f;
     }

@@ -14,7 +14,7 @@ public class Knight1_sheild : Skill
     {
         data.skillType = SkillType.OnHero;
         data.coolTime = 20f;
-        data.range = 5f;
+        data.nonTargetRange = 5f;
         data.damage = 10;
         data.duration = 10f;
     }
@@ -29,7 +29,7 @@ public class Knight1_sheild : Skill
             yield return null;
             if (timer < 0)
             {
-                Collider[] cols = Physics.OverlapSphere(skillTr.position, data.range + 2, targetLayer);
+                Collider[] cols = Physics.OverlapSphere(skillTr.position, data.nonTargetRange + 2, targetLayer);
                 foreach (Collider col in cols)
                 {
                     Unit unit = col.gameObject.GetComponent<Unit>();
@@ -42,7 +42,7 @@ public class Knight1_sheild : Skill
 
     public override void UseSkill( Transform skillTr,Hero hero)
     {
-        Collider[] cols = Physics.OverlapSphere(skillTr.position, data.range+2, targetLayer);
+        Collider[] cols = Physics.OverlapSphere(skillTr.position, data.nonTargetRange+2, targetLayer);
         foreach (Collider col in cols)
         {
             Unit unit = col.gameObject.GetComponent<Unit>();

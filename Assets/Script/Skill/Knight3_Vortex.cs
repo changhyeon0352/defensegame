@@ -8,7 +8,7 @@ public class Knight3_Vortex : Skill
     {
         data.skillType = SkillType.OnHero;
         data.coolTime = 12f;
-        data.range = 3f;
+        data.nonTargetRange = 3f;
         data.damage = 10;
         data.duration = 5f;
     }

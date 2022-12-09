@@ -20,6 +20,14 @@ public abstract class Skill : MonoBehaviour
     [SerializeField] protected GameObject skillPrefab;
     [SerializeField] protected GameObject indicator;
     public GameObject Indicator { get { return indicator; } }
+    public LayerMask TargetLayer 
+    { get 
+        {
+            if (data.skillType == SkillType.NonTarget)
+                return LayerMask.GetMask("Ground");
+                return targetLayer; 
+        } 
+    }    
     public GameObject SkillPrefab { get { return skillPrefab; } }
     //private YieldInstruction yield;
 
@@ -32,7 +40,7 @@ public abstract class Skill : MonoBehaviour
     
     public virtual void AoeSkill(Transform skillTr,Hero hero)
     {
-        Collider[] cols = Physics.OverlapSphere(skillTr.position, data.range, targetLayer);
+        Collider[] cols = Physics.OverlapSphere(skillTr.position, data.nonTargetRange, targetLayer);
         foreach (Collider col in cols)
         {
             Unit unit = col.gameObject.GetComponent<Unit>();

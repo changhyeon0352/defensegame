@@ -18,6 +18,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     public LayerMask enemyLayer;
     public bool isProvoked = false;
     public bool isSleep = false;
+    public bool ishited=false;
     protected float timeCount;
     protected float attackSpeed = 2.0f;
     protected int hp;
@@ -68,16 +69,28 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     public IEnumerator Sleep(float sec)
     {
+        double count = sec;
         isSleep = true;
-        anim.SetBool("isSleep", true);
-        agent.enabled=false;
+        anim.SetTrigger("Sleep");
+        agent.enabled = false;
         GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.sleep], transform);
-        yield return new WaitForSeconds(sec);
-        isSleep = false;
-        agent.enabled = true;
-        anim.SetBool("isSleep", false);
-        ChangeState(UnitState.Move);
+        while (count>0)
+        {
+            count -= Time.deltaTime;
+            yield return null;
+            if(ishited)
+                break;
+        }
+        
+        if (state != UnitState.Dead)
+        {
+            agent.enabled = true;
+            isSleep = false;
+            anim.SetTrigger("WakeUp");
+            ChangeState(UnitState.Move);
+        }
         Destroy(obj);
+        ishited= false;
     }
     
     public virtual int Hp 
@@ -124,9 +137,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     {
         double decreaseRate= 1-Math.Atan((double)(armor+armorPlus)/50)/(Math.PI/2);//아머가 50쯤 되면 50%
         int netDamage = (int)(damage * decreaseRate);
-        Hp -= netDamage == 0 ? 1 : netDamage; 
-
-
+        Hp -= netDamage == 0 ? 1 : netDamage;
+        ishited = true;
     }
     virtual public void InitializeUnitStat()
     {
@@ -205,10 +217,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         else
         {
             ChangeState(UnitState.Move);
-        }
-        if(GameMgr.Instance.skillMgr.IsChasingForSkill&& agent.remainingDistance < attackRange && !agent.pathPending)
-        {
-            //ChangeState(UnitState.Attack);
         }
         if (agent.remainingDistance < attackRange && !agent.pathPending)
         {
