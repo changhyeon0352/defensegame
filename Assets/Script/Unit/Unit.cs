@@ -26,6 +26,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     protected int mp;
     protected int mpMax = 100;
     protected int attack = 20;
+    protected float moveSpeed;
+    public float MoveSpeed { get { return moveSpeed; } set { moveSpeed = value;agent.speed = value; } }
     [SerializeField]protected int armor = 0;
     protected int armorPlus = 0;
     public int ArmorPlus { get { return armorPlus; }
@@ -92,6 +94,12 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         Destroy(obj);
         ishited= false;
     }
+    public IEnumerator Slow(float sec)
+    {
+        MoveSpeed = unitData.MoveSpeed /4;
+        yield return new WaitForSeconds(sec);
+        MoveSpeed = unitData.MoveSpeed;
+    }
     
     public virtual int Hp 
     { 
@@ -148,7 +156,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         mp = mpMax;
         attack = unitData.Atk;
         armor = unitData.Armor;
-        agent.speed = unitData.MoveSpeed;
+        MoveSpeed = unitData.MoveSpeed;
         anim.SetFloat("attackSpeed",unitData.AttackSpeed);
         attackRange = unitData.AttackRange;
         

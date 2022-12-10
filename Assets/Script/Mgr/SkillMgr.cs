@@ -18,6 +18,7 @@ public class SkillMgr : MonoBehaviour
     [SerializeField]
     Skill[] mageSkills;
     Skill usingSkill;
+    public Skill UsingSKill { get=> usingSkill; } 
     public SkillType SkillType { 
         get 
         {
@@ -70,6 +71,7 @@ public class SkillMgr : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
             {
                 nontargetObj.transform.position = hit.point;
+                nontargetObj.transform.forward = hit.point - selectedHero.transform.position;
             }
         }
     }
@@ -98,8 +100,9 @@ public class SkillMgr : MonoBehaviour
         index = -1;
     }
     
-    public void UseSkill()
+    public void UseSkill(int index)
     {
+        this.index = index;
         if (!selectedHero.SkillCanUse[index])
             return;
         switch(selectedHero.Data.heroClass)
@@ -122,33 +125,29 @@ public class SkillMgr : MonoBehaviour
                 
             skillTarget = selectedHero.transform;
         }
-        StartCoroutine(EnumeratorTimer(usingSkill.SkillCor(skillTarget,selectedHero), usingSkill.data.duration));
-        StartCoroutine(PlaySkillOnTr(skillTarget));
+        StartCoroutine(usingSkill.SkillCor(skillTarget,selectedHero));
+        StartCoroutine(PlaySkillOnTr());
         StartCoroutine(selectedHero.SkillCoolCor(index, usingSkill.data.coolTime));
         SkillEnd();
     }
     private void OnSkill1(InputAction.CallbackContext obj)
     {
-        index = 0;
-        UseSkill();
+        UseSkill(0);
     }
 
     private void OnSkill2(InputAction.CallbackContext obj)
     {
-        index = 1;
-        UseSkill();
+        UseSkill(1);
     }
 
     private void OnSkill3(InputAction.CallbackContext obj)
     {
-        index = 2;
-        UseSkill();
+        UseSkill(2);
     }
 
     private void OnSkill4(InputAction.CallbackContext obj)
     {
-        index = 3;
-        UseSkill();
+        UseSkill(3);
     }
     public IEnumerator EnumeratorTimer(IEnumerator enumerator, float sec)
     {
@@ -157,9 +156,14 @@ public class SkillMgr : MonoBehaviour
         StopCoroutine(enumerator);
     }
 
-    public IEnumerator PlaySkillOnTr(Transform tr)
+    public IEnumerator PlaySkillOnTr()
     {
-        GameObject obj = Instantiate(usingSkill.SkillPrefab,tr);
+        
+        GameObject obj = Instantiate(usingSkill.SkillPrefab, skillTarget);
+        if(SkillType==SkillType.NonTarget)
+        {
+            obj.transform.parent = null;
+        }
         //skillNow=knight.FinishMove(
         yield return new WaitForSeconds(usingSkill.data.duration);
         Destroy(obj);
@@ -167,13 +171,14 @@ public class SkillMgr : MonoBehaviour
     public void ShowSkillRange(float skillRange)
     {
         skillRangeObj=Instantiate(skillRangePrefab, GameMgr.Instance.commandMgr.SelectedHero.transform);
-        skillRangeObj.transform.localScale=new Vector3(skillRange*2,0,skillRange * 2);
+        
+        skillRangeObj.transform.localScale=new Vector3(skillRange,0,skillRange);
         isUsingSkill = true;
     }
     public void ShowNontargetRange()
     {
         nontargetObj = Instantiate(usingSkill.Indicator);
-        nontargetObj.transform.localScale= new Vector3(usingSkill.data.nonTargetRange * 2, 0, usingSkill.data.nonTargetRange * 2);
+        nontargetObj.transform.localScale= new Vector3(usingSkill.data.nonTargetRange ,1, usingSkill.data.nonTargetRange );
     }
     public void StartClickingSkill()
     {
@@ -212,8 +217,9 @@ public class SkillMgr : MonoBehaviour
                 else
                 {
                     skillTarget = new GameObject().transform;
-                    skillTarget.position = hit.point+Vector3.up;
-                    skillTarget.transform.up = Vector3.up;
+                    skillTarget.position = hit.point+Vector3.up*0.3f;
+                    skillTarget.forward = nontargetObj.transform.forward;
+                    //skillTarget.transform.up = Vector3.up;
                 }
                 
                 
@@ -235,7 +241,7 @@ public class SkillMgr : MonoBehaviour
     public void UseClinkingSkill(Transform skillTarget)
     {
         this.skillTarget = skillTarget;
-        UseSkill();
+        UseSkill(index);
     }
     
 

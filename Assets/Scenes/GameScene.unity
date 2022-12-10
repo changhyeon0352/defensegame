@@ -31725,6 +31725,7 @@ GameObject:
   - component: {fileID: 942226324}
   - component: {fileID: 942226326}
   - component: {fileID: 942226325}
+  - component: {fileID: 942226327}
   m_Layer: 0
   m_Name: SkillMgr
   m_TagString: Untagged
@@ -31748,7 +31749,7 @@ MonoBehaviour:
   - {fileID: 8691846461088134653, guid: 1e258f9d70daae5488be7153b5a57a3c, type: 3}
   - {fileID: 5812081752390845428, guid: 1b2672e922bfdbf4dac03587d374cc0f, type: 3}
   - {fileID: 3208469172170980495, guid: 4dce3432376cccc4790d8a3630e9518f, type: 3}
-  skillRangePrefab: {fileID: 1589513323223802465, guid: 60c72ba0cb12f5c49967a1e392eae074,
+  skillRangePrefab: {fileID: 6464590046006074728, guid: 2682bedf95d656d4180dce1e3f65ff24,
     type: 3}
   knigjtSkills:
   - {fileID: 942226323}
@@ -31756,8 +31757,9 @@ MonoBehaviour:
   - {fileID: 942226321}
   - {fileID: 942226324}
   mageSkills:
-  - {fileID: 0}
+  - {fileID: 942226326}
   - {fileID: 942226325}
+  - {fileID: 942226327}
   selectedHero: {fileID: 0}
   knight: {fileID: 648949224}
 --- !u!4 &942226320
@@ -31847,7 +31849,8 @@ MonoBehaviour:
     m_Bits: 128
   skillPrefab: {fileID: 548984487552956191, guid: e4e27f3d940739144970508687c04c35,
     type: 3}
-  indicator: {fileID: 0}
+  indicator: {fileID: 6464590046006074728, guid: 2682bedf95d656d4180dce1e3f65ff24,
+    type: 3}
 --- !u!114 &942226325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31865,7 +31868,7 @@ MonoBehaviour:
     m_Bits: 128
   skillPrefab: {fileID: 1921541771461104, guid: e18ec5f7b5e58a24a8f5164cf77c6e5e,
     type: 3}
-  indicator: {fileID: 1589513323223802465, guid: 60c72ba0cb12f5c49967a1e392eae074,
+  indicator: {fileID: 6464590046006074728, guid: 2682bedf95d656d4180dce1e3f65ff24,
     type: 3}
 --- !u!114 &942226326
 MonoBehaviour:
@@ -31879,6 +31882,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cbc82b8157b77541b37f9faee86b44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  skillPrefab: {fileID: 1552481264211682, guid: fc4f12f5f26531645ad7fab9b12ed224,
+    type: 3}
+  indicator: {fileID: 7919511112748934850, guid: e0533537f813f0f4581661bf2d591975,
+    type: 3}
+--- !u!114 &942226327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fc18443951108b46b4146290e53e6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  skillPrefab: {fileID: 1758024991200994, guid: 3f266e6a3dcfa964db5d92a36ffffe1d,
+    type: 3}
+  indicator: {fileID: 6464590046006074728, guid: 2682bedf95d656d4180dce1e3f65ff24,
+    type: 3}
 --- !u!1001 &944805008
 PrefabInstance:
   m_ObjectHideFlags: 0

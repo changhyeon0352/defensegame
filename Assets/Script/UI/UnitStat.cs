@@ -44,6 +44,10 @@ public class UnitStat : MonoBehaviour
         armorTmp.text = (unit.Armor + unit.ArmorPlus).ToString();
         magicArmorTmp.text = "0";
         moveSpeedTmp.text = unit.unitData.MoveSpeed.ToString();
+        if(unit.MoveSpeed<unit.unitData.MoveSpeed)
+            moveSpeedTmp.color = Color.red;
+        else { moveSpeedTmp.color = Color.white;}
+        
         portrait.sprite = unit.unitData.UnitPortrait;
         hpText.text = $"{unit.Hp } / {unit.HpMax}";
         hpImage.fillAmount= (float)unit.Hp/(float)unit.HpMax;

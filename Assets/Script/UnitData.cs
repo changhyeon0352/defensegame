@@ -26,6 +26,8 @@ public class UnitData : ScriptableObject
     private int atk;
     public int Atk { get { return atk; } }
     [SerializeField]
+    private int magicPower;
+    public int MagicPower { get { return magicPower; } }
     private int armor;
     public int Armor { get { return armor; } }
     [SerializeField]
