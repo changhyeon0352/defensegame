@@ -43,7 +43,7 @@ public class UnitStat : MonoBehaviour
         else { armorTmp.color = Color.white;}
         armorTmp.text = (unit.Armor + unit.ArmorPlus).ToString();
         magicArmorTmp.text = "0";
-        moveSpeedTmp.text = unit.unitData.MoveSpeed.ToString();
+        moveSpeedTmp.text = unit.MoveSpeed.ToString();
         if(unit.MoveSpeed<unit.unitData.MoveSpeed)
             moveSpeedTmp.color = Color.red;
         else { moveSpeedTmp.color = Color.white;}

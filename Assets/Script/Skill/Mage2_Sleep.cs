@@ -21,6 +21,7 @@ public class Mage2_Sleep : Skill
 
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
+        StartCoroutine(PlaySkillOnTr(skillTr));
         yield return null;
         UseSkill(skillTr, hero);
     }

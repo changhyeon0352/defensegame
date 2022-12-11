@@ -24,6 +24,7 @@ public class Knight2_Provoke : Skill
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
         yield return null;
+        StartCoroutine(PlaySkillOnTr(skillTr));
         UseSkill(skillTr, hero);
     }
 }

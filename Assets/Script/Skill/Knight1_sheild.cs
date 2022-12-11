@@ -21,6 +21,7 @@ public class Knight1_sheild : Skill
 
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
+        StartCoroutine(PlaySkillOnTr(skillTr));
         double timer = data.duration;
         while(true)
         {

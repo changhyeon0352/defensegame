@@ -19,6 +19,7 @@ public abstract class Skill : MonoBehaviour
     [SerializeField] protected LayerMask targetLayer;
     [SerializeField] protected GameObject skillPrefab;
     [SerializeField] protected GameObject indicator;
+    protected GameObject skillObj;
     public GameObject Indicator { get { return indicator; } }
     public LayerMask TargetLayer 
     { get 
@@ -47,6 +48,15 @@ public abstract class Skill : MonoBehaviour
             EffectOnUnit(unit,hero);
         }
     }
-    
+    public virtual IEnumerator PlaySkillOnTr(Transform skillTr)
+    {
+        skillObj = Instantiate(SkillPrefab, skillTr);
+        if (data.skillType == SkillType.NonTarget)
+        {
+            skillObj.transform.parent = null;
+        }
+        yield return new WaitForSeconds(data.duration);
+        Destroy(skillObj);
+    }
 
 }

@@ -19,7 +19,7 @@ MonoBehaviour:
   mp: 500
   moveSpeed: 5
   atk: 20
-  armor: 0
+  magicPower: 40
   attackSpeed: 1
   cost: 80
   attackRange: 5

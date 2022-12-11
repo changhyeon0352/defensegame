@@ -31726,6 +31726,7 @@ GameObject:
   - component: {fileID: 942226326}
   - component: {fileID: 942226325}
   - component: {fileID: 942226327}
+  - component: {fileID: 942226328}
   m_Layer: 0
   m_Name: SkillMgr
   m_TagString: Untagged
@@ -31760,6 +31761,7 @@ MonoBehaviour:
   - {fileID: 942226326}
   - {fileID: 942226325}
   - {fileID: 942226327}
+  - {fileID: 942226328}
   selectedHero: {fileID: 0}
   knight: {fileID: 648949224}
 --- !u!4 &942226320
@@ -31907,6 +31909,25 @@ MonoBehaviour:
   skillPrefab: {fileID: 1758024991200994, guid: 3f266e6a3dcfa964db5d92a36ffffe1d,
     type: 3}
   indicator: {fileID: 6464590046006074728, guid: 2682bedf95d656d4180dce1e3f65ff24,
+    type: 3}
+--- !u!114 &942226328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942226318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29f774781cef554181fc3e56264ad12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 192
+  skillPrefab: {fileID: 1037905246592506, guid: 28fdd6f49e301de42896fd085978747a,
+    type: 3}
+  indicator: {fileID: 4079115041030344887, guid: e430d8848d5ae2c45846b0b0b6cbdc67,
     type: 3}
 --- !u!1001 &944805008
 PrefabInstance:
@@ -58165,7 +58186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillIndicatorPrefabs:
-  - {fileID: 7919511112748934850, guid: e0533537f813f0f4581661bf2d591975, type: 3}
+  - {fileID: 7919511112748934850, guid: c2ebfaf976b06c449999d69e77cb5243, type: 3}
   moveToPrefabs: {fileID: 2412586242081842667, guid: de4b24fd880a79441a5b47e9e90dab91,
     type: 3}
   attackToPrefabs: {fileID: 2412586242081842667, guid: c56e237b209b3be42b8e7b5bfd9c13aa,

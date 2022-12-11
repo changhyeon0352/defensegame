@@ -11,7 +11,7 @@ public class Knight4_judgement : Skill
 
     public override void InitSetting()
     {
-        data.skillType = SkillType.Targrt;
+        data.skillType = SkillType.Target;
         data.coolTime = 50f;
         data.range = 5f;
         data.damage = 10;
@@ -20,6 +20,7 @@ public class Knight4_judgement : Skill
 
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
+        StartCoroutine(PlaySkillOnTr(skillTr));
         WaitForSeconds sec = new WaitForSeconds(0.1f);
         for (int i = 0; i < 16; i++)
         {

@@ -7,7 +7,7 @@ using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public enum HeroSkill { none,shieldAura, provoke, vortex, finishMove }
-public enum SkillType { OnHero, Targrt, NonTarget }
+public enum SkillType { OnHero, Target, NonTarget,directional }
 public enum Buff { provoked,sleep,shield}
 public class SkillMgr : MonoBehaviour
 {
@@ -34,7 +34,7 @@ public class SkillMgr : MonoBehaviour
     public bool IsChasingForSkill { get { return isChasingForSkill; } }
     public Hero selectedHero;
     public float SkillRange { get { return usingSkill.data.range; } }
-    GameObject nontargetObj;
+    GameObject indicator;
     GameObject skillRangeObj;
     public GameObject SkillRangeObj { get => skillRangeObj; }
     Transform skillTarget;
@@ -59,19 +59,25 @@ public class SkillMgr : MonoBehaviour
         GameMgr.Instance.inputActions.Command.SkillCancel.performed += OnSkillCancel;
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
         selectedHero = GameMgr.Instance.commandMgr.SelectedHero;
-
     }
 
 
     private void Update()
     {
-        if(nontargetObj!=null)
+        if(indicator!=null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
-            {
-                nontargetObj.transform.position = hit.point;
-                nontargetObj.transform.forward = hit.point - selectedHero.transform.position;
+            {   
+                if(SkillType==SkillType.NonTarget)
+                {
+                    indicator.transform.position = hit.point;
+                    indicator.transform.forward = hit.point - selectedHero.transform.position;
+                }
+                else if (SkillType == SkillType.directional)
+                {
+                    indicator.transform.right=-(hit.point - selectedHero.transform.position);
+                }
             }
         }
     }
@@ -84,8 +90,8 @@ public class SkillMgr : MonoBehaviour
     {
         if(skillRangeObj!=null)
             Destroy(skillRangeObj);
-        if(nontargetObj!=null)
-            Destroy(nontargetObj);
+        if(indicator!=null)
+            Destroy(indicator);
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
         GameMgr.Instance.inputActions.Command.Select.Enable();
         UIMgr.Instance.ChangeCursor(CursorType.Default);
@@ -126,78 +132,51 @@ public class SkillMgr : MonoBehaviour
             skillTarget = selectedHero.transform;
         }
         StartCoroutine(usingSkill.SkillCor(skillTarget,selectedHero));
-        StartCoroutine(PlaySkillOnTr());
         StartCoroutine(selectedHero.SkillCoolCor(index, usingSkill.data.coolTime));
         SkillEnd();
     }
-    private void OnSkill1(InputAction.CallbackContext obj)
-    {
-        UseSkill(0);
-    }
-
-    private void OnSkill2(InputAction.CallbackContext obj)
-    {
-        UseSkill(1);
-    }
-
-    private void OnSkill3(InputAction.CallbackContext obj)
-    {
-        UseSkill(2);
-    }
-
-    private void OnSkill4(InputAction.CallbackContext obj)
-    {
-        UseSkill(3);
-    }
-    public IEnumerator EnumeratorTimer(IEnumerator enumerator, float sec)
-    {
-        StartCoroutine(enumerator);
-        yield return new WaitForSeconds(sec);
-        StopCoroutine(enumerator);
-    }
-
-    public IEnumerator PlaySkillOnTr()
-    {
-        
-        GameObject obj = Instantiate(usingSkill.SkillPrefab, skillTarget);
-        if(SkillType==SkillType.NonTarget)
-        {
-            obj.transform.parent = null;
-        }
-        //skillNow=knight.FinishMove(
-        yield return new WaitForSeconds(usingSkill.data.duration);
-        Destroy(obj);
-    }
+    private void OnSkill1(InputAction.CallbackContext obj) {UseSkill(0);}
+    private void OnSkill2(InputAction.CallbackContext obj) {UseSkill(1);}
+    private void OnSkill3(InputAction.CallbackContext obj) {UseSkill(2);}
+    private void OnSkill4(InputAction.CallbackContext obj) {UseSkill(3);}
+    
     public void ShowSkillRange(float skillRange)
     {
         skillRangeObj=Instantiate(skillRangePrefab, GameMgr.Instance.commandMgr.SelectedHero.transform);
-        
         skillRangeObj.transform.localScale=new Vector3(skillRange,0,skillRange);
-        isUsingSkill = true;
     }
-    public void ShowNontargetRange()
+    public void ShowIndicator()
     {
-        nontargetObj = Instantiate(usingSkill.Indicator);
-        nontargetObj.transform.localScale= new Vector3(usingSkill.data.nonTargetRange ,1, usingSkill.data.nonTargetRange );
+        indicator = Instantiate(usingSkill.Indicator);
+        if(SkillType==SkillType.NonTarget)
+        {
+            indicator.transform.localScale = new Vector3(usingSkill.data.nonTargetRange, 1, usingSkill.data.nonTargetRange);
+        }
+        else if(SkillType==SkillType.directional)
+        {
+            indicator.transform.position = selectedHero.transform.position;
+            indicator.transform.parent = selectedHero.transform;
+        }
     }
     public void StartClickingSkill()
     {
-        ShowSkillRange(usingSkill.data.range);
+        if(SkillType==SkillType.NonTarget|| SkillType == SkillType.Target)
+            ShowSkillRange(usingSkill.data.range);
+        isUsingSkill = true;
         GameMgr.Instance.inputActions.Command.Select.Disable();
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Enable();
-        if (SkillType == SkillType.Targrt)
+        if (SkillType == SkillType.Target)
         {
             UIMgr.Instance.ChangeCursor(CursorType.findTarget);
         }
         else
         {
-            //스킬인디케이터온
-            ShowNontargetRange();
+            ShowIndicator(); //스킬인디케이터온
         }
     }
-    private void HeroSkillClick(InputAction.CallbackContext obj)
+    private void HeroSkillClick(InputAction.CallbackContext obj)//skillTarget을 정해서 UseClinkingSkill(skillTarget) 하는 역할
     {
-        if (SkillType != SkillType.OnHero)
+        if (SkillType == SkillType.Target|| SkillType == SkillType.NonTarget)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f,usingSkill.TargetLayer))
@@ -205,7 +184,7 @@ public class SkillMgr : MonoBehaviour
                 Vector3 heroPos = selectedHero.transform.position;
                 float distance = Vector2.Distance(new Vector2(heroPos.x, heroPos.z), new Vector2(hit.point.x, hit.point.z));
                 Debug.Log(distance);
-                if(usingSkill.data.skillType==SkillType.Targrt)
+                if(usingSkill.data.skillType==SkillType.Target)
                 {
                     Unit skillTargetUnit = hit.transform.GetComponent<Unit>();
                     if (skillTargetUnit == null)
@@ -214,15 +193,13 @@ public class SkillMgr : MonoBehaviour
                     }
                     skillTarget = skillTargetUnit.transform;
                 }
-                else
+                else if(usingSkill.data.skillType == SkillType.NonTarget)
                 {
                     skillTarget = new GameObject().transform;
                     skillTarget.position = hit.point+Vector3.up*0.3f;
-                    skillTarget.forward = nontargetObj.transform.forward;
+                    skillTarget.forward = indicator.transform.forward;
                     //skillTarget.transform.up = Vector3.up;
                 }
-                
-                
                 if (distance > usingSkill.data.range)//사거리 밖일때
                 {
                     isChasingForSkill = true;
@@ -235,6 +212,15 @@ public class SkillMgr : MonoBehaviour
             else
             {
                 return;//무반응하기
+            }
+        }
+        else if (SkillType == SkillType.directional)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, usingSkill.TargetLayer))
+            {
+                selectedHero.transform.LookAt(hit.point);
+                UseClinkingSkill(selectedHero.transform);
             }
         }
     }

@@ -22,6 +22,7 @@ public class Mage3_earthquake : Skill
 
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
+        StartCoroutine(PlaySkillOnTr(skillTr));
         yield return new WaitForSeconds(0.2f);
         for (int i = 0; i < data.duration; i++)
         {

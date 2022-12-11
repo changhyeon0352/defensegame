@@ -24,7 +24,8 @@ public class Knight3_Vortex : Skill
     }
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
-        for(int i=0;i<data.duration;i++)
+        StartCoroutine(PlaySkillOnTr(skillTr));
+        for (int i=0;i<data.duration;i++)
         {
             UseSkill(skillTr, hero);
             yield return new WaitForSeconds(1);
