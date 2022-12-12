@@ -16,17 +16,23 @@ public class Mage4_dragonBreath : Skill
         data.range = 8f;
         data.nonTargetRange = 1f;
         data.damage = 10;
-        data.duration = 10f;// playskillontr을 반복하기 위해서
+        data.duration = 7f;
+        data.Name = "용의 숨결";
     }
 
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
+        UIMgr.Instance.ShowDuration(data.Name, data.duration);
+        hero.MoveSpots(hero.transform.position);
+        hero.IsStopSkill = true;
         StartCoroutine(PlaySkillOnTr(skillTr));
-        yield return null;
+        yield return new WaitForSeconds(data.duration);
+        hero.IsStopSkill = false;
     }
 
     public override void UseSkill(Transform skillTr, Hero hero)
     {
         
     }
+    
 }

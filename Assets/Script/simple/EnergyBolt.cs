@@ -14,7 +14,8 @@ public class EnergyBolt : MonoBehaviour
     {
         if (target == null)
             Destroy(this.gameObject);
-        transform.position += (target.position - transform.position).normalized * speed * Time.deltaTime;
+        else
+            transform.position += (target.position - transform.position).normalized * speed * Time.deltaTime;
         //transform.LookAt(target);
         //transform.Translate(transform.forward * speed * Time.deltaTime);
         

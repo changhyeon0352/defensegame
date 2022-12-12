@@ -11,6 +11,7 @@ public enum SkillType { OnHero, Target, NonTarget,directional }
 public enum Buff { provoked,sleep,shield}
 public class SkillMgr : MonoBehaviour
 {
+    
     public GameObject[] Buffs;
     public GameObject skillRangePrefab;
     [SerializeField]
@@ -18,6 +19,7 @@ public class SkillMgr : MonoBehaviour
     [SerializeField]
     Skill[] mageSkills;
     Skill usingSkill;
+    
     public Skill UsingSKill { get=> usingSkill; } 
     public SkillType SkillType { 
         get 
@@ -230,5 +232,5 @@ public class SkillMgr : MonoBehaviour
         UseSkill(index);
     }
     
-
+    
 }

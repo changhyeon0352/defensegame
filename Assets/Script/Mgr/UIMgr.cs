@@ -12,7 +12,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] Texture2D cursorSword;
     [SerializeField] Texture2D cursorTargeting;
     [SerializeField] Texture2D cursorFindTarget;
-
+    public GameObject skilldurationUI;
     public UnitStat unitStatUI;
     public SkillbarUI skillbarUI;
     public HPbar hpbar;
@@ -209,5 +209,9 @@ public class UIMgr : Singleton<UIMgr>
     {
         nowSpawnPoint.text = nowPoint.ToString();
         maxSpawnPoint.text = maxPoint.ToString();
+    }
+    public void ShowDuration(string name, float sec)
+    {
+        Instantiate(skilldurationUI,transform).GetComponent<SkillDuration>().InitSkillDurationUI(name, sec);
     }
 }

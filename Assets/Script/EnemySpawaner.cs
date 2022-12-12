@@ -6,16 +6,30 @@ using UnityEngine.InputSystem;
 public class EnemySpawaner : MonoBehaviour
 {
     public GameObject EnemyPrefab;
-    public UnitData[] monDatas; 
+    public UnitData[] monDatas;
+    float timeCount=1f;
+    float coolTime = 1f;
 
     // Update is called once per frame
     void Update()
     {
+        if(GameMgr.Instance.Phase==Phase.defense)
+            timeCount-=Time.deltaTime;
         if(Input.GetKeyDown(KeyCode.C))
         {
-            Unit monster =Instantiate(EnemyPrefab,transform).GetComponent<Unit>();
-            monster.unitData = monDatas[0];
-            monster.InitializeUnitStat();
+            SpawnMonster(0);
         }
+        if(timeCount<0)
+        {
+            timeCount=coolTime;
+            SpawnMonster(0);
+        }
+    }
+
+    private void SpawnMonster(int index)
+    {
+        Unit monster = Instantiate(EnemyPrefab, transform).GetComponent<Unit>();
+        monster.unitData = monDatas[index];
+        monster.InitializeUnitStat();
     }
 }

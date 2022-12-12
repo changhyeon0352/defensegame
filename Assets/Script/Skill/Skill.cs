@@ -12,6 +12,7 @@ public struct SkillData
     public float duration;
     public int damage;
     public float nonTargetRange;
+    public string Name;
 }
 public abstract class Skill : MonoBehaviour
 {

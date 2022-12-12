@@ -18527,7 +18527,7 @@ GameObject:
   - component: {fileID: 497937731}
   - component: {fileID: 497937730}
   m_Layer: 0
-  m_Name: TestEnemySpawn
+  m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28242,6 +28242,8 @@ MonoBehaviour:
   cursorSword: {fileID: 2800000, guid: ce683041f000c7c48b73e8fbda566384, type: 3}
   cursorTargeting: {fileID: 2800000, guid: 1b362737dfa014a40a71ecaffce5e053, type: 3}
   cursorFindTarget: {fileID: 2800000, guid: 583ebe40474f892468eb72f2bb7ea4a8, type: 3}
+  skilldurationUI: {fileID: 3084659920196064807, guid: afe7fbcf2caf6134daa53f90f03f2bc3,
+    type: 3}
   unitStatUI: {fileID: 486180339}
   skillbarUI: {fileID: 1520948286}
   hpbar: {fileID: 230517563}

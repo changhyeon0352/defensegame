@@ -16,6 +16,8 @@ public class Hero : AllyUnit
             }
         }
     }
+    private bool isStopSkill=false;
+    public bool IsStopSkill { get => isStopSkill; set { isStopSkill = value; agent.SetDestination(goalTr.position); } }
     public HeroState heroState;
     bool isSelected = false;
     public bool IsSelected{ get => isSelected; }
@@ -87,6 +89,18 @@ public class Hero : AllyUnit
 
     protected override void Update()
     {
+        if(isStopSkill)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, LayerMask.GetMask("Ground")))
+            {
+                Vector3 mouseDir=new Vector3(hit.point.x,transform.position.y,hit.point.z)-transform.position;
+                float dot = Vector3.Dot(Vector3.Cross(transform.forward, mouseDir).normalized, Vector3.up);
+                Debug.Log(dot);
+                transform.Rotate(transform.up * dot*0.1f);
+                return;
+            }
+        }
         base.Update();
     }
 

@@ -13,5 +13,9 @@ public class Monster : Unit
         UIMgr.Instance.hpbar.AddHpBar(this);
        
     }
+     protected void Start()
+    {
+        ChangeState(UnitState.Move);
+    }
     
 }

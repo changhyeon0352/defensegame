@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198620769904498290}
   - component: {fileID: 199316721893786090}
   - component: {fileID: -3206927580471443400}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mage_dragonbreath
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3769,7 +3769,7 @@ ParticleSystem:
     m_Bounce:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -3877,7 +3877,7 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 128
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
