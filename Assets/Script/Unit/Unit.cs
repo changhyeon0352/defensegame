@@ -27,6 +27,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     protected int mpMax = 100;
     protected int attack = 20;
     protected float moveSpeed;
+    private Rigidbody rb;
+    private Collider col;
     public float MoveSpeed { get { return moveSpeed; } set { moveSpeed = value;agent.speed = value; } }
     [SerializeField]protected int armor = 0;
     protected int armorPlus = 0;
@@ -118,16 +120,17 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             }
             UIMgr.Instance.hpbar.ChangeHPbar(this, (float)hp / (float)hpMax);
             Debug.Log($"{transform.name}의 hp: {hp}");
-            
         }
     }
+    public int Attack { get => attack; set => attack = value; }
+    public int Armor { get => armor; set => armor = value; }
     public int HpMax { get => hpMax; }
     public  int Mp { get => mp; }
     public int MpMax { get => mpMax; }
 
     virtual protected void Die()
     {
-        GetComponent<Collider>().enabled = false;
+        col.enabled = false;
         agent.enabled = false;
         ChangeState(UnitState.Dead);
         ParticleSystem[] psArray =GetComponentsInChildren<ParticleSystem>();
@@ -137,9 +140,18 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         }
         //Destroy(gameObject);
     }
-
-    public int Attack { get => attack; set => attack=value; }
-    public int Armor { get => armor; set => armor = value; }
+    public void DieFall()
+    {
+        if(state == UnitState.Dead)
+        {
+            rb.useGravity = true;
+            rb.isKinematic = false;
+            rb.drag = 20;
+            col.isTrigger = true;
+            col.enabled = true;
+        }
+    }
+   
 
     public void TakeDamage(int damage)
     {
@@ -166,6 +178,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     {
         agent = GetComponent<NavMeshAgent>();
         anim= GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
     }
     virtual protected void Update()
     {
@@ -251,7 +265,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 float distance=Vector3.SqrMagnitude(attackTargetTr.position-transform.position);
                 if (distance<attackRange*attackRange)
                 {
-                    
                     anim.SetTrigger("Attack");
                     timeCount = attackSpeed;
                     attackTargetTr = null;
@@ -374,13 +387,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         state = newState;
 
     }
-    
-    
-    private void OnDrawGizmos()
-    {
-        //Handles.DrawWireDisc(transform.position, transform.up, searchRange);
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.GetComponent<Outline>().enabled = true;

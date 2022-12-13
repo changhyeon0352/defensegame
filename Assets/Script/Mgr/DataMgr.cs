@@ -23,6 +23,14 @@ public class Property:Data
 {
     public int money;
 }
+public class defenseData : Data
+{
+    public int townHp;
+    public int townHpMax;
+    public int gateHp;
+    public int gateHpMax;
+    public int allyDieNum;
+}
 public class DataMgr : Singleton<DataMgr>
 {
     private List<HeroData> fightingHeroDataList = new();

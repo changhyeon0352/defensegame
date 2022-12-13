@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -17,6 +18,7 @@ public class HPbar : MonoBehaviour
         m_cam = Camera.main;
         GameObject[] t_objects1 = GameObject.FindGameObjectsWithTag("Soldier");
         GameObject[] t_objects2 = GameObject.FindGameObjectsWithTag("Monster");
+        Gate gate = FindObjectOfType<Gate>();
 
         for (int i = 0; i < t_objects1.Length; i++)
         {
@@ -69,7 +71,17 @@ public class HPbar : MonoBehaviour
     {
         for(int i=0;i<unitList.Count;i++)
         {
-            hpBarList[i].transform.position=m_cam.WorldToScreenPoint(unitList[i].transform.position+Vector3.left);
+            if (unitList[i]==null)
+            {
+                unitList.RemoveAt(i);
+                GameObject obj = hpBarList[i];
+                hpBarList.Remove(obj);
+                Destroy(obj);
+            }
+            else
+            {
+                hpBarList[i].transform.position = m_cam.WorldToScreenPoint(unitList[i].transform.position + Vector3.left);
+            }
         }
     }
 }
