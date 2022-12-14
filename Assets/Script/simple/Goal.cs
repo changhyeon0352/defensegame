@@ -12,7 +12,7 @@ public class Goal : MonoBehaviour
             if(other.CompareTag("Monster"))
             {
                 Destroy(other.gameObject);
-                //DataMgr.Instance.
+                DataMgr.Instance.MonsterEnterTown(unit);
             }
         }
     }

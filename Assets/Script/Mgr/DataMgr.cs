@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Data { }
 public enum DataType {HeroDatas,upgrade,inventory}
@@ -23,20 +24,20 @@ public class Property:Data
 {
     public int money;
 }
-public class defenseData : Data
+public class DefenseData : Data
 {
     public int townHp;
     public int townHpMax;
-    public int gateHp;
-    public int gateHpMax;
     public int allyDieNum;
 }
 public class DataMgr : Singleton<DataMgr>
 {
+    [SerializeField] private Image townHpImage;
     private List<HeroData> fightingHeroDataList = new();
     private HeroDatas myHeroDatas;
     private Upgrade myUpgrade;
     private Inventory myInventory;
+    private DefenseData defenseData = new();
     private Property myProperty;
     public Property MyProperty { get { return myProperty; } }
     string heroDatafileName = "heroDataList.json";
@@ -45,10 +46,35 @@ public class DataMgr : Singleton<DataMgr>
     private void Start()
     {
         LoadDataFromJson(DataType.HeroDatas);
+        InitDefenseData();
     }
 
     public List<HeroData> FightingHeroDataList { get { return fightingHeroDataList; } }
 
+    public void InitDefenseData()
+    {
+        defenseData.townHpMax = 100;
+        defenseData.townHp = 100;
+        defenseData.allyDieNum = 0;
+    }
+    public void DieAlly(Unit unit)
+    {
+        defenseData.allyDieNum++;
+        if(unit.CompareTag("Hero"))
+        {
+            Hero hero =unit.GetComponent<Hero>();
+            hero.Data.isDead = true;
+        }
+    }
+    public void MonsterEnterTown(Unit unit)
+    {
+        defenseData.townHp -= unit.unitData.Atk/2;
+        if(defenseData.townHp<=0)
+        {
+            //게임 엔드
+        }
+        townHpImage.fillAmount = (float)defenseData.townHp / (float)defenseData.townHpMax;
+    }
     void SaveDataToJson(DataType dataType)
     {
         Data data;

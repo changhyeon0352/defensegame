@@ -11,6 +11,8 @@ public class HPbar : MonoBehaviour
     public GameObject hpPrefabSoldier;
     List<Unit> unitList =new List<Unit>();
     List<GameObject> hpBarList =new List<GameObject>();
+    GameObject hpBarGate;
+    Gate gate;
     Camera m_cam;
     // Start is called before the first frame update
     void Start()
@@ -18,8 +20,10 @@ public class HPbar : MonoBehaviour
         m_cam = Camera.main;
         GameObject[] t_objects1 = GameObject.FindGameObjectsWithTag("Soldier");
         GameObject[] t_objects2 = GameObject.FindGameObjectsWithTag("Monster");
-        Gate gate = FindObjectOfType<Gate>();
-
+        gate = FindObjectOfType<Gate>();
+        hpBarGate = Instantiate(hpPrefabSoldier, gate.transform.position, Quaternion.identity, transform);
+        hpBarGate.transform.localScale = Vector3.one * 2;
+        
         for (int i = 0; i < t_objects1.Length; i++)
         {
             unitList.Add(t_objects1[i].GetComponent<Unit>());
@@ -32,6 +36,7 @@ public class HPbar : MonoBehaviour
             GameObject hpBar = Instantiate(hpPrefabMon, t_objects2[i].transform.position, Quaternion.identity, transform);
             hpBarList.Add(hpBar);
         }
+        
     }
     public void AddHpBar(Unit unit)
     {
@@ -63,8 +68,14 @@ public class HPbar : MonoBehaviour
                 Destroy(obj);
             }
         }
-        
-
+    }
+    public void ChangeHPbarGate(float hpPercent)
+    {
+        hpBarGate.transform.GetChild(0).GetComponent<Image>().fillAmount = hpPercent;
+        if (hpPercent <= 0)
+        {
+            Destroy(hpBarGate.gameObject);
+        }
     }
     // Update is called once per frame
     void Update()
@@ -83,5 +94,7 @@ public class HPbar : MonoBehaviour
                 hpBarList[i].transform.position = m_cam.WorldToScreenPoint(unitList[i].transform.position + Vector3.left);
             }
         }
+        if(hpBarGate!=null&&gate!=null)
+            hpBarGate.transform.position= m_cam.WorldToScreenPoint(gate.transform.position + Vector3.left*2); 
     }
 }

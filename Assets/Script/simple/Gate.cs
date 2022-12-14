@@ -4,8 +4,23 @@ using UnityEngine;
 
 public class Gate : MonoBehaviour, IHealth
 {
-    int hp = 100;
-    public int Hp { get => hp;set { hp = value; if (hp < 0) { Destroy(this.gameObject); } } }
+    int hpMax=100;
+    int hp;
+    private void Awake()
+    {
+        hp = hpMax;
+    }
+    public int Hp { get => hp;
+        set
+        {
+            hp = value;
+            UIMgr.Instance.hpbar.ChangeHPbarGate((float)hp / (float)hpMax);
+            if (hp < 0) 
+            { 
+                Destroy(this.gameObject); 
+            } 
+        } 
+    }
     int attack = 0;
     public int Attack { get => attack; set { } }
     int armor;

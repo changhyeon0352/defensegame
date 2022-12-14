@@ -116,6 +116,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 if(state !=UnitState.Dead)
                 {
                     Die();
+                    DataMgr.Instance.DieAlly(this);
                 }
             }
             UIMgr.Instance.hpbar.ChangeHPbar(this, (float)hp / (float)hpMax);
