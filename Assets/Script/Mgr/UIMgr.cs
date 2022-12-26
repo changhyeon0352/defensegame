@@ -71,7 +71,6 @@ public class UIMgr : Singleton<UIMgr>
                     spawnImages.Add(spawnUiTr.GetChild(i).GetComponent<Image>());
                     spawnButtons.Add(spawnUiTr.GetChild(i).GetComponent<Button>());
                     int index = i;
-                    spawnButtons[i].onClick.AddListener(() => GameMgr.Instance.settingMgr.SelectSpawnUnitType(index));
                     spawnButtons[i].onClick.AddListener(() => SelectedSpawnButton(index));
                 }
                 break;
@@ -157,7 +156,8 @@ public class UIMgr : Singleton<UIMgr>
     }
     public void SelectedSpawnButton(int index)
     {
-        for(int i= 0; i < spawnImages.Count; i++)
+        GameMgr.Instance.settingMgr.SelectSpawnUnitType(index);
+        for (int i= 0; i < spawnImages.Count; i++)
         {
             if(i==index)
             {

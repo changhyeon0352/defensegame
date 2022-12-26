@@ -322,6 +322,7 @@ public class CommandMgr : MonoBehaviour
                     {
                         case (BasicSkills.MoveToSpot):
                             units[i].ChangeState(UnitState.Move);
+                            units[i].isattackMove = false;
                             break;
                         case (BasicSkills.Charge):
                             units[i].ChargeToEnemy();

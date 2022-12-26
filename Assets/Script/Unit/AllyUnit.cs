@@ -9,6 +9,8 @@ public class AllyUnit : Unit
     
     [SerializeField] GameObject selectedMark;
     private bool isSelectedUnit=false;
+
+    public bool isattackMove = true;
     public bool IsSelectedUnit
     {
         get => isSelectedUnit;
@@ -18,7 +20,22 @@ public class AllyUnit : Unit
             selectedMark.SetActive(isSelectedUnit);
         }
     }
-    
+    protected override void MoveUpdate()
+    {
+        if (isattackMove)
+        {
+            base.MoveUpdate();
+        }
+        else
+        {
+            agent.SetDestination(goalTr.position);          //목표로 가기
+            if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
+            {
+                ChangeState(UnitState.Idle);
+                isattackMove = true;
+            }
+        }
+    }
     public void ChargeToEnemy()
     {
         int multipleNum = 2;

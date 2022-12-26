@@ -17,10 +17,11 @@ MonoBehaviour:
   unitName: "\uAD81\uBCD1"
   hp: 50
   mp: 0
-  moveSpeed: 5
+  moveSpeed: 3
   atk: 10
-  armor: 0
-  attackSpeed: 2
+  magicPower: 0
+  attackSpeed: 1
   cost: 80
   attackRange: 10
   unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}
+  attackAniLength: []

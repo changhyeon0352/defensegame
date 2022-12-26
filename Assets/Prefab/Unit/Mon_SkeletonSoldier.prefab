@@ -567,6 +567,10 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
+  isProvoked: 0
+  isSleep: 0
+  armor: 0
+  shieldbuff: {fileID: 0}
   goalTr: {fileID: 0}
 --- !u!114 &9097893891522991812
 MonoBehaviour:
@@ -608,7 +612,7 @@ Animator:
   m_GameObject: {fileID: 9085880239558194240}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 402d7f55b217a8648864646bb745b031, type: 3}
-  m_Controller: {fileID: 9100000, guid: 85a5aae5d6939c44099135a6d3ec9dd2, type: 2}
+  m_Controller: {fileID: 22100000, guid: 5eb1a44595713d4448c719ce0fd3f517, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -50,14 +50,13 @@ public class SkillMgr : MonoBehaviour
     //이펙트 소환
     // 인디케이터 표시
 
-    public Knight knight;
     private void OnEnable()
     {
         GameMgr.Instance.inputActions.Command.SkillButton1.performed += OnSkill1;
         GameMgr.Instance.inputActions.Command.SkillButton2.performed += OnSkill2;
         GameMgr.Instance.inputActions.Command.SkillButton3.performed += OnSkill3;
         GameMgr.Instance.inputActions.Command.SkillButton4.performed += OnSkill4;
-        GameMgr.Instance.inputActions.Command.HeroSkillClick.performed += HeroSkillClick;
+        GameMgr.Instance.inputActions.Command.HeroSkillClick.performed += OnSkillClick;
         GameMgr.Instance.inputActions.Command.SkillCancel.performed += OnSkillCancel;
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
         selectedHero = GameMgr.Instance.commandMgr.SelectedHero;
@@ -135,6 +134,8 @@ public class SkillMgr : MonoBehaviour
         }
         StartCoroutine(usingSkill.SkillCor(skillTarget,selectedHero));
         StartCoroutine(selectedHero.SkillCoolCor(index, usingSkill.data.coolTime));
+        if (selectedHero.Data.heroClass == HeroClass.Mage)
+            selectedHero.SkillAnimation(UsingSKill == mageSkills[3],UsingSKill.data.duration);
         SkillEnd();
     }
     private void OnSkill1(InputAction.CallbackContext obj) {UseSkill(0);}
@@ -144,8 +145,10 @@ public class SkillMgr : MonoBehaviour
     
     public void ShowSkillRange(float skillRange)
     {
-        skillRangeObj=Instantiate(skillRangePrefab, GameMgr.Instance.commandMgr.SelectedHero.transform);
-        skillRangeObj.transform.localScale=new Vector3(skillRange,0,skillRange);
+        skillRangeObj=Instantiate(skillRangePrefab);
+        skillRangeObj.transform.localScale=new Vector3(skillRange,1,skillRange);
+        skillRangeObj.transform.position = selectedHero.transform.position;
+        skillRangeObj.transform.parent = selectedHero.transform;
     }
     public void ShowIndicator()
     {
@@ -176,9 +179,9 @@ public class SkillMgr : MonoBehaviour
             ShowIndicator(); //스킬인디케이터온
         }
     }
-    private void HeroSkillClick(InputAction.CallbackContext obj)//skillTarget을 정해서 UseClinkingSkill(skillTarget) 하는 역할
+    private void OnSkillClick(InputAction.CallbackContext obj)//skillTarget을 정해서 UseClinkingSkill(skillTarget) 하는 역할
     {
-        if (SkillType == SkillType.Target|| SkillType == SkillType.NonTarget)
+        if (SkillType == SkillType.Target|| SkillType == SkillType.NonTarget)//타게팅,혹은 논타겟범위
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f,usingSkill.TargetLayer))
@@ -209,7 +212,9 @@ public class SkillMgr : MonoBehaviour
                     selectedHero.ChaseTarget(skillTarget);
                     return;
                 }
+                selectedHero.transform.forward = new Vector3(skillTarget.position.x - selectedHero.transform.position.x, 0, skillTarget.position.z - selectedHero.transform.position.z);
                 UseClinkingSkill(skillTarget);
+                
             }
             else
             {
@@ -230,6 +235,7 @@ public class SkillMgr : MonoBehaviour
     {
         this.skillTarget = skillTarget;
         UseSkill(index);
+        
     }
     
     

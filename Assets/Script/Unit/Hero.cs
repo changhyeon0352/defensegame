@@ -10,10 +10,10 @@ public class Hero : AllyUnit
     private HeroData data;
     public HeroData Data { get => data;
         set { data = value;
-            for (int i = 0; i < skillCools.Length; i++)
-            {
-                skillCools[i] = GameMgr.Instance.skillMgr.knight.SkillCools[i];
-            }
+            //for (int i = 0; i < skillCools.Length; i++)
+            //{
+            //    skillCools[i] = GameMgr.Instance.skillMgr.knight.SkillCools[i];
+            //}
         }
     }
     private bool isStopSkill=false;
@@ -24,7 +24,6 @@ public class Hero : AllyUnit
     [SerializeField] GameObject energyBoltPrefab;
     [SerializeField] Transform tipOfStaff;
     public float rangeforGizmo;
-    public bool isattackMove = false;
     
     float[] skillCoolsLeft = { -1, -1, -1, -1 };
     public float[] SkillCoolLeft { get => skillCoolsLeft; }
@@ -35,6 +34,7 @@ public class Hero : AllyUnit
     public IEnumerator SkillCoolCor(int num,float coolTime)
     {
         skillCanUse[num] = false;
+        skillCools[num] = coolTime;
         skillCoolsLeft[num]=coolTime;
         for (int i=0; i<10000;i++)
         {
@@ -118,21 +118,7 @@ public class Hero : AllyUnit
         }
         return result;
     }
-    protected override void MoveUpdate()
-    {
-        if(isattackMove)
-        {
-            base.MoveUpdate();
-        }
-        else
-        {
-            agent.SetDestination(goalTr.position);          //목표로 가기
-            if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
-            {
-                ChangeState(UnitState.Idle);
-            }
-        }       
-    }
+    
     override protected void ChaseUpdate()
     {
 
@@ -174,6 +160,18 @@ public class Hero : AllyUnit
     {
         Handles.DrawWireDisc(transform.position, transform.up, rangeforGizmo);
     }
-
+    public void SkillAnimation(bool isMaintain,float sec)
+    {
+        if (isMaintain)
+            StartCoroutine(MaintainCor(sec));
+        else
+            anim.SetTrigger("UseSkill");
+    }
+    IEnumerator MaintainCor(float sec)
+    {
+        anim.SetBool("MaintainSkill", true);
+        yield return new WaitForSeconds(sec);
+        anim.SetBool("MaintainSkill", false);
+    }    
    
 }

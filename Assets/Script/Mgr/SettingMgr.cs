@@ -147,6 +147,9 @@ public class SettingMgr : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
         {
+            //23
+            int unitIndex = (int)hit.transform.GetComponent<Unit>().unitData.unitType - 2;
+            UIMgr.Instance.SelectedSpawnButton(unitIndex);
             unitGroupTr = hit.transform.parent.parent;
             unitGroup = unitGroupTr.GetComponent<UnitGroup>();
             //unitspot제거
@@ -308,7 +311,6 @@ public class SettingMgr : MonoBehaviour
         { 
             for(int i=0; i<num_row;i++)
             {
-                NowUnitSpawnPoint += spawnUnitData.Cost;
                 RemoveLastToList();
             }
         }
@@ -319,6 +321,7 @@ public class SettingMgr : MonoBehaviour
         {
             GameObject obj = unitSetList[unitSetList.Count - 1];
             unitSetList.Remove(obj);
+            NowUnitSpawnPoint += spawnUnitData.Cost;
             Destroy(obj);
         }
     }

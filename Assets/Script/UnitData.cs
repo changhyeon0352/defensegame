@@ -39,4 +39,7 @@ public class UnitData : ScriptableObject
     [SerializeField]private float attackRange;
     public float AttackRange { get { return attackRange; } }
     public GameObject unitPrefab;
+    [SerializeField]
+    private float[] attackAniLength;
+    public float[] AttackAniLength { get { return attackAniLength; } }
 }

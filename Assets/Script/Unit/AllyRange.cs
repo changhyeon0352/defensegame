@@ -39,7 +39,7 @@ public class AllyRange : AllyUnit
             if (timeCount < 0)
             {
                 anim.SetTrigger("Attack");
-                timeCount = attackSpeed;
+                timeCount = unitData.AttackSpeed;
             }
         }
         else

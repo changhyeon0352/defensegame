@@ -17,10 +17,13 @@ MonoBehaviour:
   unitName: "\uAE30\uC0AC"
   hp: 1000
   mp: 300
-  moveSpeed: 8
+  moveSpeed: 7
   atk: 20
-  armor: 0
-  attackSpeed: 2
+  magicPower: 0
+  attackSpeed: 1
   cost: 80
   attackRange: 2
   unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}
+  attackAniLength:
+  - 1.4
+  - 1.2

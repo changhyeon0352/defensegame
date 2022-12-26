@@ -17,11 +17,14 @@ MonoBehaviour:
   unitName: "\uD574\uACE8\uBCD1"
   hp: 100
   mp: 0
-  moveSpeed: 4
+  moveSpeed: 2
   atk: 8
   magicPower: 0
-  attackSpeed: 0.8
+  attackSpeed: 0.5
   cost: 0
   attackRange: 1
   unitPrefab: {fileID: 9085880239558194240, guid: 89cec0479aef7e947be888699ef08555,
     type: 3}
+  attackAniLength:
+  - 1
+  - 1

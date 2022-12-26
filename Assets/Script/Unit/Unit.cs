@@ -3,9 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
-using UnityEditor;
 using System.Collections;
-using Unity.VisualScripting;
 
 public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandler
 {
@@ -18,9 +16,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     public LayerMask enemyLayer;
     public bool isProvoked = false;
     public bool isSleep = false;
-    public bool ishited=false;
     protected float timeCount;
-    protected float attackSpeed = 2.0f;
+    //protected float attackSpeed = 2.0f;
     protected int hp;
     protected int hpMax = 100;
     protected int mp;
@@ -29,7 +26,17 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     protected float moveSpeed;
     private Rigidbody rb;
     private Collider col;
-    public float MoveSpeed { get { return moveSpeed; } set { moveSpeed = value;agent.speed = value; } }
+    private int attackCombo = 0;
+    public bool IsDead { get=>state==UnitState.Dead;}
+    public float MoveSpeed 
+    { 
+        get { return moveSpeed; } 
+        set 
+        { 
+            moveSpeed = value; 
+            agent.speed = value; 
+        } 
+    }
     [SerializeField]protected int armor = 0;
     protected int armorPlus = 0;
     public int ArmorPlus { get { return armorPlus; }
@@ -59,48 +66,47 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
     public IEnumerator Provoked(Transform tr,float sec)
     {
-        chaseTargetTr = tr;
-        ChangeState(UnitState.Chase);
-        isProvoked = true;
-        GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.provoked], transform);
-        yield return new WaitForSeconds(sec);
-        if(state!=UnitState.Dead)
-        {
-            ChangeState(UnitState.Move);
-            isProvoked = false;
-        }
-        Destroy(obj);
+            chaseTargetTr = tr;
+            ChangeState(UnitState.Chase);
+            isProvoked = true;
+            GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.provoked], transform);
+            yield return new WaitForSeconds(sec);
+            if (state != UnitState.Dead)
+            {
+                ChangeState(UnitState.Move);
+                isProvoked = false;
+            }
+            Destroy(obj);
     }
     public IEnumerator Sleep(float sec)
     {
-        double count = sec;
-        isSleep = true;
-        anim.SetTrigger("Sleep");
-        agent.enabled = false;
-        GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.sleep], transform);
-        while (count>0)
-        {
-            count -= Time.deltaTime;
-            yield return null;
-            if(ishited)
-                break;
-        }
-        
-        if (state != UnitState.Dead)
-        {
-            agent.enabled = true;
-            isSleep = false;
-            anim.SetTrigger("WakeUp");
-            ChangeState(UnitState.Move);
-        }
-        Destroy(obj);
-        ishited= false;
+            float count = sec;
+            isSleep = true;
+            anim.SetTrigger("Sleep");
+            agent.enabled = false;
+            GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.sleep], transform);
+            while (count > 0)
+            {
+                count -= Time.deltaTime;
+                yield return null;
+                if (!isSleep)
+                    break;
+            }
+            if (state != UnitState.Dead)
+            {
+                agent.enabled = true;
+                isSleep = false;
+                anim.SetTrigger("WakeUp");
+                ChangeState(UnitState.Move);
+            }
+            Destroy(obj);
     }
     public IEnumerator Slow(float sec)
     {
         MoveSpeed = unitData.MoveSpeed /4;
         yield return new WaitForSeconds(sec);
-        MoveSpeed = unitData.MoveSpeed;
+        if(state != UnitState.Dead)
+            MoveSpeed = unitData.MoveSpeed;
     }
     
     public virtual int Hp 
@@ -139,18 +145,22 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         {
             ps.Stop();
         }
-        //Destroy(gameObject);
     }
     public void DieFall()
     {
-        if(state == UnitState.Dead)
+        StartCoroutine(DieFallCor());
+    }
+    IEnumerator DieFallCor()
+    {
+        if (state == UnitState.Dead)
         {
             rb.useGravity = true;
             rb.isKinematic = false;
             rb.drag = 20;
-            col.isTrigger = true;
-            col.enabled = true;
+            yield return new WaitForSeconds(1);
+            Destroy(this.gameObject);
         }
+        
     }
    
 
@@ -159,7 +169,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         double decreaseRate= 1-Math.Atan((double)(armor+armorPlus)/50)/(Math.PI/2);//아머가 50쯤 되면 50%
         int netDamage = (int)(damage * decreaseRate);
         Hp -= netDamage == 0 ? 1 : netDamage;
-        ishited = true;
+        isSleep = false;
     }
     virtual public void InitializeUnitStat()
     {
@@ -170,7 +180,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         attack = unitData.Atk;
         armor = unitData.Armor;
         MoveSpeed = unitData.MoveSpeed;
-        anim.SetFloat("attackSpeed",unitData.AttackSpeed);
         attackRange = unitData.AttackRange;
         
     }
@@ -184,7 +193,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     virtual protected void Update()
     {
-        if(isSleep)
+        timeCount -= Time.deltaTime;
+        if (isSleep)
             return;
         switch (state)
         {
@@ -222,6 +232,9 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
     virtual protected void MoveUpdate()
     {
+        if (!agent.enabled)
+            return;
+
         agent.SetDestination(goalTr.position);          //목표로 가기
         if (SearchAndChase(searchRange))
             ChangeState(UnitState.Chase);
@@ -232,16 +245,18 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     virtual protected void ChaseUpdate()
     {
-        
+        if(!agent.enabled)
+            return ;
         if ((isProvoked&&chaseTargetTr!=null)||SearchAndChase(searchRange)) //도발되었고 쫒는놈이 있다면 혹은 서칭거리안에 있다면
         {
+            
             agent.SetDestination(chaseTargetTr.position);
         }
         else
         {
             ChangeState(UnitState.Move);
         }
-        if (agent.remainingDistance < attackRange && !agent.pathPending)
+        if (agent.enabled&&agent.remainingDistance < attackRange && !agent.pathPending)
         {
             ChangeState(UnitState.Attack);
         }
@@ -257,20 +272,33 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     virtual protected void AttackUpdate()
     {
-        timeCount -= Time.deltaTime;
         if(attackTargetTr != null)
         {
             transform.LookAt(attackTargetTr);
             if (timeCount < 0)
             {
-                float distance=Vector3.SqrMagnitude(attackTargetTr.position-transform.position);
-                if (distance<attackRange*attackRange)
+                CapsuleCollider capsuleCollider = attackTargetTr.GetComponent<CapsuleCollider>();
+                if (capsuleCollider!=null&&!capsuleCollider.enabled)
                 {
-                    anim.SetTrigger("Attack");
-                    timeCount = attackSpeed;
-                    attackTargetTr = null;
+                    ChangeState(UnitState.Move);
+                    return;
                 }
-                else
+                
+                float distance=Vector3.SqrMagnitude(attackTargetTr.position-transform.position);
+                if (distance<attackRange*attackRange) //사거리 이내면
+                {
+                    anim.SetInteger("AttackCombo", attackCombo);
+                    anim.SetFloat("attackSpeed", unitData.AttackAniLength[0]*unitData.AttackSpeed*1.5f);
+                    anim.SetFloat("attackSpeed2", unitData.AttackAniLength[1] * unitData.AttackSpeed * 1.5f);
+                    anim.SetTrigger("Attack");
+                    //공격 애니메이션:컴뱃idle = 2:1비율로
+                    
+                    timeCount = 1/unitData.AttackSpeed;
+                    //attackTargetTr = null;
+                    attackCombo++;
+                    attackCombo %= 2;
+                }
+                else //사거리 밖이면
                 {
                     if (isProvoked)
                     {
@@ -284,8 +312,9 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
             }
         }
-        else
+        else//attactTr이 없어지면
         {
+            isProvoked = false;
             Transform enemyTr = SearchEnemy(attackRange);
             if(enemyTr!=null)
             {
@@ -326,7 +355,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         foreach (Collider col in cols)
         {
             float distance = Vector3.SqrMagnitude(transform.position - col.transform.position);
-
             minimunDistance = MathF.Min(distance, minimunDistance);
             if (minimunDistance == distance)
             {
@@ -375,7 +403,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 break;
             case UnitState.Attack:
                 anim.SetInteger("iState", 2);
-                timeCount = attackSpeed/3;
                 attackTargetTr = chaseTargetTr;
                 chaseTargetTr = null;
                 break;

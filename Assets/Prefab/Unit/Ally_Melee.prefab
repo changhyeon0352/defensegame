@@ -2158,6 +2158,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   isProvoked: 0
+  isSleep: 0
   armor: 0
   shieldbuff: {fileID: 8631965015884015627}
   goalTr: {fileID: 0}
@@ -2190,7 +2191,7 @@ Animator:
   m_GameObject: {fileID: 169604}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d288a0e4a2d923b46898986e979da643, type: 3}
-  m_Controller: {fileID: 22100000, guid: 1f4ac14a2bc33c54895d9e88cf7e4123, type: 2}
+  m_Controller: {fileID: 22100000, guid: d5c44c81f11a48943b14247c65598e4b, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -46,7 +46,8 @@ public abstract class Skill : MonoBehaviour
         foreach (Collider col in cols)
         {
             Unit unit = col.gameObject.GetComponent<Unit>();
-            EffectOnUnit(unit,hero);
+            if(!unit.IsDead)
+                EffectOnUnit(unit,hero);
         }
     }
     public virtual IEnumerator PlaySkillOnTr(Transform skillTr)

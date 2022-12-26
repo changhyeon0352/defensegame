@@ -4916,7 +4916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 1153689192050712, guid: bc53a3334e4adbb48ba70ce18a89f000,
     type: 3}
-  speed: 5
+  speed: 10
 --- !u!135 &7936961256900564735
 SphereCollider:
   m_ObjectHideFlags: 0
