@@ -29,8 +29,9 @@ public enum BasicSkills:byte
     None        = 0b_0000_0000,
     MoveToSpot  = 0b_0000_0001,
     Charge      = 0b_0000_0010,
-    Shoot       = 0b_0000_0100,
-    AttackMove  = 0b_0000_1000
+    ShootSpot   = 0b_0000_0100,
+    ShootEnemy  = 0b_0000_1000,
+    AttackMove  = 0b_0001_0000
     //
 }
 public enum HeroClass

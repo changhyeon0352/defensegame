@@ -115,6 +115,7 @@ public class CommandMgr : MonoBehaviour
     private void OnAttackMove(InputAction.CallbackContext _)
     {
         ClearSelectedGroups();
+        
         if (IsHeroSelected())
         {
             GameMgr.Instance.skillMgr.ShowSkillRange(SelectedHero.unitData.AttackRange);
@@ -128,12 +129,12 @@ public class CommandMgr : MonoBehaviour
     /// 우클릭시 실행됨 땅찍으면 그쪽에 이펙트 보여주고 무브 적이면 추격
     private void OnMoveOrSetTarget(InputAction.CallbackContext _)
     {
+        ClearSelectedGroups();
         if (GameMgr.Instance.skillMgr.IsUsingSkill)
         {
             GameMgr.Instance.skillMgr.SkillEnd();
             return;
         }
-        ClearSelectedGroups();
         if (IsHeroSelected())
         {
             selectedHero.isattackMove = false;
@@ -219,7 +220,7 @@ public class CommandMgr : MonoBehaviour
                     }
                 }
             }
-            else //아군이 아니면
+            else //아군이 아니면 ex)땅,적
             {
                 Debug.Log(hit.transform.name);
                 if (!Input.GetKey(KeyCode.LeftShift))
@@ -244,7 +245,7 @@ public class CommandMgr : MonoBehaviour
     //스킬실행중 셀렉트클릭잠금,스킬인디케이터 생성 스팟복사해서 인디케이터 안에 넣음 스킬타겟즈에 스팟즈를 넣음
     public void SelectShotSpot()
     {
-        usingSkill = BasicSkills.Shoot;
+        usingSkill = BasicSkills.ShootSpot;
         inputActions.Command.Select.Disable();
         inputActions.Command.skillClick.Enable();
         List<Transform> spots = new();
@@ -283,7 +284,7 @@ public class CommandMgr : MonoBehaviour
                 MoveOrSetTarget(attackToPrefabs);
                 GameMgr.Instance.skillMgr.SkillEnd();
                 break;
-            case BasicSkills.Shoot:
+            case BasicSkills.ShootSpot:
                 foreach (var indicator in skillIndicatorTrs)
                 {
                     indicator.GetChild(1).parent = null;
@@ -327,7 +328,7 @@ public class CommandMgr : MonoBehaviour
                         case (BasicSkills.Charge):
                             units[i].ChargeToEnemy();
                             break;
-                        case (BasicSkills.Shoot):
+                        case (BasicSkills.ShootSpot):
                             if (!inputActions.Command.skillClick.enabled)
                             {
                                 SelectShotSpot();
@@ -335,8 +336,11 @@ public class CommandMgr : MonoBehaviour
                             }
                             else
                             {
-                                units[i].GetComponent<AllyRange>().SetNewTarget(skillTargets[i]);
+                                units[i].GetComponent<AllyRange>().ShotSpotMode(skillTargets[i]);
                             }
+                            break;
+                        case (BasicSkills.ShootEnemy):
+                            units[i].GetComponent<AllyRange>().ShotEnemyMode();
                             break;
                     }
                 }
@@ -368,6 +372,7 @@ public class CommandMgr : MonoBehaviour
     {
         seletedGroupList.Clear();
         UIMgr.Instance.ClearSkillButton();
+        AllCheckSelected();
     }
     //유닛에 셀렉트될때 이펙트를 킬지 끌지
     public void AllCheckSelected()

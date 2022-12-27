@@ -10,6 +10,7 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float gravityForce = 10f;
     bool isFlying = true;
     Collider col;
+    LayerMask monsterOrGround;
     public float GravityForce { get=>gravityForce;}
     public float ShootVel 
     {
@@ -20,7 +21,7 @@ public class Arrow : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-       
+        monsterOrGround = LayerMask.GetMask("Monster") | LayerMask.GetMask("Ground");
         GetComponent<ConstantForce>().force = new Vector3(0, -(GravityForce - 9.8f), 0);
     }
     void Start()
@@ -33,19 +34,23 @@ public class Arrow : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        IHealth targetHP = other.gameObject.GetComponent<IHealth>();
-        if (targetHP != null)
+        Debug.Log(other.gameObject.layer);
+        if(other.gameObject.layer==6|| other.gameObject.layer == 7)
         {
-            targetHP.TakeDamage(arrowDamage);
-        }
+            Unit unit = other.GetComponent<Unit>();
+            if (unit != null)
+            {
+                unit.TakeDamage(arrowDamage);
+            }
 
-        
-        transform.parent = other.transform.Find("Root")?? other.transform.Find("Bip001")??other.transform;
-        isFlying = false;
-        rb.isKinematic = true;
-        rb.useGravity = false;
-        col.enabled = false;
-        //StartCoroutine(StopArrow());
+
+            transform.parent = other.transform.Find("Root") ?? other.transform.Find("Bip001") ?? other.transform;
+            isFlying = false;
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            col.enabled = false;
+            StartCoroutine(DestroyTimer());
+        }
     }
     private void Update()
     {
@@ -61,5 +66,9 @@ public class Arrow : MonoBehaviour
         
         rb.AddForce(noiseVector, ForceMode.Impulse);
     }
-
+    IEnumerator DestroyTimer()
+    {
+        yield return new WaitForSeconds(5f);
+        Destroy(this.gameObject);
+    }
 }

@@ -38,9 +38,16 @@ public class AllyRange : AllyUnit
             transform.LookAt(bowLoadShot.target);
             if (timeCount < 0)
             {
-                anim.SetTrigger("Attack");
-                timeCount = unitData.AttackSpeed;
+                float distance = Vector3.Distance(transform.position, bowLoadShot.target.position);
+                if(distance<shotRange+0.6f||isShotSpot)
+                {
+                    anim.SetTrigger("Attack");
+                    timeCount = unitData.AttackSpeed;
+                }
+                else
+                    ChangeState(UnitState.Idle);
             }
+            
         }
         else
         {
@@ -56,12 +63,20 @@ public class AllyRange : AllyUnit
             ChangeState(UnitState.Idle);
         }
     }
-
-    public void SetNewTarget(Transform targetTr)
+    public void ShotEnemyMode()
     {
+        ChangeState(UnitState.Idle);
+        bowLoadShot.ShotAngle = 5;
+        isShotSpot = false;
+        AttackSpeed=unitData.AttackSpeed;
+    }
+    public void ShotSpotMode(Transform targetTr)
+    {
+        bowLoadShot.ShotAngle = 40;
         bowLoadShot.target = targetTr;
         ChangeState(UnitState.Attack);
         isShotSpot = true;
+        AttackSpeed = unitData.AttackSpeed*1.3f;
     }
     
 }

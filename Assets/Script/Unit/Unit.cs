@@ -27,6 +27,14 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     private Rigidbody rb;
     private Collider col;
     private int attackCombo = 0;
+    private float attackSpeed;
+    public float AttackSpeed { get { return attackSpeed; } 
+        set { 
+            attackSpeed = value; 
+            anim.SetFloat("attackSpeed", unitData.AttackAniLength[0] * attackSpeed * 1.5f);
+            anim.SetFloat("attackSpeed2", unitData.AttackAniLength[1] * attackSpeed * 1.5f);
+        } 
+    }
     public bool IsDead { get=>state==UnitState.Dead;}
     public float MoveSpeed 
     { 
@@ -63,7 +71,18 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     public Transform goalTr;
 
     //=====================================================================================================================
-
+    virtual public void InitializeUnitStat()
+    {
+        hpMax = unitData.HP;
+        hp = hpMax;
+        mpMax = unitData.MP;
+        mp = mpMax;
+        attack = unitData.Atk;
+        armor = unitData.Armor;
+        MoveSpeed = unitData.MoveSpeed;
+        attackRange = unitData.AttackRange;
+        AttackSpeed= unitData.AttackSpeed;
+    }
     public IEnumerator Provoked(Transform tr,float sec)
     {
             chaseTargetTr = tr;
@@ -171,18 +190,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         Hp -= netDamage == 0 ? 1 : netDamage;
         isSleep = false;
     }
-    virtual public void InitializeUnitStat()
-    {
-        hpMax = unitData.HP;
-        hp = hpMax;
-        mpMax=unitData.MP;
-        mp = mpMax;
-        attack = unitData.Atk;
-        armor = unitData.Armor;
-        MoveSpeed = unitData.MoveSpeed;
-        attackRange = unitData.AttackRange;
-        
-    }
+    
 
     virtual protected void Awake()
     {
@@ -288,8 +296,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 if (distance<attackRange*attackRange) //사거리 이내면
                 {
                     anim.SetInteger("AttackCombo", attackCombo);
-                    anim.SetFloat("attackSpeed", unitData.AttackAniLength[0]*unitData.AttackSpeed*1.5f);
-                    anim.SetFloat("attackSpeed2", unitData.AttackAniLength[1] * unitData.AttackSpeed * 1.5f);
+                    
                     anim.SetTrigger("Attack");
                     //공격 애니메이션:컴뱃idle = 2:1비율로
                     

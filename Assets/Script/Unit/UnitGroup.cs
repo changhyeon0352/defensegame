@@ -57,7 +57,8 @@ public class UnitGroup:MonoBehaviour
         }
         else if (unitType == UnitType.soldier_Range)
         {
-            groupSkill |= BasicSkills.Shoot;
+            groupSkill |= BasicSkills.ShootSpot;
+            groupSkill |= BasicSkills.ShootEnemy;
         }
     }
     public void RemoveUnitFromList(AllyUnit unit)

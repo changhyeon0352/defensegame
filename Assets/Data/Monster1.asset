@@ -17,7 +17,7 @@ MonoBehaviour:
   unitName: "\uD574\uACE8\uBCD1"
   hp: 100
   mp: 0
-  moveSpeed: 2
+  moveSpeed: 3
   atk: 8
   magicPower: 0
   attackSpeed: 0.5

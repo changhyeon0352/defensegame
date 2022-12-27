@@ -52,9 +52,7 @@ public class UIMgr : Singleton<UIMgr>
         GameMgr.Instance.actionChangePhase += ChangePhase;
         
     }
-    private void Start()
-    {
-    }
+    
     void InitializeUI(Phase phase)
     {
         switch(phase)

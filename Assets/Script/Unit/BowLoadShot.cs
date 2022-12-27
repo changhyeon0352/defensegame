@@ -19,7 +19,8 @@ public class BowLoadShot : MonoBehaviour
 	public Transform arrowToDraw;  //화살 쏘는척 할꺼 
 	public GameObject arrowToShoot; //화살 쏠꺼
     bool isShootingEnd = true;
-    public float shotAngle=45;
+    private float shotAngle=10;
+    public float ShotAngle { get { return shotAngle; } set { shotAngle = value; } }
     [SerializeField] float accuracy = 0f;
     public Transform target;
     Transform correctionTarget;
@@ -53,7 +54,7 @@ public class BowLoadShot : MonoBehaviour
                 GameObject obj = new GameObject();
             Debug.Log("계속 생성");
                 obj.transform.position=target.position;
-                obj.transform.Translate(transform.right * -0.25f);
+                obj.transform.Translate(transform.right * -0.25f+Vector3.up*0.7f);
                 correctionTarget = obj.transform;
                 correctionTarget.parent = target;
                 oldTarget = target;
@@ -96,8 +97,8 @@ public class BowLoadShot : MonoBehaviour
                         aTr.rotation *= Quaternion.Euler(new Vector3(-shotAngle, 0, 0));
                             
                         float distance = Vector2.Distance(new Vector2(aTr.position.x, aTr.position.z),
-                            new Vector2(target.position.x, target.position.z));
-                        float deltaH = aTr.position.y - target.position.y;
+                            new Vector2(correctionTarget.position.x, correctionTarget.position.z));
+                        float deltaH = aTr.position.y - correctionTarget.position.y;
                         Arrow arrow = aTr.GetComponent<Arrow>();
                         arrow.ShootVel = GetArrowVelocity(distance, deltaH, arrow.GravityForce);
                         Vector3 noise = Random.insideUnitSphere * (1 - accuracy);
@@ -118,24 +119,9 @@ public class BowLoadShot : MonoBehaviour
     public float GetArrowVelocity(float L, float dH, float g)
     {
         float vel;
-        //float sin2theta = Mathf.Sin(2 * shotAngle * Mathf.Deg2Rad);
-        //vel = Mathf.Sqrt(g * L * L / ((L + dH) * sin2theta));
+        
         float cos=Mathf.Cos(shotAngle*Mathf.Deg2Rad);
         float sin = Mathf.Sin(shotAngle * Mathf.Deg2Rad);
-        //float a = sin2 * sin2 / 4 * (1 - 1 / (g * g));
-        //float b = (2 * g * dH * cos * cos - L * sin2 / g);
-        //float c = -L * L;
-
-        //if (dH>0)
-        //{
-        //    vel=Mathf.Sqrt((-b + Mathf.Sqrt(b * b - 4 * a * c)) / (2 * a));
-        //    Debug.Log($"dh가 양수임{vel}");
-        //}
-        //else
-        //{
-        //    vel = Mathf.Sqrt((-b - Mathf.Sqrt(b * b - 4 * a * c)) / (2 * a));
-        //    Debug.Log($"dh가 음수임{vel}");
-        //}
         vel = Mathf.Sqrt((g * g * L * L) / (cos * cos) / (2 * g * L * sin / cos + 2 * g * (dH)));
 
         return vel;

@@ -2161,10 +2161,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   isProvoked: 0
+  isSleep: 0
   armor: 0
   shieldbuff: {fileID: 6887479763640468813}
   goalTr: {fileID: 0}
   selectedMark: {fileID: 4772200002249250832}
+  isattackMove: 1
   shotRange: 10
 --- !u!114 &2043105617243096268
 MonoBehaviour:
@@ -2184,8 +2186,7 @@ MonoBehaviour:
   arrowToDraw: {fileID: 7102917065288276202}
   arrowToShoot: {fileID: 79862129729574746, guid: a7eb1ac063f66f24f81e703a0d397f8d,
     type: 3}
-  shotAngle: 45
-  accuracy: 0.5
+  accuracy: 0.8
   target: {fileID: 0}
 --- !u!114 &612394230996168502
 MonoBehaviour:
