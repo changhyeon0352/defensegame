@@ -1,3 +1,4 @@
+/* 아군 병사들을 배치하는 기능을 함*/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,6 @@ public class SettingMgr : MonoBehaviour
     private GameObject spawnHeroPrefab;
     public GameObject unitGroupPrefab;
     PlayerInput inputActions;
-    List<GameObject> unitSetList;
     private float   unitOffset  = 1.5f;
     public  float   scrollSpeed = 1f;
     private int     num_row;
@@ -32,8 +32,6 @@ public class SettingMgr : MonoBehaviour
     private void Awake()
     {
         inputActions = GameMgr.Instance.inputActions;
-        unitSetList = new();
-        
     }
 
     private void OnEnable()
@@ -46,9 +44,12 @@ public class SettingMgr : MonoBehaviour
         inputActions.Setting.Click.performed            += OnCompleteSetting;
         inputActions.Setting.SwitchRow.performed        += OnSwitchRow;
         inputActions.Setting.ReSetting.performed        += OnResetting;
+        inputActions.Setting.Cancel.performed += OnCancel;
         NowUnitSpawnPoint = unitSpawnPoint;
-
     }
+
+    
+
     private void OnDisable()
     {
         inputActions.Setting.Disable();
@@ -63,7 +64,7 @@ public class SettingMgr : MonoBehaviour
     private void Update()
     {
         //세팅중
-        if (unitSetList.Count>0)
+        if (unitGroup!=null)
         {
             //유닛 회전
             unitGroupTr.rotation *= Quaternion.Euler(0f, dir * 360f * Time.deltaTime, 0f);
@@ -72,6 +73,16 @@ public class SettingMgr : MonoBehaviour
         }
     }
     //inputActions 연결함수=======================================================================
+    private void OnCancel(InputAction.CallbackContext _)
+    {
+        for(int i=0;i<unitGroup.NumUnitList;)
+        {
+            RemoveLastToList(true);
+            Debug.Log(unitGroup.unitsTr.childCount);
+        }
+        Ray ray=new Ray();
+        CompleteUnitSetting(ray);
+    }
     private void OnSwitchRow(InputAction.CallbackContext _)
     {
         Keyboard kboard = Keyboard.current;
@@ -90,12 +101,6 @@ public class SettingMgr : MonoBehaviour
     private void OnCompleteSetting(InputAction.CallbackContext _)
     {
         CompleteUnitSetting(Camera.main.ScreenPointToRay(Input.mousePosition));
-        inputActions.Setting.Click.Disable();
-        inputActions.Setting.scrollUpDown.Disable();
-        inputActions.Camera.CameraZoom.Enable();
-        inputActions.Setting.ReSetting.Enable();
-        inputActions.Command.Select.Enable();
-        inputActions.Setting.SwitchRow.Disable();
     }
     private void OnRotateUnitGroup(InputAction.CallbackContext obj)
     {
@@ -103,7 +108,7 @@ public class SettingMgr : MonoBehaviour
     }
     private void OnStartSetting(InputAction.CallbackContext _)
     {
-        if (unitSetList.Count == 0&&spawnUnitData!=null)
+        if (unitGroup==null&&spawnUnitData!=null)
         {
             StartSetting();
             inputActions.Setting.Click.Enable();
@@ -113,7 +118,7 @@ public class SettingMgr : MonoBehaviour
             inputActions.Setting.SwitchRow.Enable();
         }
     }
-
+    //space바를 누르면 유닛그룹 배치를 시작
     private void StartSetting(bool isHero=false)
     {
         GameObject obj = Instantiate(unitGroupPrefab, Vector3.zero, Quaternion.identity);
@@ -126,7 +131,7 @@ public class SettingMgr : MonoBehaviour
             AddUnitRow();
         }
     }
-
+    //유닛 배치중 스크롤로 유닛그룹에 Add/Remove
     private void OnscrollUpDown(InputAction.CallbackContext obj)
     {
         if (!Input.GetKey(KeyCode.LeftShift))
@@ -142,12 +147,12 @@ public class SettingMgr : MonoBehaviour
             }
         }
     }
+    //유닛 재배치함수
     private void OnResetting(InputAction.CallbackContext _)
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
         {
-            //23
             int unitIndex = (int)hit.transform.GetComponent<Unit>().unitData.unitType - 2;
             UIMgr.Instance.SelectedSpawnButton(unitIndex);
             unitGroupTr = hit.transform.parent.parent;
@@ -161,9 +166,10 @@ public class SettingMgr : MonoBehaviour
             unitGroupTr.parent = transform;
             for (int i = 0; i < unitGroup.unitsTr.childCount; i++)
             {
-                unitSetList.Add(unitGroup.unitsTr.GetChild(i).gameObject);
+                AllyUnit allyunit = unitGroup.unitsTr.GetChild(i).GetComponent<AllyUnit>();
+                unitGroup.AddUnitList(allyunit);
             }
-            if (unitGroupTr != null && unitGroup.unitsTr.childCount == unitSetList.Count)
+            if (unitGroupTr != null && unitGroup.unitsTr.childCount == unitGroup.NumUnitList)
             {
                 ShaderChange(UnitShader.transparentShader);
             }
@@ -175,12 +181,15 @@ public class SettingMgr : MonoBehaviour
             inputActions.Setting.SwitchRow.Enable();
         }
     }
-    public void SelectSpawnUnitType(int i)
+    //스폰할 유닛 변경함수
+    public int SelectSpawnUnitType(int i)
     {
         spawnUnitData = unitDatas[i];
+        return unitDatas[i].Cost;
     }
     // 로컬 함수====================================================
     
+    //지정된 위치에 선택한 영웅캐릭터를 배치하는 함수
     public void SpawnHeros()
     {
         int i = 0;
@@ -193,6 +202,7 @@ public class SettingMgr : MonoBehaviour
                 spawnHeroPrefab = heroPrefabs[classNum];
                 StartSetting(true);
                 GameObject obj = Instantiate(spawnHeroPrefab, unitGroup.unitsTr);
+                unitGroup.AddUnitList(obj.GetComponent<AllyUnit>());
                 Hero hero = obj.GetComponent<Hero>();
                 if (hero != null)
                 {
@@ -201,13 +211,12 @@ public class SettingMgr : MonoBehaviour
                     hero.InitializeUnitStat();
                 }
                 ShaderChange(UnitShader.transparentShader);
-                unitSetList.Add(obj);
                 Ray ray = new Ray();
                 ray.origin = heroSpawnSpots.GetChild(i).position;
                 ray.direction = Vector3.down;
                 if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
                 {
-                    unitSetList[0].transform.position = hit.point;
+                    obj.transform.position = hit.point;
                     CompleteUnitSetting(ray);
                 }
                 i++;
@@ -219,22 +228,23 @@ public class SettingMgr : MonoBehaviour
     {
         SortingUnit(Mouse.current.position.ReadValue());
     }//오버로딩
+    //유닛그룹을 행열에 맞게 정렬해서 배치되게 하는 함수
     private void SortingUnit(Vector3 mousePosition)
     {
         //유닛그룹 정렬시키기
         //짝수면 n/2-0.5  홀수면 (n-1)/2 
-        if(unitSetList.Count > 0)
+        if(unitGroup !=null)
         {
             float centerDiff = 0;
-            if ((unitSetList.Count / num_row) % 2 == 0)
+            if ((unitGroup.NumUnitList / num_row) % 2 == 0)
             {
-                centerDiff = (unitSetList.Count / num_row) / 2 - 0.5f;
+                centerDiff = (unitGroup.NumUnitList / num_row) / 2 - 0.5f;
             }
             else
             {
-                centerDiff = ((unitSetList.Count / num_row) - 1) / 2;
+                centerDiff = ((unitGroup.NumUnitList / num_row) - 1) / 2;
             }
-            for (int i = 0; i < unitSetList.Count / num_row; i++)
+            for (int i = 0; i < unitGroup.NumUnitList / num_row; i++)
             {
                 for (int j = 0; j < num_row; j++)
                 {
@@ -242,13 +252,13 @@ public class SettingMgr : MonoBehaviour
                     ray.origin += UnitOffset * ((i - centerDiff) * unitGroupTr.right +unitGroupTr.forward * ((num_row-1)*0.5f-j));
                     if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
                     {
-                        unitSetList[i * num_row + j].transform.position = hit.point;
+                        unitGroup.UnitList[i * num_row + j].transform.position = hit.point;
                     }
                 }
             }
         }
     }
-
+    //유닛그룹 세팅을 마치는 함수 spot정하기/ 인풋관련처리/ 쉐이더 처리함
     private void CompleteUnitSetting(Ray ray)
     {
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
@@ -270,27 +280,34 @@ public class SettingMgr : MonoBehaviour
             unit.InitializeUnitStat();
         }
         ShaderChange(UnitShader.normalShader);
-        unitGroupTr.parent = unitGroup.AllyGroups;//원래 이거자식이 unitGroupTr인데 형제로 격상
-        unitSetList.Clear();
+        unitGroupTr.parent = unitGroup.AllyGroups;//유닛그룹이 AllyGroups의 자식으로 계층이동
         if(spawnUnitData != null)
             unitGroup.unitType = spawnUnitData.unitType;                      //유닛타입결정
         unitGroup.InitializeUnitList();
         unitGroupTr = null;
         unitGroup = null;
+        inputActions.Setting.Click.Disable();
+        inputActions.Setting.scrollUpDown.Disable();
+        inputActions.Camera.CameraZoom.Enable();
+        inputActions.Setting.ReSetting.Enable();
+        inputActions.Command.Select.Enable();
+        inputActions.Setting.SwitchRow.Disable();
     }
+    //유닛그룹을 몇 열로 할지 변경
     void ChangeGroupRow(int iRow)
     {
-        if(unitSetList.Count>0)
+        if(unitGroup!=null>0)
         {
             num_row = iRow;
-            int a = unitSetList.Count % iRow;
-            for(int i=0; i<a; i++)
+            int remainder = unitGroup.NumUnitList % iRow;
+            for(int i=0; i< remainder; i++)
             {
                 RemoveLastToList();
             }
         }
     }
     
+    //유닛그룹에 유닛 1열을 추가
     void AddUnitRow()
     {
         for(int i=0;i<num_row;i++)
@@ -299,15 +316,17 @@ public class SettingMgr : MonoBehaviour
             {
                 NowUnitSpawnPoint-=spawnUnitData.Cost;
                 GameObject obj = Instantiate(spawnUnitData.unitPrefab, unitGroup.unitsTr);
-                obj.GetComponent<AllyUnit>().unitData = spawnUnitData;
+                AllyUnit allyUnit = obj.GetComponent<AllyUnit>();
+                allyUnit.unitData = spawnUnitData;
+                unitGroup.AddUnitList(allyUnit);
                 ShaderChange(UnitShader.transparentShader);
-                unitSetList.Add(obj);
             }
         }
     }
+    //배치중인 유닛그룹의 유닛 마지막 열 삭제
     void RemoveLastRow()
     { 
-        if (unitSetList.Count > num_row)
+        if (unitGroup.NumUnitList > num_row)
         { 
             for(int i=0; i<num_row;i++)
             {
@@ -315,16 +334,20 @@ public class SettingMgr : MonoBehaviour
             }
         }
     }
-    void RemoveLastToList()
+    //배치중인 유닛그룹의 마지막 유닛을 삭제하는 함수
+    void RemoveLastToList(bool isCancel=false)
     {
-        if(unitSetList.Count>1)
+        int limitNum = isCancel ? 0 : 1;
+        if(unitGroup.NumUnitList > limitNum)
         {
-            GameObject obj = unitSetList[unitSetList.Count - 1];
-            unitSetList.Remove(obj);
+            GameObject obj = unitGroup.unitsTr.GetChild(unitGroup.NumUnitList - 1).gameObject;
+            AllyUnit allyUnit = obj.GetComponent<AllyUnit>();
+            unitGroup.RemoveUnitFromList(allyUnit);
             NowUnitSpawnPoint += spawnUnitData.Cost;
             Destroy(obj);
         }
     }
+    //배치중인 유닛은 파란색으로 보이게 쉐이더를 조절하는 함수
     void ShaderChange(UnitShader _type)
     {
         SkinnedMeshRenderer[] skinRen = unitGroup.unitsTr.GetComponentsInChildren<SkinnedMeshRenderer>();

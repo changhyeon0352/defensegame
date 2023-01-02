@@ -55,6 +55,7 @@ public class AllyUnit : Unit
     {
         IsSelectedUnit = false;
         UnitGroup unitGroup=transform.parent.parent.GetComponent<UnitGroup>();
+
         transform.parent = null;
         unitGroup.RemoveUnitFromList(this);
         

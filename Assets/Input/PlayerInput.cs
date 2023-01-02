@@ -168,6 +168,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""64b93d57-0b06-4b24-a5e3-63025ee01c7a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -289,6 +298,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SwitchRow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54ebc90b-cd7f-4cb7-a1de-e714604e5b34"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -633,6 +653,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Setting_Click = m_Setting.FindAction("Click", throwIfNotFound: true);
         m_Setting_ReSetting = m_Setting.FindAction("ReSetting", throwIfNotFound: true);
         m_Setting_SwitchRow = m_Setting.FindAction("SwitchRow", throwIfNotFound: true);
+        m_Setting_Cancel = m_Setting.FindAction("Cancel", throwIfNotFound: true);
         // Test
         m_Test = asset.FindActionMap("Test", throwIfNotFound: true);
         m_Test_CameraStop = m_Test.FindAction("CameraStop", throwIfNotFound: true);
@@ -771,6 +792,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Setting_Click;
     private readonly InputAction m_Setting_ReSetting;
     private readonly InputAction m_Setting_SwitchRow;
+    private readonly InputAction m_Setting_Cancel;
     public struct SettingActions
     {
         private @PlayerInput m_Wrapper;
@@ -781,6 +803,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Click => m_Wrapper.m_Setting_Click;
         public InputAction @ReSetting => m_Wrapper.m_Setting_ReSetting;
         public InputAction @SwitchRow => m_Wrapper.m_Setting_SwitchRow;
+        public InputAction @Cancel => m_Wrapper.m_Setting_Cancel;
         public InputActionMap Get() { return m_Wrapper.m_Setting; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -808,6 +831,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @SwitchRow.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
                 @SwitchRow.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
                 @SwitchRow.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
+                @Cancel.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnCancel;
+                @Cancel.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnCancel;
+                @Cancel.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnCancel;
             }
             m_Wrapper.m_SettingActionsCallbackInterface = instance;
             if (instance != null)
@@ -830,6 +856,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @SwitchRow.started += instance.OnSwitchRow;
                 @SwitchRow.performed += instance.OnSwitchRow;
                 @SwitchRow.canceled += instance.OnSwitchRow;
+                @Cancel.started += instance.OnCancel;
+                @Cancel.performed += instance.OnCancel;
+                @Cancel.canceled += instance.OnCancel;
             }
         }
     }
@@ -1013,6 +1042,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnClick(InputAction.CallbackContext context);
         void OnReSetting(InputAction.CallbackContext context);
         void OnSwitchRow(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
     }
     public interface ITestActions
     {

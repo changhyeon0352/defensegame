@@ -56,7 +56,6 @@ public class HPbar : MonoBehaviour
     public void ChangeHPbar(Unit unit,float hpPercent)
     {
         int index=unitList.FindIndex(x => x==unit);
-        Debug.Log(index);
         if(index>=0)
         {
             hpBarList[index].transform.GetChild(0).GetComponent<Image>().fillAmount = hpPercent;

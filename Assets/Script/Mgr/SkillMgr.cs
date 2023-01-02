@@ -93,6 +93,7 @@ public class SkillMgr : MonoBehaviour
             Destroy(skillRangeObj);
         if(indicator!=null)
             Destroy(indicator);
+
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
         GameMgr.Instance.inputActions.Command.Select.Enable();
         UIMgr.Instance.ChangeCursor(CursorType.Default);
@@ -109,6 +110,10 @@ public class SkillMgr : MonoBehaviour
     
     public void UseSkill(int index)
     {
+        if (skillRangeObj != null)
+            Destroy(skillRangeObj);
+        if (indicator != null)
+            Destroy(indicator);
         this.index = index;
         if (!selectedHero.SkillCanUse[index])
             return;

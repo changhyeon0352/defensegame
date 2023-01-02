@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 
 public class UnitGroup:MonoBehaviour
 {
-    List<AllyUnit> unitList;
+    [SerializeField]List<AllyUnit> unitList;
     public UnitType unitType = UnitType.none;
     public Transform unitsTr;
     public Transform spotsTr;
@@ -15,6 +16,8 @@ public class UnitGroup:MonoBehaviour
     BasicSkills groupSkill =BasicSkills.None;
 
     public BasicSkills GroupSkill { get => groupSkill; }
+    public int NumUnitList { get => unitList.Count; }
+    public List<AllyUnit> UnitList { get => unitList; }
 
     private void Awake()
     {
@@ -39,17 +42,23 @@ public class UnitGroup:MonoBehaviour
         }
         
     }
+    public void AddUnitList(AllyUnit unit)
+    {
+        unitList.Add(unit);
+    }
     public void InitializeUnitList()
     {
-        unitList.Clear();
+        Debug.Log("이니셜라이즈");
+        if (unitList.Count == 0)
+            Destroy(this.gameObject);
+
         
-        for (int i = 0; i < unitsTr.childCount; i++)
-        {
-            AllyUnit allyUnit = transform.GetChild(0).GetChild(i).GetComponent<AllyUnit>();
-            unitList.Add(allyUnit);
-        }
+        //for (int i = 0; i < unitsTr.childCount; i++)
+        //{
+        //    AllyUnit allyUnit = transform.GetChild(0).GetChild(i).GetComponent<AllyUnit>();
+        //    unitList.Add(allyUnit);
+        //}
         
-        //tag = transform.GetChild(0).GetChild(0).tag;
         if (unitType==UnitType.soldier_Melee)
         {
             groupSkill |= BasicSkills.MoveToSpot;
@@ -60,6 +69,7 @@ public class UnitGroup:MonoBehaviour
             groupSkill |= BasicSkills.ShootSpot;
             groupSkill |= BasicSkills.ShootEnemy;
         }
+        
     }
     public void RemoveUnitFromList(AllyUnit unit)
     {

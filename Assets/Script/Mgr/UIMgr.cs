@@ -154,16 +154,18 @@ public class UIMgr : Singleton<UIMgr>
     }
     public void SelectedSpawnButton(int index)
     {
-        GameMgr.Instance.settingMgr.SelectSpawnUnitType(index);
+        int unitCost=GameMgr.Instance.settingMgr.SelectSpawnUnitType(index);
         for (int i= 0; i < spawnImages.Count; i++)
         {
             if(i==index)
             {
-                spawnImages[i].color = Color.yellow;
+                spawnImages[i].transform.localScale= Vector3.one*1.1f;
+                spawnImages[i].transform.GetComponentInChildren<TextMeshProUGUI>().text=unitCost.ToString();
             }
             else
             {
-                spawnImages[i].color = Color.white;
+                spawnImages[i].transform.localScale = Vector3.one * 1f;
+                spawnImages[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = "";
             }
         }
     }

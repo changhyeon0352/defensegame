@@ -20,8 +20,10 @@ MonoBehaviour:
   moveSpeed: 3
   atk: 10
   magicPower: 0
-  attackSpeed: 1
-  cost: 80
+  attackSpeed: 0.5
+  cost: 100
   attackRange: 10
   unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}
-  attackAniLength: []
+  attackAniLength:
+  - 2.167
+  - 2.167

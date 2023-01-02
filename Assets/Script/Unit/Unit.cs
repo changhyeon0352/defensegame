@@ -1,3 +1,5 @@
+/*유닛의 기본적인 움직임을 제어하는 클래스 (유한상태머신)
+ Ally, Monster 등의 유닛관련 클래스의 최상위 부모 클래스*/
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,6 +30,13 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     private Collider col;
     private int attackCombo = 0;
     private float attackSpeed;
+    protected const float stopRange = 0.1f;
+    protected const float searchRange = 4f;
+    protected float attackRange = 2f;
+    public ParticleSystem shieldbuff;
+    public Transform goalTr;
+    [SerializeField] protected int armor = 0;
+    protected int armorPlus = 0;
     public float AttackSpeed { get { return attackSpeed; } 
         set { 
             attackSpeed = value; 
@@ -45,9 +54,9 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             agent.speed = value; 
         } 
     }
-    [SerializeField]protected int armor = 0;
-    protected int armorPlus = 0;
-    public int ArmorPlus { get { return armorPlus; }
+    
+    public int ArmorPlus { 
+        get { return armorPlus; }
         set
         {
             armorPlus = value;
@@ -62,14 +71,32 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                     shieldbuff.Stop();
             }
         }
-    } 
-    protected const float stopRange = 0.1f;
-    protected const float searchRange = 4f;
-    protected float attackRange = 2f;
-    public ParticleSystem shieldbuff;
-
-    public Transform goalTr;
-
+    }
+    public virtual int Hp
+    {
+        get => hp;
+        set
+        {
+            hp = value;
+            if (hp <= 0)
+            {
+                hp = 0;
+                //죽음
+                if (state != UnitState.Dead)
+                {
+                    Die();
+                    DataMgr.Instance.DieAlly(this);
+                }
+            }
+            UIMgr.Instance.hpbar.ChangeHPbar(this, (float)hp / (float)hpMax);
+            Debug.Log($"{transform.name}의 hp: {hp}");
+        }
+    }
+    public int Attack { get => attack; set => attack = value; }
+    public int Armor { get => armor; set => armor = value; }
+    public int HpMax { get => hpMax; }
+    public int Mp { get => mp; }
+    public int MpMax { get => mpMax; }
     //=====================================================================================================================
     virtual public void InitializeUnitStat()
     {
@@ -128,31 +155,8 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             MoveSpeed = unitData.MoveSpeed;
     }
     
-    public virtual int Hp 
-    { 
-        get => hp;
-        set
-        {
-            hp = value; 
-            if (hp <= 0)
-            {
-                hp = 0;
-                //죽음
-                if(state !=UnitState.Dead)
-                {
-                    Die();
-                    DataMgr.Instance.DieAlly(this);
-                }
-            }
-            UIMgr.Instance.hpbar.ChangeHPbar(this, (float)hp / (float)hpMax);
-            Debug.Log($"{transform.name}의 hp: {hp}");
-        }
-    }
-    public int Attack { get => attack; set => attack = value; }
-    public int Armor { get => armor; set => armor = value; }
-    public int HpMax { get => hpMax; }
-    public  int Mp { get => mp; }
-    public int MpMax { get => mpMax; }
+    
+    
 
     virtual protected void Die()
     {
@@ -179,7 +183,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             yield return new WaitForSeconds(1);
             Destroy(this.gameObject);
         }
-        
     }
    
 
@@ -190,12 +193,14 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         Hp -= netDamage == 0 ? 1 : netDamage;
         isSleep = false;
     }
-    
 
+
+
+    //==============================================================================
     virtual protected void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim= GetComponent<Animator>();
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
     }
@@ -223,7 +228,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 break;
         }
     }
-    //==============================================================================
     virtual protected void IdleUpdate()
     {
         // 아군유닛 대기상태
@@ -235,9 +239,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         if(goalTr!=null&&unitData.unitType!=UnitType.hero)
             transform.LookAt(goalTr.forward+transform.position);
     }
-
-    
-
     virtual protected void MoveUpdate()
     {
         if (!agent.enabled)
@@ -268,15 +269,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         {
             ChangeState(UnitState.Attack);
         }
-    }
-    public void MeleeAttack()
-    {
-        if(attackTargetTr!=null)
-        {
-            IHealth Enemy_IHealth = attackTargetTr.GetComponent<IHealth>();
-            Enemy_IHealth.TakeDamage(Attack);
-        }
-        
     }
     virtual protected void AttackUpdate()
     {
@@ -316,7 +308,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                         ChangeState(UnitState.Move);
                     }
                 }
-
             }
         }
         else//attactTr이 없어지면
@@ -339,8 +330,16 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         //아군 범위내 상대가 없으면 진형으로 복귀
 
     }
+    public void MeleeAttack()
+    {
+        if (attackTargetTr != null)
+        {
+            IHealth Enemy_IHealth = attackTargetTr.GetComponent<IHealth>();
+            Enemy_IHealth.TakeDamage(Attack);
+        }
 
-   
+    }
+
 
     //=================================================================================
     public bool SearchAndChase(float radius)
