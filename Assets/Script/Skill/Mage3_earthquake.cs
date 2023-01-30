@@ -12,8 +12,8 @@ public class Mage3_earthquake : Skill
 
     public override void InitSetting()
     {
-        data.skillType = SkillType.NonTarget;
-        data.coolTime = 1f;
+        data.skillType = SkillType.AreaTarget;
+        data.coolTime = 25f;
         data.range = 8f;
         data.nonTargetRange = 5f;
         data.damage = 5;
@@ -26,13 +26,8 @@ public class Mage3_earthquake : Skill
         yield return new WaitForSeconds(0.2f);
         for (int i = 0; i < data.duration; i++)
         {
-            UseSkill(skillTr, hero);
+            AoeSkill(skillTr, hero);
             yield return new WaitForSeconds(1f);
         }
-    }
-
-    public override void UseSkill(Transform skillTr, Hero hero)
-    {
-        AoeSkill(skillTr, hero);
     }
 }

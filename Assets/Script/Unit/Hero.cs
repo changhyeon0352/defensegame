@@ -1,20 +1,18 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using static UnityEngine.Rendering.DebugUI;
 
 public class Hero : AllyUnit
 {
-    private HeroData data;
-    public HeroData Data { get => data;
-        set { data = value;
-            //for (int i = 0; i < skillCools.Length; i++)
-            //{
-            //    skillCools[i] = GameMgr.Instance.skillMgr.knight.SkillCools[i];
-            //}
+    private HeroData heroData;
+    public HeroData HeroData { get => heroData;
+        set { heroData = value;
         }
+    }
+    override public void InitializeUnitStat()
+    {
+        unitData.HeroData= heroData;
+        base.InitializeUnitStat();
     }
     private bool isStopSkill=false;
     public bool IsStopSkill { get => isStopSkill; set { isStopSkill = value; agent.SetDestination(goalTr.position); } }
@@ -64,7 +62,7 @@ public class Hero : AllyUnit
         get => hp;
         set 
         { 
-            base.Hp = value;
+            hp = value;
             if (hp <= 0)
             {
                 hp = 0;
@@ -72,6 +70,8 @@ public class Hero : AllyUnit
                 if (state != UnitState.Dead)
                 {
                     Die();
+                    DataMgr.Instance.HeroDie(this);
+                    GameMgr.Instance.defenseMgr.ChangeHeroAfterDie();
                 }
             }
             heroState.ShowHpMp(this);
@@ -96,7 +96,6 @@ public class Hero : AllyUnit
             {
                 Vector3 mouseDir=new Vector3(hit.point.x,transform.position.y,hit.point.z)-transform.position;
                 float dot = Vector3.Dot(Vector3.Cross(transform.forward, mouseDir).normalized, Vector3.up);
-                Debug.Log(dot);
                 transform.Rotate(transform.up * dot*0.1f);
                 return;
             }
@@ -111,7 +110,7 @@ public class Hero : AllyUnit
         Hero[] heros=FindObjectsOfType<Hero>();
         foreach(Hero hero in heros)
         {
-            if(hero.data == herodata)
+            if(hero.heroData == herodata)
             {
                 result = hero;
             }
@@ -130,9 +129,10 @@ public class Hero : AllyUnit
         {
             ChangeState(UnitState.Move);
         }
-        if (GameMgr.Instance.skillMgr.IsChasingForSkill && agent.remainingDistance < GameMgr.Instance.skillMgr.SkillRange && !agent.pathPending)
+        //스킬 범위 밖에 스킬을 사용한 경우 스킬범위 안으로 온다면 스킬사용
+        if (GameMgr.Instance.skillController.IsChasingForSkill && agent.remainingDistance < GameMgr.Instance.skillController.SkillRange && !agent.pathPending)
         {
-            GameMgr.Instance.skillMgr.UseClinkingSkill(chaseTargetTr);
+            GameMgr.Instance.skillController.UseClinkingSkill(chaseTargetTr);
             MoveSpots(transform.position);
         }
         else if (agent.remainingDistance < attackRange && !agent.pathPending&&chaseTargetTr.CompareTag("Monster"))
@@ -156,10 +156,6 @@ public class Hero : AllyUnit
         obj.GetComponent<EnergyBolt>().SetTargetAndDamage(attackTargetTr, attack);
 
     }
-    private void OnDrawGizmos()
-    {
-        Handles.DrawWireDisc(transform.position, transform.up, rangeforGizmo);
-    }
     public void SkillAnimation(bool isMaintain,float sec)
     {
         if (isMaintain)
@@ -167,6 +163,7 @@ public class Hero : AllyUnit
         else
             anim.SetTrigger("UseSkill");
     }
+    //스킬쓸때 자세유지
     IEnumerator MaintainCor(float sec)
     {
         anim.SetBool("MaintainSkill", true);

@@ -18,7 +18,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     public LayerMask enemyLayer;
     public bool isProvoked = false;
     public bool isSleep = false;
-    protected float timeCount;
+    protected float timeElapsed;
     //protected float attackSpeed = 2.0f;
     protected int hp;
     protected int hpMax = 100;
@@ -31,12 +31,11 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     private int attackCombo = 0;
     private float attackSpeed;
     protected const float stopRange = 0.1f;
-    protected const float searchRange = 4f;
+    protected float searchRange = 4f;
     protected float attackRange = 2f;
     public ParticleSystem shieldbuff;
     public Transform goalTr;
     [SerializeField] protected int armor = 0;
-    protected int armorPlus = 0;
     public float AttackSpeed { get { return attackSpeed; } 
         set { 
             attackSpeed = value; 
@@ -54,24 +53,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             agent.speed = value; 
         } 
     }
-    
-    public int ArmorPlus { 
-        get { return armorPlus; }
-        set
-        {
-            armorPlus = value;
-            if (armorPlus > 0)
-            {
-                if(!shieldbuff.isPlaying)
-                    shieldbuff.Play();
-            }
-            else
-            {
-                if (shieldbuff.isPlaying)
-                    shieldbuff.Stop();
-            }
-        }
-    }
     public virtual int Hp
     {
         get => hp;
@@ -85,7 +66,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 if (state != UnitState.Dead)
                 {
                     Die();
-                    DataMgr.Instance.DieAlly(this);
                 }
             }
             UIMgr.Instance.hpbar.ChangeHPbar(this, (float)hp / (float)hpMax);
@@ -109,13 +89,32 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         MoveSpeed = unitData.MoveSpeed;
         attackRange = unitData.AttackRange;
         AttackSpeed= unitData.AttackSpeed;
+        searchRange = unitData.SearchRange;
+        ChangeState(UnitState.Move);
+        //searchRange=
+    }
+
+    
+    public IEnumerator AddAromor(int armorPlus,float sec)
+    {
+        if(unitData.Armor + armorPlus > armor)
+        {
+            armor = unitData.Armor + armorPlus;
+            if (!shieldbuff.isPlaying)
+                shieldbuff.Play();
+            UIMgr.Instance.unitStatUI.isRefresh = true;
+            yield return new WaitForSeconds(sec);
+            armor = unitData.Armor;
+            shieldbuff.Stop();
+            UIMgr.Instance.unitStatUI.isRefresh = true;
+        }
     }
     public IEnumerator Provoked(Transform tr,float sec)
     {
             chaseTargetTr = tr;
             ChangeState(UnitState.Chase);
             isProvoked = true;
-            GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.provoked], transform);
+            GameObject obj = Instantiate(GameMgr.Instance.skillController.Buffs[(int)Buff.provoked], transform);
             yield return new WaitForSeconds(sec);
             if (state != UnitState.Dead)
             {
@@ -130,7 +129,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             isSleep = true;
             anim.SetTrigger("Sleep");
             agent.enabled = false;
-            GameObject obj = Instantiate(GameMgr.Instance.skillMgr.Buffs[(int)Buff.sleep], transform);
+            GameObject obj = Instantiate(GameMgr.Instance.skillController.Buffs[(int)Buff.sleep], transform);
             while (count > 0)
             {
                 count -= Time.deltaTime;
@@ -150,9 +149,11 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     public IEnumerator Slow(float sec)
     {
         MoveSpeed = unitData.MoveSpeed /4;
+        UIMgr.Instance.unitStatUI.isRefresh = true;
         yield return new WaitForSeconds(sec);
         if(state != UnitState.Dead)
             MoveSpeed = unitData.MoveSpeed;
+        UIMgr.Instance.unitStatUI.isRefresh = true;
     }
     
     
@@ -188,9 +189,9 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
 
     public void TakeDamage(int damage)
     {
-        double decreaseRate= 1-Math.Atan((double)(armor+armorPlus)/50)/(Math.PI/2);//아머가 50쯤 되면 50%
+        double decreaseRate= 1-Math.Atan((double)(armor)/50)/(Math.PI/2);//아머가 50쯤 되면 50%
         int netDamage = (int)(damage * decreaseRate);
-        Hp -= netDamage == 0 ? 1 : netDamage;
+        Hp -= ((netDamage == 0)? 1 : netDamage);
         isSleep = false;
     }
 
@@ -206,7 +207,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     virtual protected void Update()
     {
-        timeCount -= Time.deltaTime;
         if (isSleep)
             return;
         switch (state)
@@ -234,7 +234,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
         // 아군유닛 이동으로 전환
         //궁수는  Attack 전환
         //전사는  Chase 전환
-        if(SearchAndChase(searchRange))
+        if (SearchAndChase(searchRange))
             ChangeState(UnitState.Chase);
         if(goalTr!=null&&unitData.unitType!=UnitType.hero)
             transform.LookAt(goalTr.forward+transform.position);
@@ -272,10 +272,11 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
     }
     virtual protected void AttackUpdate()
     {
-        if(attackTargetTr != null)
+        timeElapsed -= Time.deltaTime;
+        if (attackTargetTr != null)
         {
             transform.LookAt(attackTargetTr);
-            if (timeCount < 0)
+            if (timeElapsed < 0)
             {
                 CapsuleCollider capsuleCollider = attackTargetTr.GetComponent<CapsuleCollider>();
                 if (capsuleCollider!=null&&!capsuleCollider.enabled)
@@ -288,11 +289,10 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 if (distance<attackRange*attackRange) //사거리 이내면
                 {
                     anim.SetInteger("AttackCombo", attackCombo);
-                    
                     anim.SetTrigger("Attack");
                     //공격 애니메이션:컴뱃idle = 2:1비율로
                     
-                    timeCount = 1/unitData.AttackSpeed;
+                    timeElapsed = 1/unitData.AttackSpeed;
                     //attackTargetTr = null;
                     attackCombo++;
                     attackCombo %= 2;
@@ -337,10 +337,7 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
             IHealth Enemy_IHealth = attackTargetTr.GetComponent<IHealth>();
             Enemy_IHealth.TakeDamage(Attack);
         }
-
     }
-
-
     //=================================================================================
     public bool SearchAndChase(float radius)
     {
@@ -419,7 +416,6 @@ public class Unit : MonoBehaviour,IHealth,IPointerEnterHandler,IPointerExitHandl
                 break;
         }
         state = newState;
-
     }
     public void OnPointerEnter(PointerEventData eventData)
     {

@@ -2,9 +2,25 @@
     "heroDataList": [
         {
             "id": 1,
-            "heroClass": 1,
-            "name": "홍염의 마도사",
+            "heroClass": 0,
+            "name": "줄리아",
             "level": 2,
+            "exp": 0,
+            "level_Weapon": 2,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": false
+        },
+        {
+            "id": 2,
+            "heroClass": 1,
+            "name": "디스마스",
+            "level": 1,
             "exp": 0,
             "level_Weapon": 1,
             "level_Armor": 1,
@@ -17,50 +33,34 @@
             "isDead": false
         },
         {
-            "id": 2,
+            "id": 3,
             "heroClass": 0,
-            "name": "새벽의 기사",
-            "level": 1,
+            "name": "리놈",
+            "level": 0,
             "exp": 0,
             "level_Weapon": 0,
             "level_Armor": 0,
             "level_Skills": [
-                1,
-                1,
-                1,
-                1
+                0,
+                0,
+                0,
+                0
             ],
             "isDead": false
         },
         {
-            "id": 3,
-            "heroClass": 0,
-            "name": "광전사",
-            "level": 3,
-            "exp": 0,
-            "level_Weapon": 2,
-            "level_Armor": 2,
-            "level_Skills": [
-                3,
-                1,
-                3,
-                1
-            ],
-            "isDead": true
-        },
-        {
             "id": 4,
             "heroClass": 1,
-            "name": "빙결술사",
-            "level": 3,
+            "name": "바리스탄",
+            "level": 0,
             "exp": 0,
-            "level_Weapon": 4,
-            "level_Armor": 2,
+            "level_Weapon": 0,
+            "level_Armor": 0,
             "level_Skills": [
-                3,
-                1,
-                3,
-                1
+                0,
+                0,
+                0,
+                0
             ],
             "isDead": false
         }

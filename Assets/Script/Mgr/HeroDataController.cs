@@ -3,7 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+[Serializable]
+public class HeroData
+{
+    public int id;
+    public HeroClass heroClass;
+    public string name;
+    public int level;
+    public int exp;
+    public int level_Weapon;
+    public int level_Armor;
+    public int[] level_Skills;
+    public bool isDead;
 
+}
+[Serializable]
+public class HeroDatas : Data
+{
+    public List<HeroData> heroDataList;
+}
 public class HeroDataController : Singleton<HeroDataController>
 {
     public HeroData heroData;
@@ -12,14 +30,13 @@ public class HeroDataController : Singleton<HeroDataController>
 
     private void Start()
     {
-        LoadHeroDataFromJson();
-        heroID=heroDatas.heroDataList[heroDatas.heroDataList.Count - 1].id+1;
-        int a = 0;
+        //LoadHeroDataFromJson();
+        //heroID=heroDatas.heroDataList[heroDatas.heroDataList.Count - 1].id+1;
+        //int a = 0;
     }
     [ContextMenu("To Json Data")]
     void SavePlayerDataToJson()
     {
-
         string jsonData = JsonUtility.ToJson(heroDatas, true);
         string path = Path.Combine(Application.dataPath, "heroDataList.json");
         File.WriteAllText(path, jsonData);
@@ -27,7 +44,6 @@ public class HeroDataController : Singleton<HeroDataController>
     [ContextMenu("From Json Data")]
     void LoadHeroDataFromJson()
     {
-
         string path = Path.Combine(Application.dataPath, "heroDataList.json");
         string jsonData = File.ReadAllText(path);
         heroDatas=JsonUtility.FromJson<HeroDatas>(jsonData);
@@ -44,23 +60,5 @@ public class HeroDataController : Singleton<HeroDataController>
         heroID++;   
     }
 }
-[Serializable]
-public class HeroData
-{
-    public int id;
-    public HeroClass heroClass;
-    public string name;
-    public int level;
-    public int exp;
-    public int level_Weapon;
-    public int level_Armor;
-    public int[] level_Skills;
-    public bool isDead;
-    
-}
-[Serializable]
-public class HeroDatas:Data
-{
-    public List<HeroData> heroDataList;
-}
+
 

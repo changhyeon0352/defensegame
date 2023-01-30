@@ -11,7 +11,7 @@ public class rockWall : MonoBehaviour
     void Awake()
     {
         ps=GetComponent<ParticleSystem>();
-        count = GameMgr.Instance.skillMgr.UsingSKill.data.duration-2;
+        count = GameMgr.Instance.skillController.UsingSKill.data.duration-2;
 
     }
 

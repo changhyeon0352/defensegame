@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
-  m_Name: Soldier_Range
+  m_Name: Hero_Knight
   m_EditorClassIdentifier: 
-  type: 3
-  unitPortrait: {fileID: 21300000, guid: b993b5e91b2cfb0468163165ff52bf44, type: 3}
-  unitName: "\uAD81\uBCD1"
-  hp: 50
-  mp: 0
-  moveSpeed: 3
-  atk: 10
+  type: 4
+  unitPortrait: {fileID: 21300000, guid: 2e0bb37bea53f3a4495388acf1f05900, type: 3}
+  unitName: "\uAE30\uC0AC"
+  hp: 600
+  mp: 300
+  moveSpeed: 7
+  atk: 20
   magicPower: 0
-  attackSpeed: 0.5
-  cost: 100
-  attackRange: 10
+  attackSpeed: 1
+  cost: 80
+  attackRange: 2
+  searchRange: 4
   unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}
   attackAniLength:
-  - 2.167
-  - 2.167
+  - 1.4
+  - 1.2

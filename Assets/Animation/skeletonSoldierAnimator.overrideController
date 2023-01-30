@@ -6,7 +6,7 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MonsterAnimator
+  m_Name: skeletonSoldierAnimator
   m_Controller: {fileID: 9100000, guid: 7f11855890a201f43945b480172fa0d5, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: -6206981513316247533, guid: c346a9e2503cda64ba4698db6aa5e707,

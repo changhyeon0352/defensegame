@@ -9,7 +9,7 @@ public class Test : MonoBehaviour
 {
     void Start()
     {
-        GameMgr.Instance.ChangePhaseAction(1);
+        //GameMgr.Instance.ChangePhaseAction(1);
     }
 
     

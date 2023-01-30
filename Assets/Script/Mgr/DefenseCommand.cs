@@ -10,7 +10,7 @@ using UnityEngine.InputSystem.Controls;
 
 
 
-public class CommandMgr : MonoBehaviour
+public class DefenseCommand : MonoBehaviour
 {
     public GameObject[] skillIndicatorPrefabs;
     [SerializeField] GameObject moveToPrefabs;
@@ -32,7 +32,7 @@ public class CommandMgr : MonoBehaviour
     public BasicSkills UsingSkill { get => usingSkill;}
     public Hero SelectedHero { get => selectedHero;
         set { selectedHero = value;
-            GameMgr.Instance.skillMgr.selectedHero = value; 
+            GameMgr.Instance.skillController.selectedHero = value; 
             AllCheckSelected(); 
         } 
     }
@@ -70,21 +70,39 @@ public class CommandMgr : MonoBehaviour
             {
                 if (k.wasPressedThisFrame)
                 {
-                    int a=(int)k.keyCode - 41;
-                    if(a<DataMgr.Instance.FightingHeroDataList.Count)
+                    int num=(int)k.keyCode - 41;
+                    if(num<DataMgr.Instance.FightingHeroDataList.Count)
                     {
-                        SelectHero(a);
+                        SelectHero(num);
                     }
                 }
             }
         }
     }
 
-    private void SelectHero(int a)
+    private bool SelectHero(int a)
     {
-        ClearSelectedGroups();
-        SelectedHero = fightingHeroList[a];
-        UIMgr.Instance.skillbarUI.ChangeHeroSkill(selectedHero);
+        Hero hero= fightingHeroList[a];
+        
+        if(!hero.IsDead)
+        {
+            ClearSelectedGroups();
+            SelectedHero=hero;
+            UIMgr.Instance.skillbarUI.ChangeHeroSkill(selectedHero);
+            return true;
+        }
+        else
+            return false;
+    }
+    public void ChangeHeroAfterDie()
+    {
+        for(int i=0;i<fightingHeroList.Count;i++)
+        {
+            if(SelectHero(i))
+            {
+                return;
+            }
+        }
     }
 
     private void OnDisable()
@@ -118,7 +136,7 @@ public class CommandMgr : MonoBehaviour
         
         if (IsHeroSelected())
         {
-            GameMgr.Instance.skillMgr.ShowSkillRange(SelectedHero.unitData.AttackRange);
+            GameMgr.Instance.skillController.ShowSkillRange(SelectedHero.unitData.AttackRange);
             inputActions.Command.Select.Disable();
             inputActions.Command.skillClick.Enable();
             usingSkill = BasicSkills.AttackMove;
@@ -130,9 +148,9 @@ public class CommandMgr : MonoBehaviour
     private void OnMoveOrSetTarget(InputAction.CallbackContext _)
     {
         ClearSelectedGroups();
-        if (GameMgr.Instance.skillMgr.IsUsingSkill)
+        if (GameMgr.Instance.skillController.IsUsingSkill)
         {
-            GameMgr.Instance.skillMgr.SkillEnd();
+            GameMgr.Instance.skillController.SkillEnd();
             return;
         }
         if (IsHeroSelected())
@@ -172,7 +190,7 @@ public class CommandMgr : MonoBehaviour
     // 병사, 영웅 쉬프트,그냥 클릭
     private void OnSelect(InputAction.CallbackContext obj)
     {
-        if (Utils.IsClickOnUI())//UI 클릭 하는지
+        if (Utils.IsClickOnUI())//UI 클릭 하면 OnSelect를 스킵
         {
             return;
         }
@@ -191,10 +209,12 @@ public class CommandMgr : MonoBehaviour
             if ((int)MathF.Pow(2, hit.transform.gameObject.layer) == LayerMask.GetMask("Ally")) //hit한게 ally layer라면
             {
                 //영웅이 클릭됐는지
-                if (hit.transform.GetComponent<Hero>() != null)
+                Hero hero=hit.transform.GetComponent<Hero>();
+                if (hero!=null)
                 {
-                    ClearSelectedGroups();
-                    SelectedHero= hit.transform.GetComponent<Hero>();
+                    //ClearSelectedGroups();
+                    int numHero= fightingHeroList.IndexOf(hero);
+                    SelectHero(numHero);
                 }
                 else //병사들이 클릭 됐으면
                 {
@@ -282,7 +302,7 @@ public class CommandMgr : MonoBehaviour
                 UIMgr.Instance.ChangeCursor(CursorType.Default);
                 SelectedHero.isattackMove = true;
                 MoveOrSetTarget(attackToPrefabs);
-                GameMgr.Instance.skillMgr.SkillEnd();
+                GameMgr.Instance.skillController.SkillEnd();
                 break;
             case BasicSkills.ShootSpot:
                 foreach (var indicator in skillIndicatorTrs)

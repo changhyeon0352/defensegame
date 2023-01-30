@@ -32,17 +32,17 @@ public class AllyRange : AllyUnit
 
     protected override void AttackUpdate()
     {
-        timeCount -= Time.deltaTime;
+        timeElapsed -= Time.deltaTime;
         if (bowLoadShot.target != null)
         {
             transform.LookAt(bowLoadShot.target);
-            if (timeCount < 0)
+            if (timeElapsed < 0)
             {
                 float distance = Vector3.Distance(transform.position, bowLoadShot.target.position);
                 if(distance<shotRange+0.6f||isShotSpot)
                 {
                     anim.SetTrigger("Attack");
-                    timeCount = unitData.AttackSpeed;
+                    timeElapsed = unitData.AttackSpeed;
                 }
                 else
                     ChangeState(UnitState.Idle);

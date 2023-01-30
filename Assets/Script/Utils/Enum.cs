@@ -52,5 +52,7 @@ public enum Phase
     town,
     selectHero,
     setting,
-    defense
+    defense,
+    result
+
 }

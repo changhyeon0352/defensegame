@@ -10,20 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
-  m_Name: Soldier_Melee
+  m_Name: Monster2
   m_EditorClassIdentifier: 
-  type: 2
-  unitPortrait: {fileID: 21300000, guid: 6b53d432c764e3945a2004edcaffe80b, type: 3}
-  unitName: "\uBCF4\uBCD1"
-  hp: 100
+  type: 1
+  unitPortrait: {fileID: 21300000, guid: 1bd8553401f3d73409c94fc3c2dac999, type: 3}
+  unitName: "\uD574\uACE8\uAE30\uC0AC"
+  hp: 500
   mp: 0
-  moveSpeed: 3
-  atk: 10
+  moveSpeed: 4.5
+  atk: 40
   magicPower: 0
-  attackSpeed: 0.8
-  cost: 50
+  armor: 0
+  attackSpeed: 0.5
+  cost: 0
   attackRange: 1
-  unitPrefab: {fileID: 169604, guid: 51eae40567d3ff847bafc22ed4abaa6a, type: 3}
+  searchRange: 1
+  unitPrefab: {fileID: 5980554872325107210, guid: 08c0553ee55e2d44fa0ff8283c254d1c,
+    type: 3}
   attackAniLength:
-  - 1.4
-  - 1.2
+  - 1
+  - 1

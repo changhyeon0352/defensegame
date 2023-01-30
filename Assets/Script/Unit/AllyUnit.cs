@@ -20,6 +20,7 @@ public class AllyUnit : Unit
             selectedMark.SetActive(isSelectedUnit);
         }
     }
+    
     protected override void MoveUpdate()
     {
         if (isattackMove)
@@ -53,6 +54,7 @@ public class AllyUnit : Unit
     }
     protected override void Die()
     {
+        DataMgr.Instance.DieAlly(this);
         IsSelectedUnit = false;
         UnitGroup unitGroup=transform.parent.parent.GetComponent<UnitGroup>();
 

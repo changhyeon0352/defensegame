@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
-  m_Name: Hero_Mage
+  m_Name: Soldier_Melee
   m_EditorClassIdentifier: 
-  type: 4
-  unitPortrait: {fileID: 21300000, guid: 0f1a4ce37ccc6ab488c84d999e9f3778, type: 3}
-  unitName: "\uBA54\uC774\uC9C0"
-  hp: 400
-  mp: 500
-  moveSpeed: 6
-  atk: 20
-  magicPower: 40
-  attackSpeed: 1
-  cost: 80
-  attackRange: 5
-  unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}
+  type: 2
+  unitPortrait: {fileID: 21300000, guid: 6b53d432c764e3945a2004edcaffe80b, type: 3}
+  unitName: "\uBCF4\uBCD1"
+  hp: 100
+  mp: 0
+  moveSpeed: 3
+  atk: 10
+  magicPower: 0
+  attackSpeed: 0.8
+  cost: 50
+  attackRange: 1
+  searchRange: 3
+  unitPrefab: {fileID: 169604, guid: 51eae40567d3ff847bafc22ed4abaa6a, type: 3}
   attackAniLength:
-  - 1
-  - 1
+  - 1.4
+  - 1.2

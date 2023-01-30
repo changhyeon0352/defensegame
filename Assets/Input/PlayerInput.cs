@@ -602,6 +602,34 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Game"",
+            ""id"": ""8f6b169c-db81-427d-938f-3aeb29eb46ff"",
+            ""actions"": [
+                {
+                    ""name"": ""GameQuit"",
+                    ""type"": ""Button"",
+                    ""id"": ""a121b829-ffcc-49d6-a40a-8ae404faeddc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""16515f8e-a20d-4a04-868d-fabb61b04236"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GameQuit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -670,6 +698,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Command_SkillButton4 = m_Command.FindAction("SkillButton4", throwIfNotFound: true);
         m_Command_SkillCancel = m_Command.FindAction("SkillCancel", throwIfNotFound: true);
         m_Command_HeroSkillClick = m_Command.FindAction("HeroSkillClick", throwIfNotFound: true);
+        // Game
+        m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
+        m_Game_GameQuit = m_Game.FindAction("GameQuit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1009,6 +1040,39 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         }
     }
     public CommandActions @Command => new CommandActions(this);
+
+    // Game
+    private readonly InputActionMap m_Game;
+    private IGameActions m_GameActionsCallbackInterface;
+    private readonly InputAction m_Game_GameQuit;
+    public struct GameActions
+    {
+        private @PlayerInput m_Wrapper;
+        public GameActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @GameQuit => m_Wrapper.m_Game_GameQuit;
+        public InputActionMap Get() { return m_Wrapper.m_Game; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GameActions set) { return set.Get(); }
+        public void SetCallbacks(IGameActions instance)
+        {
+            if (m_Wrapper.m_GameActionsCallbackInterface != null)
+            {
+                @GameQuit.started -= m_Wrapper.m_GameActionsCallbackInterface.OnGameQuit;
+                @GameQuit.performed -= m_Wrapper.m_GameActionsCallbackInterface.OnGameQuit;
+                @GameQuit.canceled -= m_Wrapper.m_GameActionsCallbackInterface.OnGameQuit;
+            }
+            m_Wrapper.m_GameActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @GameQuit.started += instance.OnGameQuit;
+                @GameQuit.performed += instance.OnGameQuit;
+                @GameQuit.canceled += instance.OnGameQuit;
+            }
+        }
+    }
+    public GameActions @Game => new GameActions(this);
     private int m_NewcontrolschemeSchemeIndex = -1;
     public InputControlScheme NewcontrolschemeScheme
     {
@@ -1061,5 +1125,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnSkillButton4(InputAction.CallbackContext context);
         void OnSkillCancel(InputAction.CallbackContext context);
         void OnHeroSkillClick(InputAction.CallbackContext context);
+    }
+    public interface IGameActions
+    {
+        void OnGameQuit(InputAction.CallbackContext context);
     }
 }

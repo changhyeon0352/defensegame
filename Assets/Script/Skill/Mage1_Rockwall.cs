@@ -10,12 +10,12 @@ public class Mage1_Rockwall : Skill
 
     public override void InitSetting()
     {
-        data.skillType = SkillType.NonTarget;
-        data.coolTime = 1f;
+        data.skillType = SkillType.AreaTarget;
+        data.coolTime = 20f;
         data.range = 8f;
         data.nonTargetRange = 5f;
         data.damage = 5;
-        data.duration = 12f;
+        data.duration = 10f;
     }
 
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
@@ -24,8 +24,4 @@ public class Mage1_Rockwall : Skill
         yield return null;
     }
 
-    public override void UseSkill(Transform skillTr, Hero hero)
-    {
-        
-    }
 }

@@ -11,8 +11,8 @@ public class Mage2_Sleep : Skill
 
     public override void InitSetting()
     {
-        data.skillType = SkillType.NonTarget;
-        data.coolTime = 1f;
+        data.skillType = SkillType.AreaTarget;
+        data.coolTime = 20f;
         data.range = 8f;
         data.damage = 30;
         data.duration = 10f;
@@ -23,11 +23,7 @@ public class Mage2_Sleep : Skill
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
         yield return null;
-        UseSkill(skillTr, hero);
-    }
-
-    public override void UseSkill(Transform skillTr, Hero hero)
-    {
         AoeSkill(skillTr, hero);
     }
+
 }

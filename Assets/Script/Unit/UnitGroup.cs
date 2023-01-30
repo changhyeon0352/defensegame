@@ -26,11 +26,11 @@ public class UnitGroup:MonoBehaviour
     }
     public void CheckSelected()
     {
-        bool isSelected = (GameMgr.Instance.commandMgr.SelectedGroupList.Contains(this));// this가 리스트에 속해 있다
-        if(!isSelected&& GameMgr.Instance.commandMgr.SelectedHero!=null) //선택되지 않았지만 히어로임
+        bool isSelected = (GameMgr.Instance.defenseMgr.SelectedGroupList.Contains(this));// this가 리스트에 속해 있다
+        if(!isSelected&& GameMgr.Instance.defenseMgr.SelectedHero!=null) //선택되지 않았지만 히어로임
         {
             //이것안에 히어로가 선택된 히어로랑 일치
-            isSelected = GameMgr.Instance.commandMgr.SelectedHero==this.GetComponentInChildren<Hero>();
+            isSelected = GameMgr.Instance.defenseMgr.SelectedHero==this.GetComponentInChildren<Hero>();
             if(isSelected)
             {
                 HeroState.SelectedHeroUI();
@@ -76,7 +76,7 @@ public class UnitGroup:MonoBehaviour
         unitList.Remove(unit);
         if(unitList.Count== 0)
         {
-            GameMgr.Instance.commandMgr.SelectedGroupList.Remove(this);
+            GameMgr.Instance.defenseMgr.SelectedGroupList.Remove(this);
             Destroy(gameObject);
         }
     }

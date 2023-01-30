@@ -17,6 +17,7 @@ public class UnitStat : MonoBehaviour
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] Image portrait;
     [SerializeField] Image hpImage;
+    public bool isRefresh = false;
 
     private Unit unit;
     // Start is called before the first frame update
@@ -25,23 +26,36 @@ public class UnitStat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(unit!=null)
+        if(isRefresh)
+        {
+            RefreshUnitStatWindow();
+        }
+    }
+    public void RefreshUnitStatWindow()
+    {
+        if (unit != null)
         {
             RefreshUnitStatWindow(unit);
         }
     }
-
+    
     public void RefreshUnitStatWindow(Unit unit)
     {
+        if(unit.unitData.unitType==UnitType.hero)
+        {
+            Hero hero = unit.GetComponent<Hero>();
+            unit.unitData.HeroData =hero.HeroData;
+        }
+            
         this.unit = unit;
         nameTmp.text = unit.unitData.UnitName;
         atkTmp.text = unit.Attack.ToString();
         magicTmp.text = "0";
         atkSpeedTmp.text = unit.unitData.AttackSpeed.ToString();
-        if (unit.ArmorPlus > 0)
-            armorTmp.color = Color.blue;
+        if (unit.Armor > unit.unitData.Armor)
+            armorTmp.color = Color.green;
         else { armorTmp.color = Color.white;}
-        armorTmp.text = (unit.Armor + unit.ArmorPlus).ToString();
+        armorTmp.text = (unit.Armor).ToString();
         magicArmorTmp.text = "0";
         moveSpeedTmp.text = unit.MoveSpeed.ToString();
         if(unit.MoveSpeed<unit.unitData.MoveSpeed)

@@ -18,16 +18,13 @@ public class Knight3_Vortex : Skill
         unit.TakeDamage(data.damage + hero.Attack);
     }
 
-    public override void UseSkill(Transform skillTr,Hero hero)
-    {
-        AoeSkill(skillTr, hero);
-    }
+    
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
         for (int i=0;i<data.duration;i++)
         {
-            UseSkill(skillTr, hero);
+            AoeSkill(skillTr, hero);
             yield return new WaitForSeconds(1);
         }
         

@@ -1,0 +1,68 @@
+{
+    "heroDataList": [
+        {
+            "id": 1,
+            "heroClass": 0,
+            "name": "줄리아",
+            "level": 2,
+            "exp": 0,
+            "level_Weapon": 2,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": true
+        },
+        {
+            "id": 2,
+            "heroClass": 1,
+            "name": "디스마스",
+            "level": 3,
+            "exp": 0,
+            "level_Weapon": 2,
+            "level_Armor": 2,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": false
+        },
+        {
+            "id": 3,
+            "heroClass": 0,
+            "name": "리놈",
+            "level": 1,
+            "exp": 0,
+            "level_Weapon": 1,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 4,
+            "heroClass": 1,
+            "name": "바리스탄",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        }
+    ]
+}

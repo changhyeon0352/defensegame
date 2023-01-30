@@ -32,21 +32,46 @@ public class HeroCard : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(DataMgr.Instance.FightingHeroDataList.Count<4&&!isSelected)
+        if(GameMgr.Instance.Phase==Phase.selectHero&&DataMgr.Instance.FightingHeroDataList.Count<4&&!isSelected)
         {
             AddHeroToHeroSolts(heroData);
             AddorRemoveFromList(true);
+        }
+        if(GameMgr.Instance.Phase==Phase.town)
+        {
+            Blacksmith blacksmith = FindObjectOfType<Blacksmith>();
+            Guild guild = FindObjectOfType<Guild>();
+            if (blacksmith != null)
+            {
+                HeroSlot slot = FindObjectOfType<HeroSlot>();
+                if (slot != null)
+                {
+                    slot.GiveheroDataToSlot(heroData);
+                    slot.heroDataCard = this;
+                    blacksmith.InitBlacksmithHeroInfo();
+                }
+            }
+            else if(guild!=null)
+            {
+                bool isContain=guild.IsContainData(heroData);
+                heroImage.color = isContain ? Color.white : Color.gray;
+                heroImage.transform.GetChild(0).GetComponent<Image>().enabled = !isContain;//참전표시
+                if (!isContain)
+                    guild.AddHeroData(heroData);
+                else
+                    guild.RemoveHeroData(heroData);
+            }
         }
     }
     public void AddHeroToHeroSolts(HeroData heroData)
     {
         HeroSlot[] heroSlots=UIMgr.Instance.HeroSlots;
-        for (int i = 0; i < heroSlots.Length; i++)
+        for (int i = 0; i < heroSlots.Length; i++)//왼쪽부터 보고 비어있는 슬롯에 넣음
         {
             HeroData data1 = heroSlots[i].Data;
             if (data1 == null)
             {
-                heroSlots[i].Data = heroData;
+                heroSlots[i].GiveheroDataToSlot(heroData);
                 heroSlots[i].heroDataCard = this;
                 break;
             }
@@ -56,7 +81,7 @@ public class HeroCard : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     public void AddorRemoveFromList(bool isFight)
     {
         heroImage.color = isFight ? Color.gray : Color.white;
-        heroImage.transform.GetChild(0).GetComponent<Image>().enabled = isFight;
+        heroImage.transform.GetChild(0).GetComponent<Image>().enabled = isFight;//참전표시
         isSelected = isFight;
 
     }

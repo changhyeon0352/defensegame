@@ -12,7 +12,7 @@ public class Mage4_dragonBreath : Skill
     public override void InitSetting()
     {
         data.skillType = SkillType.directional;
-        data.coolTime = 1f;
+        data.coolTime = 40f;
         data.range = 8f;
         data.nonTargetRange = 1f;
         data.damage = 10;
@@ -30,9 +30,5 @@ public class Mage4_dragonBreath : Skill
         hero.IsStopSkill = false;
     }
 
-    public override void UseSkill(Transform skillTr, Hero hero)
-    {
-        
-    }
     
 }

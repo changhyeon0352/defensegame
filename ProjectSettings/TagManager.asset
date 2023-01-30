@@ -14,6 +14,10 @@ TagManager:
   - Knight
   - Soldier
   - Hero
+  - Barracks
+  - StartStatue
+  - Blacksmith
+  - Guild
   layers:
   - Default
   - TransparentFX
@@ -24,7 +28,7 @@ TagManager:
   - Ground
   - Monster
   - effect
-  - 
+  - building
   - 
   - 
   - 

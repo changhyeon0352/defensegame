@@ -7,7 +7,7 @@ public class Knight1_sheild : Skill
 {
     public override void EffectOnUnit(Unit unit, Hero hero)
     {
-        unit.ArmorPlus = data.damage;
+        StartCoroutine(unit.AddAromor(data.damage, 0.5f));
     }
 
     public override void InitSetting()
@@ -22,35 +22,12 @@ public class Knight1_sheild : Skill
     public override IEnumerator SkillCor(Transform skillTr, Hero hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
-        double timer = data.duration;
-        while(true)
+        StartCoroutine(hero.AddAromor(data.damage * 2, data.duration));
+        for (int i = 0; i < data.duration*2; i++)
         {
-            timer -= Time.deltaTime;
-            UseSkill(skillTr, hero);
-            yield return null;
-            if (timer < 0)
-            {
-                Collider[] cols = Physics.OverlapSphere(skillTr.position, data.nonTargetRange + 2, targetLayer);
-                foreach (Collider col in cols)
-                {
-                    Unit unit = col.gameObject.GetComponent<Unit>();
-                    unit.ArmorPlus = 0;
-                }
-                break;
-            }
+            AoeSkill(skillTr, hero);
+            yield return new WaitForSeconds(0.5f);
         }
-    }
-
-    public override void UseSkill( Transform skillTr,Hero hero)
-    {
-        Collider[] cols = Physics.OverlapSphere(skillTr.position, data.nonTargetRange+2, targetLayer);
-        foreach (Collider col in cols)
-        {
-            Unit unit = col.gameObject.GetComponent<Unit>();
-            unit.ArmorPlus = 0;
-        }
-        AoeSkill(skillTr, hero);
-        hero.ArmorPlus = data.damage * 2;
     }
 
 }

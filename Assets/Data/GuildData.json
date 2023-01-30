@@ -1,0 +1,68 @@
+{
+    "heroDataList": [
+        {
+            "id": 0,
+            "heroClass": 0,
+            "name": "디스마스",
+            "level": 1,
+            "exp": 0,
+            "level_Weapon": 1,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": false
+        },
+        {
+            "id": 0,
+            "heroClass": 0,
+            "name": "시보스",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 0,
+            "heroClass": 0,
+            "name": "디스마스",
+            "level": 1,
+            "exp": 0,
+            "level_Weapon": 1,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": false
+        },
+        {
+            "id": 0,
+            "heroClass": 1,
+            "name": "오스먼드",
+            "level": 2,
+            "exp": 0,
+            "level_Weapon": 2,
+            "level_Armor": 2,
+            "level_Skills": [
+                2,
+                2,
+                2,
+                2
+            ],
+            "isDead": false
+        }
+    ]
+}

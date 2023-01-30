@@ -10,20 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
-  m_Name: Hero_Knight
+  m_Name: Monster1
   m_EditorClassIdentifier: 
-  type: 4
-  unitPortrait: {fileID: 21300000, guid: 2e0bb37bea53f3a4495388acf1f05900, type: 3}
-  unitName: "\uAE30\uC0AC"
-  hp: 1000
-  mp: 300
-  moveSpeed: 7
-  atk: 20
+  type: 1
+  unitPortrait: {fileID: 21300000, guid: 1bd8553401f3d73409c94fc3c2dac999, type: 3}
+  unitName: "\uD574\uACE8\uBCD1"
+  hp: 75
+  mp: 0
+  moveSpeed: 3
+  atk: 15
   magicPower: 0
-  attackSpeed: 1
-  cost: 80
-  attackRange: 2
-  unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}
+  attackSpeed: 0.5
+  cost: 0
+  attackRange: 1
+  searchRange: 2
+  unitPrefab: {fileID: 9085880239558194240, guid: 89cec0479aef7e947be888699ef08555,
+    type: 3}
   attackAniLength:
-  - 1.4
-  - 1.2
+  - 1
+  - 1

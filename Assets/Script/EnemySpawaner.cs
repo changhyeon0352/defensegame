@@ -21,14 +21,20 @@ public class EnemySpawaner : MonoBehaviour
         }
         if(timeCount<0)
         {
-            timeCount=coolTime;
-            SpawnMonster(0);
+            int a=Random.Range(0, 10);
+            if(monDatas.Length>1&&a<2)
+                SpawnMonster(1);
+            else
+                SpawnMonster(0);
+
+            timeCount =coolTime;
+            
         }
     }
 
     private void SpawnMonster(int index)
     {
-        Unit monster = Instantiate(EnemyPrefab, transform).GetComponent<Unit>();
+        Unit monster = Instantiate(monDatas[index].unitPrefab, transform).GetComponent<Unit>();
         monster.unitData = monDatas[index];
         monster.InitializeUnitStat();
     }

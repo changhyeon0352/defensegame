@@ -16,7 +16,7 @@ public class SkillbarUI : MonoBehaviour
     public void ChangeHeroSkill(Hero hero)
     {
         selectedHero=hero;
-        switch(hero.Data.heroClass)
+        switch(hero.HeroData.heroClass)
         {
             case HeroClass.Knight:
                 for(int i=0;i<4;i++)

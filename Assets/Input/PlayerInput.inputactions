@@ -580,6 +580,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Game",
+            "id": "8f6b169c-db81-427d-938f-3aeb29eb46ff",
+            "actions": [
+                {
+                    "name": "GameQuit",
+                    "type": "Button",
+                    "id": "a121b829-ffcc-49d6-a40a-8ae404faeddc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "16515f8e-a20d-4a04-868d-fabb61b04236",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GameQuit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

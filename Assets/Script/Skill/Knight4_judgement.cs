@@ -6,12 +6,12 @@ public class Knight4_judgement : Skill
 {
     public override void EffectOnUnit(Unit unit, Hero hero)
     {
-        throw new System.NotImplementedException();
+        unit.TakeDamage(data.damage + hero.Attack);
     }
 
     public override void InitSetting()
     {
-        data.skillType = SkillType.Target;
+        data.skillType = SkillType.UnitTarget;
         data.coolTime = 50f;
         data.range = 5f;
         data.damage = 10;
@@ -25,12 +25,10 @@ public class Knight4_judgement : Skill
         for (int i = 0; i < 16; i++)
         {
             yield return sec;
-            UseSkill(skillTr, hero);
+            Unit unit =skillTr.GetComponent<Unit>();
+            EffectOnUnit(unit, hero);
         }
     }
 
-    public override void UseSkill(Transform skillTr, Hero hero)
-    {
-        skillTr.GetComponent<Unit>().TakeDamage(data.damage + hero.Attack);
-    }
+   
 }

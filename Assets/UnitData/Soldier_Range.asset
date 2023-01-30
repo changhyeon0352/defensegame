@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
-  m_Name: Monster1
+  m_Name: Soldier_Range
   m_EditorClassIdentifier: 
-  type: 1
-  unitPortrait: {fileID: 21300000, guid: 1bd8553401f3d73409c94fc3c2dac999, type: 3}
-  unitName: "\uD574\uACE8\uBCD1"
-  hp: 100
+  type: 3
+  unitPortrait: {fileID: 21300000, guid: b993b5e91b2cfb0468163165ff52bf44, type: 3}
+  unitName: "\uAD81\uBCD1"
+  hp: 50
   mp: 0
   moveSpeed: 3
-  atk: 8
+  atk: 10
   magicPower: 0
   attackSpeed: 0.5
-  cost: 0
-  attackRange: 1
-  unitPrefab: {fileID: 9085880239558194240, guid: 89cec0479aef7e947be888699ef08555,
-    type: 3}
+  cost: 100
+  attackRange: 10
+  searchRange: 10
+  unitPrefab: {fileID: 169604, guid: 957843ffc7bd0384e825be4dd497495d, type: 3}
   attackAniLength:
-  - 1
-  - 1
+  - 2.167
+  - 2.167
