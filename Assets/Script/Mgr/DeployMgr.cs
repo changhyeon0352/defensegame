@@ -9,7 +9,6 @@ using UnityEngine.InputSystem.Controls;
 public class DeployMgr : MonoBehaviour
 {
     public GameObject[] heroPrefabs;
-    //public GameObject[] unitPrefabs;
     private GameObject spawnHeroPrefab;
     public GameObject unitGroupPrefab;
     PlayerInput inputActions;
@@ -24,6 +23,7 @@ public class DeployMgr : MonoBehaviour
     private int nowUnitSpawnPoint;
     public UnitData[] unitDatas;
     private UnitData spawnUnitData;
+    public UnitData SpawnUnitData { get => spawnUnitData; }
 
     public int NowUnitSpawnPoint { get { return nowUnitSpawnPoint; } 
         set { nowUnitSpawnPoint = value; UIMgr.Instance.UpdateSpawnPoint(nowUnitSpawnPoint, unitSpawnPoint); } }
@@ -35,26 +35,25 @@ public class DeployMgr : MonoBehaviour
     }
     private void OnEnable()
     {
-        inputActions.Setting.Enable();
-        inputActions.Setting.NewUnitGroup.performed     += OnStartSetting;
-        inputActions.Setting.scrollUpDown.performed     += OnAddorRemoveUnitColumn;
-        inputActions.Setting.RotateUnitGroup.performed  += OnRotateUnitGroup;
-        inputActions.Setting.RotateUnitGroup.canceled   += (_) => dir = 0;
-        inputActions.Setting.Click.performed            += OnCompleteSetting;
-        inputActions.Setting.SwitchRow.performed        += OnChangeRow;
-        inputActions.Setting.ReSetting.performed        += OnResetting;
-        inputActions.Setting.Cancel.performed += OnCancel;
+        inputActions.Deploy.Enable();
+        inputActions.Deploy.NewUnitGroup.performed     += OnStartSetting;
+        inputActions.Deploy.scrollUpDown.performed     += OnAddorRemoveUnitColumn;
+        inputActions.Deploy.RotateUnitGroup.performed  += OnRotateUnitGroup;
+        inputActions.Deploy.RotateUnitGroup.canceled   += (_) => dir = 0;
+        inputActions.Deploy.Click.performed            += OnCompleteSetting;
+        inputActions.Deploy.SwitchRow.performed        += OnChangeRow;
+        inputActions.Deploy.ReSetting.performed        += OnResetting;
+        inputActions.Deploy.Cancel.performed += OnCancel;
         NowUnitSpawnPoint = unitSpawnPoint;
     }
     private void OnDisable()
     {
-        inputActions.Setting.Disable();
+        inputActions.Deploy.Disable();
     }
 
     private void Start()
     {
-        inputActions.Setting.Click.Disable();
-        inputActions.Setting.scrollUpDown.Disable();
+        
     }
 
     private void Update()
@@ -76,11 +75,11 @@ public class DeployMgr : MonoBehaviour
         if (unitGroup == null && spawnUnitData != null)
         {
             StartSetting();
-            inputActions.Setting.Click.Enable();
+            inputActions.Deploy.Click.Enable();
             inputActions.Command.Select.Disable();
-            inputActions.Setting.scrollUpDown.Enable();
+            inputActions.Deploy.scrollUpDown.Enable();
             inputActions.Camera.CameraZoom.Disable();
-            inputActions.Setting.SwitchRow.Enable();
+            inputActions.Deploy.SwitchRow.Enable();
         }
     }
     //유닛 배치중 유닛그룹에 열을 추가/제거 (마우스스크롤)
@@ -91,11 +90,11 @@ public class DeployMgr : MonoBehaviour
             float scroll = obj.ReadValue<float>();
             if (scroll < 0)
             {
-                RemoveLastColumn();
+                //RemoveLastColumn();
             }
             else
             {
-                AddUnitColumn();
+                //AddUnitColumn();
             }
         }
     }
@@ -155,8 +154,8 @@ public class DeployMgr : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
         {
-            int unitIndex = (int)hit.transform.GetComponent<Unit>().unitData.unitType - 2;// none,monster 다음부터임
-            UIMgr.Instance.SelectedSpawnButton(unitIndex);
+            int unitIndex = (int)hit.transform.GetComponent<Unit>().UnitData.unitType - 2;// none,monster 다음부터임
+            //UIMgr.Instance.SelectSpawnUnitUI(unitIndex);
             unitGroupTr = hit.transform.parent.parent;
             unitGroup = unitGroupTr.GetComponent<UnitGroup>();
             groupRow = unitGroup.rowColumn.x;
@@ -170,12 +169,12 @@ public class DeployMgr : MonoBehaviour
             {
                 ShaderChange(UnitShader.transparentShader);
             }
-            inputActions.Setting.Click.Enable();
-            inputActions.Setting.ReSetting.Disable();
+            inputActions.Deploy.Click.Enable();
+            inputActions.Deploy.ReSetting.Disable();
             inputActions.Command.Select.Disable();
-            inputActions.Setting.scrollUpDown.Enable();
+            inputActions.Deploy.scrollUpDown.Enable();
             inputActions.Camera.CameraZoom.Disable();
-            inputActions.Setting.SwitchRow.Enable();
+            inputActions.Deploy.SwitchRow.Enable();
         }
     }
 
@@ -210,7 +209,7 @@ public class DeployMgr : MonoBehaviour
             spot.transform.rotation = unitGroupTr.rotation;
             spot.transform.parent = unitGroup.spotsTr;
             Unit unit = unitGroup.unitsTr.GetChild(i).GetComponent<Unit>();
-            unit.goalTr = spot.transform;
+            //unit.goalTr = spot.transform;
             unit.ChangeState(UnitState.Move);
             unit.InitializeUnitStat();
         }
@@ -218,15 +217,15 @@ public class DeployMgr : MonoBehaviour
         unitGroupTr.parent = unitGroup.AllyGroups;//유닛그룹이 AllyGroups의 자식으로 계층이동
         if (spawnUnitData != null)
             unitGroup.unitType = spawnUnitData.unitType;                      //유닛타입결정
-        unitGroup.InitializeUnitList();
+        unitGroup.SetUnitGroupSkill();
         unitGroupTr = null;
         unitGroup = null;
-        inputActions.Setting.Click.Disable();
-        inputActions.Setting.scrollUpDown.Disable();
+        inputActions.Deploy.Click.Disable();
+        inputActions.Deploy.scrollUpDown.Disable();
         inputActions.Camera.CameraZoom.Enable();
-        inputActions.Setting.ReSetting.Enable();
+        inputActions.Deploy.ReSetting.Enable();
         inputActions.Command.Select.Enable();
-        inputActions.Setting.SwitchRow.Disable();
+        inputActions.Deploy.SwitchRow.Disable();
     }
     //스폰할 유닛 변경함수
     public int SelectSpawnUnitType(int i)
@@ -253,7 +252,7 @@ public class DeployMgr : MonoBehaviour
                 if (hero != null)
                 {
                     hero.HeroData = data;
-                    hero.unitData = unitDatas[2 + classNum];
+                    hero.SetUnitData(unitDatas[2 + classNum]);
                     hero.InitializeUnitStat();
                 }
                 ShaderChange(UnitShader.transparentShader);
@@ -307,14 +306,14 @@ public class DeployMgr : MonoBehaviour
     //유닛그룹에 유닛 1열을 추가
     void AddUnitColumn()
     {
-        for(int i=0;i<groupRow;i++)
+        for (int i = 0; i < groupRow; i++)
         {
-            if(nowUnitSpawnPoint > spawnUnitData.Cost)
+            if (nowUnitSpawnPoint > spawnUnitData.Cost)
             {
-                NowUnitSpawnPoint-=spawnUnitData.Cost;
+                NowUnitSpawnPoint -= spawnUnitData.Cost;
                 GameObject obj = Instantiate(spawnUnitData.unitPrefab, unitGroup.unitsTr);
                 AllyUnit allyUnit = obj.GetComponent<AllyUnit>();
-                allyUnit.unitData = spawnUnitData;
+                allyUnit.SetUnitData(spawnUnitData);
                 unitGroup.AddUnitList(allyUnit);
                 ShaderChange(UnitShader.transparentShader);
             }
@@ -322,20 +321,20 @@ public class DeployMgr : MonoBehaviour
     }
     //배치중인 유닛그룹의 유닛 마지막 열 삭제
     void RemoveLastColumn()
-    { 
+    {
         if (unitGroup.NumUnitList > groupRow)
-        { 
-            for(int i=0; i<groupRow;i++)
+        {
+            for (int i = 0; i < groupRow; i++)
             {
                 RemoveLastToList();
             }
         }
     }
     //배치중인 유닛그룹의 마지막 유닛을 삭제하는 함수
-    void RemoveLastToList(bool isCancel=false)
+    void RemoveLastToList(bool isCancel = false)
     {
         int limitNum = isCancel ? 0 : 1;
-        if(unitGroup.NumUnitList > limitNum*groupRow)
+        if (unitGroup.NumUnitList > limitNum * groupRow)
         {
             GameObject obj = unitGroup.unitsTr.GetChild(unitGroup.NumUnitList - 1).gameObject;
             AllyUnit allyUnit = obj.GetComponent<AllyUnit>();
@@ -351,9 +350,9 @@ public class DeployMgr : MonoBehaviour
         for (int i = 0; i < skinRen.Length; i++)
         {
             skinRen[i].material.SetInt("_IsSpawning", (int)_type);
-            if(_type==UnitShader.transparentShader)
+            if (_type == UnitShader.transparentShader)
             {
-                skinRen[i].material.SetFloat("_Alpha",0.2f);
+                skinRen[i].material.SetFloat("_Alpha", 0.2f);
             }
             else
             {

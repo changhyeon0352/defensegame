@@ -14,7 +14,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] Texture2D cursorTargeting;
     [SerializeField] Texture2D cursorFindTarget;
     public GameObject skilldurationUI;
-    public UnitStat unitStatUI;
+    public UnitStatUI unitStatUI;
     public SkillbarUI skillbarUI;
     public HPbar hpbar;
     public Sprite[] heroSprites;
@@ -183,23 +183,7 @@ public class UIMgr : Singleton<UIMgr>
             heroState.InitializeHeroState(heroData);
         }
     }
-    public void SelectedSpawnButton(int index)
-    {
-        int unitCost = GameMgr.Instance.settingMgr.SelectSpawnUnitType(index);
-        for (int i = 0; i < spawnImages.Count; i++)
-        {
-            if (i == index)
-            {
-                spawnImages[i].transform.localScale = Vector3.one * 1.1f;
-                spawnImages[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = unitCost.ToString();
-            }
-            else
-            {
-                spawnImages[i].transform.localScale = Vector3.one * 1f;
-                spawnImages[i].transform.GetComponentInChildren<TextMeshProUGUI>().text = "";
-            }
-        }
-    }
+    
     private void ChangePhase(Phase _phase)
     {
         switch (GameMgr.Instance.Phase)
@@ -243,7 +227,7 @@ public class UIMgr : Singleton<UIMgr>
                     spawnImages.Add(spawnUiTr.GetChild(i).GetComponent<Image>());
                     spawnButtons.Add(spawnUiTr.GetChild(i).GetComponent<Button>());
                     int index = i;
-                    spawnButtons[i].onClick.AddListener(() => SelectedSpawnButton(index));
+                    //spawnButtons[i].onClick.AddListener(() => SelectSpawnUnitUI(index)); 미수정
                 }
                 break;
             case Phase.defense:
@@ -303,7 +287,7 @@ public class UIMgr : Singleton<UIMgr>
     }
     public void ToggleGameQuitWindow()
     {
-        gameQuitWindow.SetActive(!gameQuitWindow.active);
+        gameQuitWindow.SetActive(!gameQuitWindow.activeSelf);
 
     }
     public void ChangeBuildingNameColor(BuildingType buildingType,Color color)

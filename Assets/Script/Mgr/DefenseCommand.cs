@@ -82,6 +82,8 @@ public class DefenseCommand : MonoBehaviour
 
     private bool SelectHero(int a)
     {
+        if (fightingHeroList.Count == 0)
+            return false;
         Hero hero= fightingHeroList[a];
         
         if(!hero.IsDead)
@@ -109,7 +111,7 @@ public class DefenseCommand : MonoBehaviour
     {
         inputActions.Command.Disable();
     }
-    /// 스킬인디케이터가 있으면 마우스 위치에 표시
+    // 스킬인디케이터가 있으면 마우스 위치에 표시
     private void Update()
     {
         if (skillIndicatorTrs.Count > 0)
@@ -136,7 +138,7 @@ public class DefenseCommand : MonoBehaviour
         
         if (IsHeroSelected())
         {
-            GameMgr.Instance.skillController.ShowSkillRange(SelectedHero.unitData.AttackRange);
+            GameMgr.Instance.skillController.ShowSkillRange(SelectedHero.UnitData.AttackRange);
             inputActions.Command.Select.Disable();
             inputActions.Command.skillClick.Enable();
             usingSkill = BasicSkills.AttackMove;
@@ -155,7 +157,7 @@ public class DefenseCommand : MonoBehaviour
         }
         if (IsHeroSelected())
         {
-            selectedHero.isattackMove = false;
+            //selectedHero.isattackMove = false;
             MoveOrSetTarget(moveToPrefabs);
         }
     }
@@ -273,7 +275,7 @@ public class DefenseCommand : MonoBehaviour
         {
             skillIndicatorTrs.Add(Instantiate(skillIndicatorPrefabs[0]).transform);
             skillIndicatorTrs[i].localScale = new Vector3(seletedGroupList[i].rowColumn.y, 1,
-                seletedGroupList[i].rowColumn.x) * GameMgr.Instance.settingMgr.UnitOffset;
+                seletedGroupList[i].rowColumn.x) * GameMgr.Instance.Deployer.UnitOffset;
             spots.Add(Instantiate(seletedGroupList[i].spotsTr));
 
             spots[i].parent = skillIndicatorTrs[i];
@@ -300,7 +302,7 @@ public class DefenseCommand : MonoBehaviour
         {
             case BasicSkills.AttackMove:
                 UIMgr.Instance.ChangeCursor(CursorType.Default);
-                SelectedHero.isattackMove = true;
+                //SelectedHero.isattackMove = true;
                 MoveOrSetTarget(attackToPrefabs);
                 GameMgr.Instance.skillController.SkillEnd();
                 break;

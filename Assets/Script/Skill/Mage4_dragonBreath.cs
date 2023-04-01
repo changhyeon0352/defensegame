@@ -6,7 +6,7 @@ public class Mage4_dragonBreath : Skill
 {
     public override void EffectOnUnit(Unit unit, Hero hero)
     {
-        unit.TakeDamage(data.damage + unit.unitData.MagicPower / 2);
+        unit.TakeDamage(data.damage + unit.UnitData.MagicPower / 2);
     }
 
     public override void InitSetting()

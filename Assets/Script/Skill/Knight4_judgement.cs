@@ -6,7 +6,7 @@ public class Knight4_judgement : Skill
 {
     public override void EffectOnUnit(Unit unit, Hero hero)
     {
-        unit.TakeDamage(data.damage + hero.Attack);
+        unit.TakeDamage(data.damage + hero.AttackPoint);
     }
 
     public override void InitSetting()

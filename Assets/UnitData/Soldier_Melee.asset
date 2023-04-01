@@ -20,6 +20,7 @@ MonoBehaviour:
   moveSpeed: 3
   atk: 10
   magicPower: 0
+  armor: 0
   attackSpeed: 0.8
   cost: 50
   attackRange: 1
@@ -27,4 +28,3 @@ MonoBehaviour:
   unitPrefab: {fileID: 169604, guid: 51eae40567d3ff847bafc22ed4abaa6a, type: 3}
   attackAniLength:
   - 1.4
-  - 1.2

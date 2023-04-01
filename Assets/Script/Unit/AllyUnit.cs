@@ -25,12 +25,12 @@ public class AllyUnit : Unit
     {
         if (isattackMove)
         {
-            base.MoveUpdate();
+            //base.MoveUpdate();
         }
         else
         {
-            agent.SetDestination(goalTr.position);          //목표로 가기
-            if (agent.remainingDistance < stopRange && !agent.pathPending)                  //목표에 다가가면 Idle로 변경
+            navMesh.SetDestination(goalTr.position);          //목표로 가기
+            if (navMesh.remainingDistance < unitStat.attackRange && !navMesh.pathPending)                  //목표에 다가가면 Idle로 변경
             {
                 ChangeState(UnitState.Idle);
                 isattackMove = true;
@@ -42,12 +42,12 @@ public class AllyUnit : Unit
         int multipleNum = 2;
         for(int i=0; i<10; i++)
         {
-            if (SearchAndChase(searchRange*multipleNum))
-            {
-                ChangeState(UnitState.Chase);
-                isProvoked = true;
-                break;
-            }
+            //if (SearchAndChase(unitStat.searchRange*multipleNum))
+            //{
+            //    ChangeState(UnitState.Chase);
+            //    isProvoked = true;
+            //    break;
+            //}
             multipleNum *= multipleNum;
 
         }
@@ -63,5 +63,24 @@ public class AllyUnit : Unit
         
         base.Die();
     }
-    
+
+    protected override void IdleUpdate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void ChaseUpdate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void AttackUpdate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Attack()
+    {
+        throw new System.NotImplementedException();
+    }
 }

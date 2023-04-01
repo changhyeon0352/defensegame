@@ -112,7 +112,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Setting"",
+            ""name"": ""Deploy"",
             ""id"": ""c7aadc0e-47e6-4d72-a8a8-2c4f8cd1e8fe"",
             ""actions"": [
                 {
@@ -673,15 +673,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Camera_CameraRotateOnOff = m_Camera.FindAction("CameraRotateOnOff", throwIfNotFound: true);
         m_Camera_CameraZoom = m_Camera.FindAction("CameraZoom", throwIfNotFound: true);
         m_Camera_ShowHero = m_Camera.FindAction("ShowHero", throwIfNotFound: true);
-        // Setting
-        m_Setting = asset.FindActionMap("Setting", throwIfNotFound: true);
-        m_Setting_NewUnitGroup = m_Setting.FindAction("NewUnitGroup", throwIfNotFound: true);
-        m_Setting_scrollUpDown = m_Setting.FindAction("scrollUpDown", throwIfNotFound: true);
-        m_Setting_RotateUnitGroup = m_Setting.FindAction("RotateUnitGroup", throwIfNotFound: true);
-        m_Setting_Click = m_Setting.FindAction("Click", throwIfNotFound: true);
-        m_Setting_ReSetting = m_Setting.FindAction("ReSetting", throwIfNotFound: true);
-        m_Setting_SwitchRow = m_Setting.FindAction("SwitchRow", throwIfNotFound: true);
-        m_Setting_Cancel = m_Setting.FindAction("Cancel", throwIfNotFound: true);
+        // Deploy
+        m_Deploy = asset.FindActionMap("Deploy", throwIfNotFound: true);
+        m_Deploy_NewUnitGroup = m_Deploy.FindAction("NewUnitGroup", throwIfNotFound: true);
+        m_Deploy_scrollUpDown = m_Deploy.FindAction("scrollUpDown", throwIfNotFound: true);
+        m_Deploy_RotateUnitGroup = m_Deploy.FindAction("RotateUnitGroup", throwIfNotFound: true);
+        m_Deploy_Click = m_Deploy.FindAction("Click", throwIfNotFound: true);
+        m_Deploy_ReSetting = m_Deploy.FindAction("ReSetting", throwIfNotFound: true);
+        m_Deploy_SwitchRow = m_Deploy.FindAction("SwitchRow", throwIfNotFound: true);
+        m_Deploy_Cancel = m_Deploy.FindAction("Cancel", throwIfNotFound: true);
         // Test
         m_Test = asset.FindActionMap("Test", throwIfNotFound: true);
         m_Test_CameraStop = m_Test.FindAction("CameraStop", throwIfNotFound: true);
@@ -814,59 +814,59 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     }
     public CameraActions @Camera => new CameraActions(this);
 
-    // Setting
-    private readonly InputActionMap m_Setting;
-    private ISettingActions m_SettingActionsCallbackInterface;
-    private readonly InputAction m_Setting_NewUnitGroup;
-    private readonly InputAction m_Setting_scrollUpDown;
-    private readonly InputAction m_Setting_RotateUnitGroup;
-    private readonly InputAction m_Setting_Click;
-    private readonly InputAction m_Setting_ReSetting;
-    private readonly InputAction m_Setting_SwitchRow;
-    private readonly InputAction m_Setting_Cancel;
-    public struct SettingActions
+    // Deploy
+    private readonly InputActionMap m_Deploy;
+    private IDeployActions m_DeployActionsCallbackInterface;
+    private readonly InputAction m_Deploy_NewUnitGroup;
+    private readonly InputAction m_Deploy_scrollUpDown;
+    private readonly InputAction m_Deploy_RotateUnitGroup;
+    private readonly InputAction m_Deploy_Click;
+    private readonly InputAction m_Deploy_ReSetting;
+    private readonly InputAction m_Deploy_SwitchRow;
+    private readonly InputAction m_Deploy_Cancel;
+    public struct DeployActions
     {
         private @PlayerInput m_Wrapper;
-        public SettingActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @NewUnitGroup => m_Wrapper.m_Setting_NewUnitGroup;
-        public InputAction @scrollUpDown => m_Wrapper.m_Setting_scrollUpDown;
-        public InputAction @RotateUnitGroup => m_Wrapper.m_Setting_RotateUnitGroup;
-        public InputAction @Click => m_Wrapper.m_Setting_Click;
-        public InputAction @ReSetting => m_Wrapper.m_Setting_ReSetting;
-        public InputAction @SwitchRow => m_Wrapper.m_Setting_SwitchRow;
-        public InputAction @Cancel => m_Wrapper.m_Setting_Cancel;
-        public InputActionMap Get() { return m_Wrapper.m_Setting; }
+        public DeployActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @NewUnitGroup => m_Wrapper.m_Deploy_NewUnitGroup;
+        public InputAction @scrollUpDown => m_Wrapper.m_Deploy_scrollUpDown;
+        public InputAction @RotateUnitGroup => m_Wrapper.m_Deploy_RotateUnitGroup;
+        public InputAction @Click => m_Wrapper.m_Deploy_Click;
+        public InputAction @ReSetting => m_Wrapper.m_Deploy_ReSetting;
+        public InputAction @SwitchRow => m_Wrapper.m_Deploy_SwitchRow;
+        public InputAction @Cancel => m_Wrapper.m_Deploy_Cancel;
+        public InputActionMap Get() { return m_Wrapper.m_Deploy; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(SettingActions set) { return set.Get(); }
-        public void SetCallbacks(ISettingActions instance)
+        public static implicit operator InputActionMap(DeployActions set) { return set.Get(); }
+        public void SetCallbacks(IDeployActions instance)
         {
-            if (m_Wrapper.m_SettingActionsCallbackInterface != null)
+            if (m_Wrapper.m_DeployActionsCallbackInterface != null)
             {
-                @NewUnitGroup.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnNewUnitGroup;
-                @NewUnitGroup.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnNewUnitGroup;
-                @NewUnitGroup.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnNewUnitGroup;
-                @scrollUpDown.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnScrollUpDown;
-                @scrollUpDown.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnScrollUpDown;
-                @scrollUpDown.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnScrollUpDown;
-                @RotateUnitGroup.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnRotateUnitGroup;
-                @RotateUnitGroup.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnRotateUnitGroup;
-                @RotateUnitGroup.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnRotateUnitGroup;
-                @Click.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnClick;
-                @Click.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnClick;
-                @Click.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnClick;
-                @ReSetting.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnReSetting;
-                @ReSetting.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnReSetting;
-                @ReSetting.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnReSetting;
-                @SwitchRow.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
-                @SwitchRow.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
-                @SwitchRow.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnSwitchRow;
-                @Cancel.started -= m_Wrapper.m_SettingActionsCallbackInterface.OnCancel;
-                @Cancel.performed -= m_Wrapper.m_SettingActionsCallbackInterface.OnCancel;
-                @Cancel.canceled -= m_Wrapper.m_SettingActionsCallbackInterface.OnCancel;
+                @NewUnitGroup.started -= m_Wrapper.m_DeployActionsCallbackInterface.OnNewUnitGroup;
+                @NewUnitGroup.performed -= m_Wrapper.m_DeployActionsCallbackInterface.OnNewUnitGroup;
+                @NewUnitGroup.canceled -= m_Wrapper.m_DeployActionsCallbackInterface.OnNewUnitGroup;
+                @scrollUpDown.started -= m_Wrapper.m_DeployActionsCallbackInterface.OnScrollUpDown;
+                @scrollUpDown.performed -= m_Wrapper.m_DeployActionsCallbackInterface.OnScrollUpDown;
+                @scrollUpDown.canceled -= m_Wrapper.m_DeployActionsCallbackInterface.OnScrollUpDown;
+                @RotateUnitGroup.started -= m_Wrapper.m_DeployActionsCallbackInterface.OnRotateUnitGroup;
+                @RotateUnitGroup.performed -= m_Wrapper.m_DeployActionsCallbackInterface.OnRotateUnitGroup;
+                @RotateUnitGroup.canceled -= m_Wrapper.m_DeployActionsCallbackInterface.OnRotateUnitGroup;
+                @Click.started -= m_Wrapper.m_DeployActionsCallbackInterface.OnClick;
+                @Click.performed -= m_Wrapper.m_DeployActionsCallbackInterface.OnClick;
+                @Click.canceled -= m_Wrapper.m_DeployActionsCallbackInterface.OnClick;
+                @ReSetting.started -= m_Wrapper.m_DeployActionsCallbackInterface.OnReSetting;
+                @ReSetting.performed -= m_Wrapper.m_DeployActionsCallbackInterface.OnReSetting;
+                @ReSetting.canceled -= m_Wrapper.m_DeployActionsCallbackInterface.OnReSetting;
+                @SwitchRow.started -= m_Wrapper.m_DeployActionsCallbackInterface.OnSwitchRow;
+                @SwitchRow.performed -= m_Wrapper.m_DeployActionsCallbackInterface.OnSwitchRow;
+                @SwitchRow.canceled -= m_Wrapper.m_DeployActionsCallbackInterface.OnSwitchRow;
+                @Cancel.started -= m_Wrapper.m_DeployActionsCallbackInterface.OnCancel;
+                @Cancel.performed -= m_Wrapper.m_DeployActionsCallbackInterface.OnCancel;
+                @Cancel.canceled -= m_Wrapper.m_DeployActionsCallbackInterface.OnCancel;
             }
-            m_Wrapper.m_SettingActionsCallbackInterface = instance;
+            m_Wrapper.m_DeployActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @NewUnitGroup.started += instance.OnNewUnitGroup;
@@ -893,7 +893,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             }
         }
     }
-    public SettingActions @Setting => new SettingActions(this);
+    public DeployActions @Deploy => new DeployActions(this);
 
     // Test
     private readonly InputActionMap m_Test;
@@ -1098,7 +1098,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnCameraZoom(InputAction.CallbackContext context);
         void OnShowHero(InputAction.CallbackContext context);
     }
-    public interface ISettingActions
+    public interface IDeployActions
     {
         void OnNewUnitGroup(InputAction.CallbackContext context);
         void OnScrollUpDown(InputAction.CallbackContext context);

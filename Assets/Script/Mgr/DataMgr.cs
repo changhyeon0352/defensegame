@@ -79,7 +79,7 @@ public class DataMgr : Singleton<DataMgr>
     }
     
     //인벤토리
-    private void Awake()
+    override protected void Awake()
     {
         dataPath = Path.Combine(Application.streamingAssetsPath, "Data");
         LoadDataFromJson(DataType.HeroDatas);
@@ -119,7 +119,7 @@ public class DataMgr : Singleton<DataMgr>
     //몬스터가 타운에 들어가면 타운 피 깍음
     public void MonsterEnterTown(Unit unit)
     {
-        defenseData.townHp -= unit.unitData.Atk/2;
+        defenseData.townHp -= unit.UnitData.Atk/2;
         if(defenseData.townHp<=0)
         {
             //게임 엔드
@@ -244,6 +244,10 @@ public class DataMgr : Singleton<DataMgr>
                 break;
         }
         return result;
+    }
+    public int GetSpawnPoint()
+    {
+        return barracksData.values[(int)BarracksUpgradeType.unitPoint*5+barracksData.upgladeNums[2]];
     }
     public string GetBlacksmithInfo(UpgradeInfoType infoType,int iType, int step)
     {

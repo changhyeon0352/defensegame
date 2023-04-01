@@ -521,7 +521,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9085880239558289504}
   - component: {fileID: 2483749282430846178}
+  - component: {fileID: 6368355304234074355}
   - component: {fileID: 9097893891522991812}
+  - component: {fileID: 4582681100256606630}
   - component: {fileID: 212324590753288489}
   - component: {fileID: 9085880239548663754}
   - component: {fileID: 9085880238419732540}
@@ -563,15 +565,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71f361e62aacf5548a30501c0c3125a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitData: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
   isProvoked: 0
   isSleep: 0
-  armor: 0
-  shieldbuff: {fileID: 0}
   goalTr: {fileID: 0}
+--- !u!114 &6368355304234074355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085880239558194240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e199ef3af689341ac99fe528dc16af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &9097893891522991812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,6 +593,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c52d0294da19ae94bab720979fefa2ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4582681100256606630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085880239558194240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ab6cd67055cbe47af3ee8f4aaec3a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &212324590753288489

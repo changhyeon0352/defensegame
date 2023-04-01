@@ -1,64 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
-public class AllyRange : AllyUnit
+public class AllyRange : FixedUnit,ISelect
 {
     BowLoadShot bowLoadShot = null;
     public float shotRange = 10f;
-    private bool isShotSpot=false;
     protected override void Awake()
     {
         base.Awake();
         bowLoadShot = GetComponent<BowLoadShot>();
     }
 
-    protected override void IdleUpdate()
-    {
-        //// 아군유닛 대기상태
-        //// 아군유닛 이동으로 전환
-        ////궁수는  Attack 전환
-        ////전사는  Chase 전환
-        //SearchAndChase(searchRange);
-        //if (goalTr != null)
-        //    transform.LookAt(goalTr.forward + transform.position);
-        Transform enemyTr=SearchEnemy(shotRange);
-        if(enemyTr!=null)
-        {
-            bowLoadShot.target = enemyTr;
-            ChangeState(UnitState.Attack);
-        }
-    }
 
-    protected override void AttackUpdate()
-    {
-        timeElapsed -= Time.deltaTime;
-        if (bowLoadShot.target != null)
-        {
-            transform.LookAt(bowLoadShot.target);
-            if (timeElapsed < 0)
-            {
-                float distance = Vector3.Distance(transform.position, bowLoadShot.target.position);
-                if(distance<shotRange+0.6f||isShotSpot)
-                {
-                    anim.SetTrigger("Attack");
-                    timeElapsed = unitData.AttackSpeed;
-                }
-                else
-                    ChangeState(UnitState.Idle);
-            }
-            
-        }
-        else
-        {
-            ChangeState(UnitState.Idle);
-        }
 
-    }
     public void CheckTargetAlive()
     {
-        Collider col = bowLoadShot.target.GetComponent<Collider>();
-        if((col==null||!col.enabled)&&!isShotSpot)
+        if(target==null)
+            return;
+        Collider col = target.GetComponent<Collider>();
+        if ((col == null || !col.enabled) && !isShotSpot)
         {
             ChangeState(UnitState.Idle);
         }
@@ -68,15 +30,28 @@ public class AllyRange : AllyUnit
         ChangeState(UnitState.Idle);
         bowLoadShot.ShotAngle = 5;
         isShotSpot = false;
-        AttackSpeed=unitData.AttackSpeed;
+        SetAttackSpeed( unitData.AttackSpeed);
     }
     public void ShotSpotMode(Transform targetTr)
     {
         bowLoadShot.ShotAngle = 40;
-        bowLoadShot.target = targetTr;
+        bowLoadShot.SetBowTarget(targetTr);
         ChangeState(UnitState.Attack);
         isShotSpot = true;
-        AttackSpeed = unitData.AttackSpeed*1.3f;
+        SetAttackSpeed(unitData.AttackSpeed*1.3f);
     }
-    
+
+    public void Select()
+    {
+    }
+
+    public override void Attack()
+    {
+        
+    }
+
+    public override void SetTarget(Transform target)
+    {
+        bowLoadShot.SetBowTarget(target);
+    }
 }

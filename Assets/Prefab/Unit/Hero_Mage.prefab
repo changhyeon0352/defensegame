@@ -659,6 +659,8 @@ GameObject:
   - component: {fileID: 3641313431695282749}
   - component: {fileID: 4834599386542768203}
   - component: {fileID: 6658563940566351950}
+  - component: {fileID: 7410359771512289291}
+  - component: {fileID: 1009437042869011507}
   m_Layer: 3
   m_Name: Hero_Mage
   m_TagString: Hero
@@ -731,21 +733,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 147e57a88b3ace249a049d6766d77a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitData: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
   isProvoked: 0
-  armor: 0
-  shieldbuff: {fileID: 2336442116169550887}
+  isSleep: 0
   goalTr: {fileID: 0}
-  selectedMark: {fileID: 6101159476739162706}
   heroState: {fileID: 0}
   energyBoltPrefab: {fileID: 1136871183823626, guid: ce2dcc1e43943004eb931b59eba8e52f,
     type: 3}
   tipOfStaff: {fileID: 3789588931821636389}
   rangeforGizmo: 0
-  isattackMove: 0
 --- !u!54 &3641313431695282749
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -769,7 +767,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248815240492774}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -802,6 +800,30 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &7410359771512289291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248815240492774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ab6cd67055cbe47af3ee8f4aaec3a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1009437042869011507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248815240492774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e199ef3af689341ac99fe528dc16af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1251583507443948
 GameObject:
   m_ObjectHideFlags: 0
@@ -2799,12 +2821,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 930679483881926806}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &2336442116169550887 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 3208469172170980529, guid: 4dce3432376cccc4790d8a3630e9518f,
-    type: 3}
-  m_PrefabInstance: {fileID: 930679483881926806}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8489450634981124025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2957,12 +2973,6 @@ PrefabInstance:
 --- !u!4 &6101159476739162705 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2412586242081842664, guid: 193201be5d5542249a4338c35fcf89af,
-    type: 3}
-  m_PrefabInstance: {fileID: 8489450634981124025}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6101159476739162706 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2412586242081842667, guid: 193201be5d5542249a4338c35fcf89af,
     type: 3}
   m_PrefabInstance: {fileID: 8489450634981124025}
   m_PrefabAsset: {fileID: 0}

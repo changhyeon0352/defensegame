@@ -6,10 +6,11 @@ using UnityEngine;
 
 public class UnitGroup:MonoBehaviour
 {
-    [SerializeField]List<AllyUnit> unitList;
+    [SerializeField]List<Unit> unitList;
     public UnitType unitType = UnitType.none;
     public Transform unitsTr;
     public Transform spotsTr;
+    //유닛그룹의 부모가 될 오브젝트
     public Transform AllyGroups;
     public Vector2Int rowColumn=Vector2Int.zero;
 
@@ -17,12 +18,12 @@ public class UnitGroup:MonoBehaviour
 
     public BasicSkills GroupSkill { get => groupSkill; }
     public int NumUnitList { get => unitList.Count; }
-    public List<AllyUnit> UnitList { get => unitList; }
+    public List<Unit> UnitList { get => unitList; }
 
     private void Awake()
     {
-        unitList = new List<AllyUnit>();
-        AllyGroups = FindObjectOfType<AllyUnitGroups>().transform;
+        unitList = new List<Unit>();
+        //AllyGroups = FindObjectOfType<AllyUnitGroups>().transform;
     }
     public void CheckSelected()
     {
@@ -38,15 +39,15 @@ public class UnitGroup:MonoBehaviour
         }
         for(int i=0;i<unitList.Count;i++)
         {
-            unitList[i].IsSelectedUnit = isSelected;
+            //unitList[i].IsSelectedUnit = isSelected;
         }
         
     }
-    public void AddUnitList(AllyUnit unit)
+    public void AddUnitList(Unit unit)
     {
         unitList.Add(unit);
     }
-    public void InitializeUnitList()
+    public void SetUnitGroupSkill()
     {
         Debug.Log("이니셜라이즈");
         if (unitList.Count == 0)
@@ -71,12 +72,13 @@ public class UnitGroup:MonoBehaviour
         }
         
     }
-    public void RemoveUnitFromList(AllyUnit unit)
+    public void RemoveUnitFromList(Unit unit)
     {
         unitList.Remove(unit);
+        Destroy(unit.gameObject);
         if(unitList.Count== 0)
         {
-            GameMgr.Instance.defenseMgr.SelectedGroupList.Remove(this);
+            //GameMgr.Instance.defenseMgr.SelectedGroupList.Remove(this);
             Destroy(gameObject);
         }
     }

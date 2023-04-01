@@ -35,7 +35,7 @@ public class EnemySpawaner : MonoBehaviour
     private void SpawnMonster(int index)
     {
         Unit monster = Instantiate(monDatas[index].unitPrefab, transform).GetComponent<Unit>();
-        monster.unitData = monDatas[index];
+        monster.SetUnitData(monDatas[index]);
         monster.InitializeUnitStat();
     }
 }

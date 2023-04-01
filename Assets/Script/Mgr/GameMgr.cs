@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameMgr : Singleton<GameMgr>
 {
-    public DeployMgr settingMgr;
+    public DeployModel Deployer;
     public DefenseCommand defenseMgr;
     public SkillController skillController;
     public PlayerInput inputActions;
@@ -29,7 +29,7 @@ public class GameMgr : Singleton<GameMgr>
             case Phase.selectHero:
                 break;
             case Phase.setting:
-                settingMgr.enabled = false;
+                Deployer.enabled = false;
                 cameraMove.enabled = false;
                 break;
             case Phase.defense:
@@ -53,8 +53,9 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.setting:
                 cameraMove.enabled = true;
-                settingMgr.enabled = true;
-                GameMgr.Instance.settingMgr.SpawnHeros();
+                Deployer.enabled = true;
+                Deployer.SpawnHeros();
+                Deployer.InitSpawnPoint();
                 break;
             case Phase.defense:
                 cameraMove.enabled = true;

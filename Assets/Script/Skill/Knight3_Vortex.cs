@@ -15,7 +15,7 @@ public class Knight3_Vortex : Skill
 
     public override void EffectOnUnit(Unit unit, Hero hero)
     {
-        unit.TakeDamage(data.damage + hero.Attack);
+        unit.TakeDamage(data.damage + hero.AttackPoint);
     }
 
     

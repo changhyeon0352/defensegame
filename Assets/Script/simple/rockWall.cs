@@ -5,7 +5,6 @@ using UnityEngine;
 public class rockWall : MonoBehaviour
 {
     float stopSec = 1.4f;
-    float sec = 10f;
     float count;
     ParticleSystem ps;
     void Awake()

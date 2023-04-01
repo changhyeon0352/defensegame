@@ -6,7 +6,7 @@ public class Mage3_earthquake : Skill
 {
     public override void EffectOnUnit(Unit unit, Hero hero)
     {
-        unit.TakeDamage(data.damage + unit.unitData.MagicPower/2);
+        unit.TakeDamage(data.damage + unit.UnitData.MagicPower/2);
         StartCoroutine(unit.Slow(1f));
     }
 

@@ -2106,7 +2106,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 430410}
-  - component: {fileID: 5095714225329788553}
+  - component: {fileID: 482255043047691525}
+  - component: {fileID: -189432993586746317}
+  - component: {fileID: 3827324507965247576}
   - component: {fileID: 2043105617243096268}
   - component: {fileID: 612394230996168502}
   - component: {fileID: 9593232}
@@ -2144,7 +2146,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5095714225329788553
+--- !u!114 &482255043047691525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ab6cd67055cbe47af3ee8f4aaec3a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-189432993586746317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e199ef3af689341ac99fe528dc16af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3827324507965247576
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2156,17 +2182,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93f042a32cbedd43b9a28ad91c04836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitData: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
   isProvoked: 0
   isSleep: 0
-  armor: 0
-  shieldbuff: {fileID: 6887479763640468813}
   goalTr: {fileID: 0}
-  selectedMark: {fileID: 4772200002249250832}
-  isattackMove: 1
   shotRange: 10
 --- !u!114 &2043105617243096268
 MonoBehaviour:
@@ -2247,7 +2268,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169604}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -4370,12 +4391,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 193201be5d5542249a4338c35fcf89af, type: 3}
---- !u!1 &4772200002249250832 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2412586242081842667, guid: 193201be5d5542249a4338c35fcf89af,
-    type: 3}
-  m_PrefabInstance: {fileID: 7152130697143467515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4772200002249250835 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2412586242081842664, guid: 193201be5d5542249a4338c35fcf89af,
@@ -4474,12 +4489,6 @@ PrefabInstance:
 --- !u!4 &6887479763640468812 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3208469172170980528, guid: 4dce3432376cccc4790d8a3630e9518f,
-    type: 3}
-  m_PrefabInstance: {fileID: 8292248330041407996}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &6887479763640468813 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 3208469172170980529, guid: 4dce3432376cccc4790d8a3630e9518f,
     type: 3}
   m_PrefabInstance: {fileID: 8292248330041407996}
   m_PrefabAsset: {fileID: 0}

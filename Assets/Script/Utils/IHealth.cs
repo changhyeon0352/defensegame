@@ -4,11 +4,9 @@ using UnityEngine;
 
 public interface IHealth 
 {
-    int Hp { get; set; }
-    int Attack { get; set; }
-    int Armor { get; set; }
+    int Hp {  get; }
+    int AttackPoint { get; }
+    int Armor { get; }
 
     void TakeDamage(int damage);
-
-
 }

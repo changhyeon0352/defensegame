@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
-public class Hero : AllyUnit
+public class Hero : MovableUnit,ISelect
 {
     private HeroData heroData;
     public HeroData HeroData { get => heroData;
@@ -15,7 +15,7 @@ public class Hero : AllyUnit
         base.InitializeUnitStat();
     }
     private bool isStopSkill=false;
-    public bool IsStopSkill { get => isStopSkill; set { isStopSkill = value; agent.SetDestination(goalTr.position); } }
+    public bool IsStopSkill { get => isStopSkill; set { isStopSkill = value; navMesh.SetDestination(goalTr.position); } }
     public HeroState heroState;
     bool isSelected = false;
     public bool IsSelected{ get => isSelected; }
@@ -59,30 +59,30 @@ public class Hero : AllyUnit
  
     public override int Hp
     {
-        get => hp;
-        set 
-        { 
-            hp = value;
-            if (hp <= 0)
-            {
-                hp = 0;
-                //죽음
-                if (state != UnitState.Dead)
-                {
-                    Die();
-                    DataMgr.Instance.HeroDie(this);
-                    GameMgr.Instance.defenseMgr.ChangeHeroAfterDie();
-                }
-            }
-            heroState.ShowHpMp(this);
-        }
+        get => unitStat.hp;
+        //private set 
+        //{
+        //    unitStat.hp = value;
+        //    if (unitStat.hp <= 0)
+        //    {
+        //        unitStat.hp = 0;
+        //        //죽음
+        //        if (state != UnitState.Dead)
+        //        {
+        //            Die();
+        //            DataMgr.Instance.HeroDie(this);
+        //            GameMgr.Instance.defenseMgr.ChangeHeroAfterDie();
+        //        }
+        //    }
+        //    heroState.ShowHpMp(this);
+        //}
     }
     public new int Mp
     {
-        get => mp;
+        get => unitStat.mp;
         set
         {
-            mp = value;
+            unitStat.mp = value;
             heroState.ShowHpMp(this);
         }
     }
@@ -106,8 +106,8 @@ public class Hero : AllyUnit
     //무브업데이트땐 적추적 ㄴㄴ
     public static Hero FindHero(HeroData herodata)
     {
-        Hero result = new();
         Hero[] heros=FindObjectsOfType<Hero>();
+        Hero result = heros[0];
         foreach(Hero hero in heros)
         {
             if(hero.heroData == herodata)
@@ -121,21 +121,21 @@ public class Hero : AllyUnit
     override protected void ChaseUpdate()
     {
 
-        if ((isProvoked && chaseTargetTr != null) || SearchAndChase(searchRange)) //도발되었고 쫒는놈이 있다면 혹은 서칭거리안에 있다면
+        if ((isProvoked && chaseTargetTr != null) || IsEnemyInSearchRange(unitStat.searchRange)) //도발되었고 쫒는놈이 있다면 혹은 서칭거리안에 있다면
         {
-            agent.SetDestination(chaseTargetTr.position);
+            navMesh.SetDestination(chaseTargetTr.position);
         }
         else
         {
             ChangeState(UnitState.Move);
         }
         //스킬 범위 밖에 스킬을 사용한 경우 스킬범위 안으로 온다면 스킬사용
-        if (GameMgr.Instance.skillController.IsChasingForSkill && agent.remainingDistance < GameMgr.Instance.skillController.SkillRange && !agent.pathPending)
+        if (GameMgr.Instance.skillController.IsChasingForSkill && navMesh.remainingDistance < GameMgr.Instance.skillController.SkillRange && !navMesh.pathPending)
         {
             GameMgr.Instance.skillController.UseClinkingSkill(chaseTargetTr);
             MoveSpots(transform.position);
         }
-        else if (agent.remainingDistance < attackRange && !agent.pathPending&&chaseTargetTr.CompareTag("Monster"))
+        else if (navMesh.remainingDistance < unitStat.attackRange && !navMesh.pathPending&&chaseTargetTr.CompareTag("Monster"))
         {
             ChangeState(UnitState.Attack);
         }
@@ -153,22 +153,31 @@ public class Hero : AllyUnit
     public void RangeAttack()
     {
         GameObject obj=Instantiate(energyBoltPrefab,tipOfStaff.position,Quaternion.identity);
-        obj.GetComponent<EnergyBolt>().SetTargetAndDamage(attackTargetTr, attack);
+        obj.GetComponent<EnergyBolt>().SetTargetAndDamage(attackTargetTr, unitStat.attackPoint);
 
     }
     public void SkillAnimation(bool isMaintain,float sec)
     {
         if (isMaintain)
             StartCoroutine(MaintainCor(sec));
-        else
-            anim.SetTrigger("UseSkill");
+        //else
+            //anim.SetTrigger("UseSkill");
     }
     //스킬쓸때 자세유지
     IEnumerator MaintainCor(float sec)
     {
-        anim.SetBool("MaintainSkill", true);
+        //anim.SetBool("MaintainSkill", true);
         yield return new WaitForSeconds(sec);
-        anim.SetBool("MaintainSkill", false);
-    }    
-   
+        //anim.SetBool("MaintainSkill", false);
+    }
+
+    public void Select()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Attack()
+    {
+        
+    }
 }

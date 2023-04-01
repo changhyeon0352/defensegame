@@ -22,7 +22,7 @@ public class BowLoadShot : MonoBehaviour
     private float shotAngle=10;
     public float ShotAngle { get { return shotAngle; } set { shotAngle = value; } }
     [SerializeField] float accuracy = 0f;
-    public Transform target;
+    private Transform target;
     Transform correctionTarget;
     Transform oldTarget;
 
@@ -44,7 +44,10 @@ public class BowLoadShot : MonoBehaviour
 			arrowToShoot.gameObject.SetActive(false);
 		}
 	}
-
+    public void SetBowTarget(Transform tr)
+    {
+        target = tr;
+    }
 	void Update()
 	{
         if(target != null)

@@ -349,9 +349,9 @@ ModelImporter:
       curves: []
       events:
       - time: 0.5494506
-        functionName: MeleeAttack
+        functionName: Attack
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 50699532da04b7b4a9788c866490ba82,
+        objectReferenceParameter: {fileID: 11500000, guid: 6f95e0140c1a9844e89243d85b8428a7,
           type: 3}
         floatParameter: 0
         intParameter: 0

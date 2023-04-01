@@ -22,7 +22,7 @@ public class Gate : MonoBehaviour, IHealth
         } 
     }
     int attack = 0;
-    public int Attack { get => attack; set { } }
+    public int AttackPoint { get => attack; set { } }
     int armor;
     public int Armor { get =>armor; set { }  }
 
