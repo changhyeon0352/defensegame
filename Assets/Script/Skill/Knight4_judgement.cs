@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Knight4_judgement : Skill
 {
-    public override void EffectOnUnit(Unit unit, Hero hero)
+    public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
         unit.TakeDamage(data.damage + hero.AttackPoint);
     }
@@ -18,7 +18,7 @@ public class Knight4_judgement : Skill
         data.duration = 5f;
     }
 
-    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
+    public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
         WaitForSeconds sec = new WaitForSeconds(0.1f);

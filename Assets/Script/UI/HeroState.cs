@@ -17,18 +17,16 @@ public class HeroState : MonoBehaviour
 
     private HeroData heroData;
 
-    public void ShowHpMp(Hero hero)
+    public void UpdateHp(int hp,int hpMax)
     {
-        hpImage.fillAmount =(float)hero.Hp/(float)hero.HpMax;
-        mpImage.fillAmount = (float)hero.Mp / (float)hero.MpMax;
-        hpTmp.text = $"{hero.Hp} / {hero.HpMax}";
-        mpTmp.text = $"{hero.Mp} / {hero.MpMax}";
+        hpImage.fillAmount =(float)hp/(float)hpMax;
+        hpTmp.text = $"{hp} / {hpMax}";
     }
-    public void ShowHpMp(HeroData herodata)
+    public void UpdateMp(int hp, int hpMax)
     {
-        ShowHpMp(Hero.FindHero(herodata));
+        mpImage.fillAmount = (float)hp / (float)hpMax;
+        mpTmp.text = $"{hp} / {hpMax}";
     }
-    
 
     public void InitializeHeroState(HeroData heroData)
     {
@@ -36,16 +34,16 @@ public class HeroState : MonoBehaviour
         levelTmp.text = heroData.level.ToString();
         heroImage.sprite = UIMgr.Instance.GetHeroSprite(heroData);
         this.heroData = heroData;
-        Hero.FindHero(heroData).heroState = this;
-        ShowHpMp(heroData);
+        
     }
-    public static void SelectedHeroUI()
+    public void SelectedHeroUI()
     {
-        HeroState[] heroStates = FindObjectsOfType<HeroState>();
-        foreach(HeroState heroState in heroStates)
+        HeroState[] states = FindObjectsOfType<HeroState>();
+        foreach(HeroState state in states)
         {
-            heroState.selectedImage.enabled = heroState.heroData == GameMgr.Instance.defenseMgr.SelectedHero.HeroData;
+            state.selectedImage.enabled = false;
         }
+        selectedImage.enabled = true;
     }
 
 }

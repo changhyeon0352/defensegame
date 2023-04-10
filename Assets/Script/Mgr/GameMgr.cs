@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameMgr : Singleton<GameMgr>
 {
     public DeployModel Deployer;
-    public DefenseCommand defenseMgr;
+    public HeroUnitController heroController;
     public SkillController skillController;
     public PlayerInput inputActions;
     public CameraMove cameraMove;
@@ -34,7 +34,7 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.defense:
                 cameraMove.enabled = false;
-                defenseMgr.enabled = false;
+                heroController.enabled = false;
                 skillController.enabled = false;
                 inputActions.Command.Enable();
                 break;
@@ -59,7 +59,8 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.defense:
                 cameraMove.enabled = true;
-                defenseMgr.enabled = true;
+                heroController.gameObject.SetActive(true);
+                FindObjectOfType<EnemySpawaner>().enabled = true;
                 skillController.enabled = true;
                 inputActions.Command.Enable();
                 break;

@@ -5,14 +5,22 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour
 {
-    Unit model;
-    UnitView view;
-    public Action OnHPChanged;
+    List<UnitGroup> selectedUnitGroups = new List<UnitGroup>();
 
-    private void Awake()
+
+    public void NewUnitGroup(UnitGroup unitGroup)
     {
-        model = GetComponent<Unit>();
-        view = GetComponent<UnitView>();
-        OnHPChanged += view.UpdateHPbar;
+        foreach(UnitGroup group in selectedUnitGroups)
+        {
+            group.CancelSelect();
+        }
+        selectedUnitGroups.Clear();
+        AddUnitGroup(unitGroup);
+
+    }
+    public void AddUnitGroup(UnitGroup unitGroup)
+    {
+        selectedUnitGroups.Add(unitGroup);
+        unitGroup.SelectThisGroup();
     }
 }

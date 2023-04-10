@@ -90,42 +90,39 @@ public class DeployModel : MonoBehaviour
     }
     public void Ressetting(RaycastHit hit)
     {
-        int unitIndex = (int)hit.transform.GetComponent<Unit>().UnitData.unitType - 2;// none,monster 다음부터임
+        int unitIndex = (int)hit.transform.GetComponent<Unit>().UnitData.Type - 2;// none,monster 다음부터임
         SelectSpwanUnitData(unitIndex);
         unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
         rowColumn = UnitGroup.rowColumn;
         //unitspot제거
-        for (int i = 0; i < UnitGroup.spotsTr.childCount; i++)
+        for (int i = 0; i < UnitGroup.SpotsTr.childCount; i++)
         {
-            Destroy(UnitGroup.spotsTr.GetChild(i).gameObject);
+            Destroy(UnitGroup.SpotsTr.GetChild(i).gameObject);
         }
         unitGroup.transform.SetParent(transform);
     }
-    public void Cancel()
+    public void RemoveEveryUnit()
     {
         for (int i = 0; i < UnitGroup.NumUnitList;)
         {
             RemoveLastToList(true);
         }
-        Ray ray = new Ray();
-        CompleteUnitSetting(ray);
     }
     public void CompleteUnitSetting(Ray ray)
     {
-        Unit checkUnit = UnitGroup.UnitList[0];
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
         {
-            UnitGroup.spotsTr.position = hit.point;
+            UnitGroup.SpotsTr.position = hit.point;
         }
-        UnitGroup.spotsTr.forward = unitGroup.transform.forward;
-        for (int i = 0; i < UnitGroup.unitsTr.childCount; i++)
+        UnitGroup.SpotsTr.forward = unitGroup.transform.forward;
+        for (int i = 0; i < UnitGroup.NumUnitList; i++)
         {
             UnitGroup.rowColumn = rowColumn;
             GameObject spot = new GameObject();
             spot.name = $"spot{i}";
             spot.transform.position = UnitGroup.UnitList[i].transform.position;
             spot.transform.rotation = unitGroup.transform.rotation;
-            spot.transform.SetParent(UnitGroup.spotsTr);
+            spot.transform.SetParent(UnitGroup.SpotsTr);
             Unit unit = UnitGroup.UnitList[i]; 
             unit.SetGoalSpot(spot.transform);
             unit.InitializeUnitStat();
@@ -133,8 +130,7 @@ public class DeployModel : MonoBehaviour
 
         //unitGroup.transform.SetParent(UnitGroup.AllyGroups);//유닛그룹이 AllyGroups의 자식으로 계층이동
         if (SpawnUnitData != null)
-            UnitGroup.unitType = SpawnUnitData.unitType;                      //유닛타입결정
-        UnitGroup.SetUnitGroupSkill();
+            UnitGroup.SetUnitGroupSkill(SpawnUnitData);
         unitGroup = null;
     }
     public void AddUnitColumn()
@@ -145,7 +141,7 @@ public class DeployModel : MonoBehaviour
             if (unitSpawnPoint > SpawnUnitData.Cost)
             {
                 UnitSpawnPoint -= SpawnUnitData.Cost;
-                GameObject obj = Instantiate(SpawnUnitData.unitPrefab, UnitGroup.unitsTr);
+                GameObject obj = Instantiate(SpawnUnitData.unitPrefab, UnitGroup.UnitsTr);
                 Unit unit = obj.GetComponent<Unit>();
                 unit.SetUnitData(SpawnUnitData);
                 UnitGroup.AddUnitList(unit);
@@ -194,6 +190,8 @@ public class DeployModel : MonoBehaviour
     public void ChangeRow(int row)
     {
         rowColumn.x = row;
+        if (unitGroup == null)
+            return;
         if (unitGroup.NumUnitList < row)
         {
             AddUnitColumn();
@@ -221,13 +219,13 @@ public class DeployModel : MonoBehaviour
             {
                 UnitData unitData = unitDatas[(int)heroData.heroClass+2];
                 StartSetting(true);
-                GameObject obj = Instantiate(unitData.unitPrefab, heroSpawnSpots.GetChild(i).position, Quaternion.identity, unitGroup.unitsTr);
+                GameObject obj = Instantiate(unitData.unitPrefab, heroSpawnSpots.GetChild(i).position, Quaternion.identity, unitGroup.UnitsTr);
                 unitGroup.AddUnitList(obj.GetComponent<Unit>());
-                Hero hero = obj.GetComponent<Hero>();
+                HeroUnit hero = obj.GetComponent<HeroUnit>();
                 if (hero != null)
                 {
-                    hero.HeroData = heroData;
                     hero.SetUnitData(unitData);
+                    hero.SetHeroData(heroData);
                     hero.InitializeUnitStat();
                 }
                 Ray ray = new Ray();

@@ -1,41 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class EnemySpawaner : MonoBehaviour
+public class EnemySpawaner : ObjectPooling
 {
-    public GameObject EnemyPrefab;
-    public UnitData[] monDatas;
-    float timeCount=1f;
+    [SerializeField]
+    UnitData unitData;
     float coolTime = 1f;
-
-    // Update is called once per frame
-    void Update()
+    float lastTime = 0;
+    
+    private void Awake()
     {
-        if(GameMgr.Instance.Phase==Phase.defense)
-            timeCount-=Time.deltaTime;
-        if(Input.GetKeyDown(KeyCode.C))
-        {
-            SpawnMonster(0);
-        }
-        if(timeCount<0)
-        {
-            int a=Random.Range(0, 10);
-            if(monDatas.Length>1&&a<2)
-                SpawnMonster(1);
-            else
-                SpawnMonster(0);
-
-            timeCount =coolTime;
-            
-        }
+        prefab = unitData.unitPrefab;
+        poolSize = 30;
     }
-
-    private void SpawnMonster(int index)
+    protected override void InitializeObj(GameObject obj)
     {
-        Unit monster = Instantiate(monDatas[index].unitPrefab, transform).GetComponent<Unit>();
-        monster.SetUnitData(monDatas[index]);
-        monster.InitializeUnitStat();
+        Monster unit = obj.GetComponent<Monster>();
+        unit.ReSetUnitAfterDie();
+        unit.SetUnitData(unitData);
+        unit.InitializeUnitStat();
+    }
+    private void Update()
+    {
+        if(Time.time-lastTime>coolTime)
+        {
+            lastTime = Time.time;
+            GetObjectFromPool();
+        }
     }
 }

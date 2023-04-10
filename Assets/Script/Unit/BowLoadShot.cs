@@ -10,14 +10,13 @@ public class BowLoadShot : MonoBehaviour
 	   
 	public Transform bow;
 	public Transform arrowLoad;   //평소엔 바닥에 쏠때 몸 중간 쯤으로 올라와서 화살이 로딩되는 만큼 뒤로감
-
+    private ArrowPool pool;
     //Bow Blendshape
     SkinnedMeshRenderer bowSkinnedMeshRenderer;
 		
 	//Arrow draw & rotation
 	public bool arrowOnHand;
 	public Transform arrowToDraw;  //화살 쏘는척 할꺼 
-	public GameObject arrowToShoot; //화살 쏠꺼
     bool isShootingEnd = true;
     private float shotAngle=10;
     public float ShotAngle { get { return shotAngle; } set { shotAngle = value; } }
@@ -29,7 +28,7 @@ public class BowLoadShot : MonoBehaviour
 	void Awake()
 	{
 
-
+        pool=FindObjectOfType<ArrowPool>();
         if (bow != null)
 		{
 			bowSkinnedMeshRenderer = bow.GetComponent<SkinnedMeshRenderer>();
@@ -38,10 +37,6 @@ public class BowLoadShot : MonoBehaviour
 		if(arrowToDraw != null)
 		{
 			arrowToDraw.gameObject.SetActive(false);
-		}
-		if(arrowToShoot != null)
-		{
-			arrowToShoot.gameObject.SetActive(false);
 		}
 	}
     public void SetBowTarget(Transform tr)
@@ -73,7 +68,7 @@ public class BowLoadShot : MonoBehaviour
             }
 
             //Draw arrow from quiver and rotate it  화살통에서 화살을 빼고 돌림
-            if (arrowToDraw != null && arrowToShoot != null && arrowLoad != null)
+            if (arrowToDraw != null &&  arrowLoad != null)
             {
                 if (isShootingEnd && arrowLoad.localPosition.y > 0.5f)
                 {
@@ -90,8 +85,12 @@ public class BowLoadShot : MonoBehaviour
                 {
                     if (arrowToDraw != null)
                     {
-                        GameObject arrowObj = Instantiate(arrowToShoot, arrowToDraw.position, arrowToDraw.rotation);
-                        arrowObj.SetActive(true);
+                        //GameObject arrowObj = Instantiate(arrowToShoot, arrowToDraw.position, arrowToDraw.rotation);
+                        //arrowObj.SetActive(true);
+                        GameObject arrowObj = pool.GetObjectFromPool();
+                        arrowObj.transform.position = arrowToDraw.position;
+                        arrowObj.transform.rotation = arrowToDraw.rotation;
+                        
                         Transform aTr = arrowObj.transform;
                         aTr.parent = null;
                         aTr.forward = transform.forward;
@@ -103,7 +102,7 @@ public class BowLoadShot : MonoBehaviour
                             new Vector2(correctionTarget.position.x, correctionTarget.position.z));
                         float deltaH = aTr.position.y - correctionTarget.position.y;
                         Arrow arrow = aTr.GetComponent<Arrow>();
-                        arrow.ShootVel = GetArrowVelocity(distance, deltaH, arrow.GravityForce);
+                        arrow.SetSpeed(GetArrowVelocity(distance, deltaH, arrow.GravityForce));
                         Vector3 noise = Random.insideUnitSphere * (1 - accuracy);
                         arrow.MakeNoise(noise);
                         arrowToDraw.gameObject.SetActive(false);

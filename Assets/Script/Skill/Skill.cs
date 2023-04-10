@@ -35,13 +35,13 @@ public abstract class Skill : MonoBehaviour
     public abstract void InitSetting();
 
     //타겟이 되는 유닛에 어떠한 효과를 가하는 함수
-    public abstract void EffectOnUnit(Unit unit,Hero hero);
+    public abstract void EffectOnUnit(Unit unit,HeroUnit hero);
 
     //스킬을 사용할 때 실행되는 모든 함수를 담음 SkillController에서 실행되는 함수
-    public abstract IEnumerator SkillCor(Transform skillTr, Hero hero);
+    public abstract IEnumerator SkillCor(Transform skillTr, HeroUnit hero);
 
     //원형 범위의 적 유닛에 EffectOnUnit을 실행함
-    public virtual void AoeSkill(Transform skillTr,Hero hero)
+    public virtual void AoeSkill(Transform skillTr,HeroUnit hero)
     {
         Collider[] cols = Physics.OverlapSphere(skillTr.position,data.nonTargetRange, targetLayer);
         foreach (Collider col in cols)

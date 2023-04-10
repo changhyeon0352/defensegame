@@ -13,11 +13,11 @@ public class Knight2_Provoke : Skill
         data.duration = 10f;
     }
 
-    public override void EffectOnUnit(Unit unit,Hero hero)
+    public override void EffectOnUnit(Unit unit,HeroUnit hero)
     {
         StartCoroutine(unit.Provoked(hero.transform, data.duration));
     }
-    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
+    public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
         yield return null;
         StartCoroutine(PlaySkillOnTr(skillTr));

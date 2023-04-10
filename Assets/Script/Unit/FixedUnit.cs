@@ -10,10 +10,10 @@ public abstract class FixedUnit : Unit
     abstract public void SetTarget(Transform target);
     protected override void IdleUpdate()
     {
-        Transform enemyTr = SearchEnemyInRange(unitStat.searchRange);
+        Collider enemyTr = SearchEnemyInRange(currentStat.searchRange);
         if (enemyTr != null)
         {
-            target = enemyTr;
+            target = enemyTr.transform;
             SetTarget(target);
             ChangeState(UnitState.Attack);
         }
@@ -26,7 +26,7 @@ public abstract class FixedUnit : Unit
             if (Time.time-lastAttackTime>=attackCooldown)
             {
                 float distance = Vector3.Distance(transform.position,target.position);
-                if (distance < unitStat.searchRange + 0.6f || isShotSpot)
+                if (distance < currentStat.searchRange + 0.6f || isShotSpot)
                 {
                     anim.SetTrigger("Attack");
                     lastAttackTime = Time.time;

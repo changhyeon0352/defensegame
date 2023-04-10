@@ -6,7 +6,11 @@ public class DestroyZone : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        //if(other.CompareTag)
-        Destroy(other.gameObject);
+        if(other.CompareTag("Monster"))
+        {
+            FindObjectOfType<EnemySpawaner>().ReturnObjectToPool(other.gameObject);
+        }
+        else
+            Destroy(other.gameObject);
     }
 }

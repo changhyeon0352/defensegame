@@ -10,10 +10,10 @@ public class SkillbarUI : MonoBehaviour
     public Sprite[] mageSkillSprites;
     public Image[] skillImages;
     public Image[] skillCoolImages;
-    Hero selectedHero;
+    HeroUnit selectedHero;
 
 
-    public void ChangeHeroSkill(Hero hero)
+    public void ChangeHeroSkill(HeroUnit hero)
     {
         selectedHero=hero;
         switch(hero.HeroData.heroClass)
@@ -35,6 +35,8 @@ public class SkillbarUI : MonoBehaviour
     
     private void Update()
     {
+        if (selectedHero == null)
+            return;
         for(int i=0;i<4; i++)
         {
             if (!selectedHero.SkillCanUse[i])

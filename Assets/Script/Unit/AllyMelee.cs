@@ -2,18 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AllyMelee : MovableUnit,ISelect
+public class AllyMelee : MovableUnit
 {
-    public void Select()
-    {
-        throw new System.NotImplementedException();
-    }
     public void ChargeToEnemy()
     {
         int multipleNum = 2;
         for (int i = 0; i < 10; i++)
         {
-            if (IsEnemyInSearchRange(unitStat.searchRange * multipleNum))
+            if (IsEnemyInSearchRange(currentStat.searchRange * multipleNum))
             {
                 ChangeState(UnitState.Chase);
                 isProvoked = true;
@@ -24,9 +20,9 @@ public class AllyMelee : MovableUnit,ISelect
     }
     public override void Attack()
     {
-        if (attackTargetTr != null)
+        if (targetCol.enabled)
         {
-            IHealth Enemy_IHealth = attackTargetTr.GetComponent<IHealth>();
+            IHealth Enemy_IHealth = targetCol.transform.GetComponent<IHealth>();
             Enemy_IHealth.TakeDamage(AttackPoint);
         }
     }

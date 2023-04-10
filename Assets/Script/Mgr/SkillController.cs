@@ -28,7 +28,7 @@ public class SkillController : MonoBehaviour
     public bool IsUsingSkill { get { return isUsingSkill; } }
     bool isChasingForSkill=false;
     public bool IsChasingForSkill { get { return isChasingForSkill; } }
-    public Hero selectedHero;
+    public HeroUnit selectedHero;
     public float SkillRange { get { return usingSkill.data.range; } }
     GameObject indicator;
     GameObject skillRangeObj;
@@ -53,7 +53,6 @@ public class SkillController : MonoBehaviour
         GameMgr.Instance.inputActions.Command.HeroSkillClick.performed += OnSkillClick;
         GameMgr.Instance.inputActions.Command.SkillCancel.performed += OnSkillCancel;
         GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
-        selectedHero = GameMgr.Instance.defenseMgr.SelectedHero;
     }
 
     //스킬 인디케이터 표시

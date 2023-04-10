@@ -95,7 +95,7 @@ using UnityEngine;
                                 new Vector2(target.position.x, target.position.z));
                             float deltaH = aTr.position.y - target.position.y;
                             Arrow arrow = aTr.GetComponent<Arrow>();
-                            arrow.ShootVel = GetArrowVelocity(distance, deltaH, arrow.GravityForce);
+                            //arrow.ShootVel = GetArrowVelocity(distance, deltaH, arrow.GravityForce);
                             Vector3 noise = Random.insideUnitSphere * (1 - accuracy);
                             arrow.MakeNoise(noise);
                             arrowToDraw.gameObject.SetActive(false);

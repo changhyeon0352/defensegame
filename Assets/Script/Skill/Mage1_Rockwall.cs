@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mage1_Rockwall : Skill
 {
-    public override void EffectOnUnit(Unit unit, Hero hero)
+    public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
     }
 
@@ -18,7 +18,7 @@ public class Mage1_Rockwall : Skill
         data.duration = 10f;
     }
 
-    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
+    public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
         yield return null;

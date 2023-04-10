@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mage4_dragonBreath : Skill
 {
-    public override void EffectOnUnit(Unit unit, Hero hero)
+    public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
         unit.TakeDamage(data.damage + unit.UnitData.MagicPower / 2);
     }
@@ -20,14 +20,15 @@ public class Mage4_dragonBreath : Skill
         data.Name = "용의 숨결";
     }
 
-    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
+    public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
+        Hero_Mage hero_Mage = (Hero_Mage)hero;
         UIMgr.Instance.ShowDuration(data.Name, data.duration);
-        hero.MoveSpots(hero.transform.position);
-        hero.IsStopSkill = true;
+        hero_Mage.MoveSpots(hero.transform.position);
+        hero_Mage.IsStopSkill = true;
         StartCoroutine(PlaySkillOnTr(skillTr));
         yield return new WaitForSeconds(data.duration);
-        hero.IsStopSkill = false;
+        hero_Mage.IsStopSkill = false;
     }
 
     

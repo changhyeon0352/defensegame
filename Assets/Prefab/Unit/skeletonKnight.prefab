@@ -402,15 +402,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71f361e62aacf5548a30501c0c3125a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitData: {fileID: 11400000, guid: c7a25764e42690640abad73b33da5d1a, type: 2}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
+  goalTr: {fileID: 0}
   isProvoked: 0
   isSleep: 0
-  shieldbuff: {fileID: 0}
-  goalTr: {fileID: 0}
-  armor: 0
+  unitHpbarPrefab: {fileID: 8909171721471520659, guid: 02a969f524d733a4eb216e460aeececb,
+    type: 3}
 --- !u!114 &3784160199649303374
 MonoBehaviour:
   m_ObjectHideFlags: 0

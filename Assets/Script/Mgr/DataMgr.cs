@@ -112,7 +112,7 @@ public class DataMgr : Singleton<DataMgr>
         defenseData.allyDieNum++;
         if(unit.CompareTag("Hero"))
         {
-            Hero hero =unit.GetComponent<Hero>();
+            HeroUnit hero =unit.GetComponent<HeroUnit>();
             hero.HeroData.isDead = true;
         }
     }
@@ -219,7 +219,7 @@ public class DataMgr : Singleton<DataMgr>
         }
         SaveDataToJson(DataType.HeroDatas);
     }
-    public void HeroDie(Hero hero)
+    public void HeroDie(HeroUnit hero)
     {
         myHeroDatas.heroDataList[hero.HeroData.id - 1].isDead = true;
         SaveDataToJson(DataType.HeroDatas);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mage2_Sleep : Skill
 {
-    public override void EffectOnUnit(Unit unit, Hero hero)
+    public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
         StartCoroutine(unit.Sleep(data.duration));
     }
@@ -19,7 +19,7 @@ public class Mage2_Sleep : Skill
         data.nonTargetRange = 5f;
     }
 
-    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
+    public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
         yield return null;

@@ -12,9 +12,7 @@ using static UnityEngine.Rendering.DebugUI;
 
 public struct UnitStat
 {
-    public int hp;
     public int hpMax;
-    public int mp;
     public int mpMax;
     public int attackPoint;
     public int armor;
@@ -25,21 +23,19 @@ public struct UnitStat
 }
 
 
-public abstract class Unit : MonoBehaviour, IHealth
+public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPointerExitHandler,IPointerClickHandler
 {
-    protected UnitController controller;
     protected UnitData unitData;
     public UnitData UnitData { get { return unitData; } }
-    protected UnitStat unitStat;
-    public UnitStat UnitStat { get { return unitStat; } }
+    protected UnitStat currentStat;
+    protected UnitStat permanentStat;
+    public UnitStat CurrentStat { get { return currentStat; } }
+    public UnitStat PermanentStat { get { return permanentStat; } }
     protected NavMeshAgent navMesh;
-    protected Transform chaseTargetTr;
-    protected Transform attackTargetTr;
+    protected Collider targetCol;
     protected UnitState state = UnitState.Idle;
     public UnitState State { get { return state; } }
     public LayerMask enemyLayer;
-    public bool isProvoked = false;
-    public bool isSleep = false;
     protected float lastAttackTime=0;
     protected Animator anim;
     protected Rigidbody rb;
@@ -48,28 +44,37 @@ public abstract class Unit : MonoBehaviour, IHealth
     protected Transform goalTr;
     protected float attackCooldown;
     protected StatusEffect statusEffect;
+    protected int hp;
+    protected int mp;
+    public bool isProvoked = false;
+    public bool isSleep = false;
+    private UnitHpBar unitHpBar;
+    [SerializeField]
+    protected ParticleSystem selectEffect;
 
-    public float AttackSpeed { get { return unitStat.attackSpeed; }}
+    public float AttackSpeed { get { return currentStat.attackSpeed; }}
     public bool IsDead { get => state == UnitState.Dead; }
     public float MoveSpeed
     {
-        get { return unitStat.moveSpeed; }
+        get { return currentStat.moveSpeed; }
         private set
         {
-            unitStat.moveSpeed = value;
+            currentStat.moveSpeed = value;
             navMesh.speed = value;
         }
     }
     public virtual int Hp
     {
-        get => unitStat.hp;
-        private set{ unitStat.hp = value;}
+        get => hp;
+        protected set{ hp = value;
+            UpdateHPbar(hp, currentStat.hpMax);
+        }
     }
-    public int AttackPoint { get => unitStat.attackPoint; }
-    public int Armor { get => unitStat.armor; set => unitStat.armor = value; }
-    public int HpMax { get => unitStat.hpMax; }
-    public int Mp { get => unitStat.mp; }
-    public int MpMax { get => unitStat.mpMax; }
+    public int AttackPoint { get => currentStat.attackPoint; }
+    public int Armor { get => currentStat.armor; set => currentStat.armor = value; }
+    public int HpMax { get => currentStat.hpMax; }
+    public int Mp { get => mp; }
+    public int MpMax { get => currentStat.mpMax; }
 
 
 
@@ -80,7 +85,6 @@ public abstract class Unit : MonoBehaviour, IHealth
         navMesh = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-        controller = GetComponent<UnitController>();
         anim = GetComponent<Animator>();
     }
     virtual protected void Update()
@@ -108,18 +112,40 @@ public abstract class Unit : MonoBehaviour, IHealth
     }
     virtual public void InitializeUnitStat()
     {
-        unitStat.hpMax = unitData.HP;
-        unitStat.hp = unitStat.hpMax;
-        unitStat.mpMax = unitData.MP;
-        unitStat.mp = unitStat.mpMax;
-        unitStat.attackPoint = unitData.Atk;
-        unitStat.armor = unitData.Armor;
-        MoveSpeed = unitData.MoveSpeed;
-        unitStat.attackRange = unitData.AttackRange;
-        SetAttackSpeed(unitData.AttackSpeed);
-        unitStat.searchRange = unitData.SearchRange;
-        ChangeState(UnitState.Move);
+        permanentStat.hpMax = unitData.HP;
+        permanentStat.mpMax = unitData.MP;
+        permanentStat.attackPoint = unitData.Atk;
+        permanentStat.armor = unitData.Armor;
+        permanentStat.moveSpeed = unitData.MoveSpeed;
+        permanentStat.attackRange = unitData.AttackRange;
+        permanentStat.searchRange = unitData.SearchRange;
+        permanentStat.attackSpeed=unitData.AttackSpeed;
+        if (unitData.Type == UnitType.soldier_Range)
+        {
+            permanentStat.attackPoint += DataMgr.Instance.GetBarracksUpgradeValue(BarracksUpgradeType.range_damage);
+        }
+        else if (unitData.Type == UnitType.hero)
+        { 
+            HeroUnit hero = GetComponent<HeroUnit>();
+            permanentStat.attackPoint += DataMgr.Instance.blacksmithData.values[hero.HeroData.level_Weapon];
+            permanentStat.armor += DataMgr.Instance.blacksmithData.values[5 + hero.HeroData.level_Armor];
+        }
+        else if (unitData.Type == UnitType.soldier_Melee)
+        {
+            permanentStat.armor += DataMgr.Instance.GetBarracksUpgradeValue(BarracksUpgradeType.melee_armor);
+        }
         navMesh.enabled = true;
+        currentStat.hpMax = permanentStat.hpMax;
+        currentStat.mpMax = permanentStat.mpMax;
+        currentStat.attackPoint = permanentStat.attackPoint;
+        currentStat.armor = permanentStat.armor;
+        currentStat.attackRange = permanentStat.attackRange;
+        currentStat.searchRange = permanentStat.searchRange;
+        MoveSpeed = permanentStat.moveSpeed;
+        SetAttackSpeed(permanentStat.attackSpeed);
+        ChangeState(UnitState.Move);
+        hp = currentStat.hpMax;
+        mp = currentStat.mpMax;
     }
 
 
@@ -140,7 +166,7 @@ public abstract class Unit : MonoBehaviour, IHealth
     }
     public IEnumerator Provoked(Transform tr, float sec)
     {
-        chaseTargetTr = tr;
+        targetCol = tr.GetComponent<Collider>();
         ChangeState(UnitState.Chase);
         isProvoked = true;
         GameObject obj = Instantiate(GameMgr.Instance.skillController.Buffs[(int)Buff.provoked], transform);
@@ -178,18 +204,16 @@ public abstract class Unit : MonoBehaviour, IHealth
     public IEnumerator Slow(float sec)
     {
         MoveSpeed = unitData.MoveSpeed / 4;
-        UIMgr.Instance.unitStatUI.isRefresh = true;
         yield return new WaitForSeconds(sec);
         if (state != UnitState.Dead)
             MoveSpeed = unitData.MoveSpeed;
-        UIMgr.Instance.unitStatUI.isRefresh = true;
     }
 
     public void SetAttackSpeed(float speed)
     {
-        unitStat.attackSpeed = speed;
+        currentStat.attackSpeed = speed;
         attackCooldown = speed == 0 ? float.MaxValue : 1 / speed;
-        anim.SetFloat("attackSpeed", UnitData.AttackAniLength[0] * UnitStat.attackSpeed * 1.5f);
+        anim.SetFloat("attackSpeed", UnitData.AttackAniLength[0] * CurrentStat.attackSpeed * 1.5f);
     }
     public void SetUnitData(UnitData unitData )
     {
@@ -198,6 +222,8 @@ public abstract class Unit : MonoBehaviour, IHealth
 
     virtual protected void Die()
     {
+        FindObjectOfType<UnitHpbarPool>().ReturnObjectToPool(unitHpBar.gameObject);
+        anim.SetTrigger("Dead");
         col.enabled = false;
         navMesh.enabled = false;
         ChangeState(UnitState.Dead);
@@ -211,7 +237,7 @@ public abstract class Unit : MonoBehaviour, IHealth
     {
         StartCoroutine(DieFallCor());
     }
-    IEnumerator DieFallCor()
+    protected virtual IEnumerator DieFallCor()
     {
         if (state == UnitState.Dead)
         {
@@ -219,18 +245,18 @@ public abstract class Unit : MonoBehaviour, IHealth
             rb.isKinematic = false;
             rb.drag = 20;
             yield return new WaitForSeconds(1);
-            Destroy(this.gameObject);
+            Destroy(this);
         }
     }
-
+    
 
     public void TakeDamage(int damage)
     {
         if (state == UnitState.Dead)
             return;
-        double decreaseRate = 1 - Math.Atan((double)(unitStat.armor) / 50) / (Math.PI / 2);//아머가 50쯤 되면 50%
+        double decreaseRate = 1 - Math.Atan((double)(currentStat.armor) / 50) / (Math.PI / 2);//아머가 50쯤 되면 50%
         int netDamage = (int)(damage * decreaseRate);
-        if (netDamage > Hp)
+        if (netDamage >= Hp)
         {
             Hp = 0;
             Die();
@@ -239,7 +265,6 @@ public abstract class Unit : MonoBehaviour, IHealth
             Hp -= ((netDamage == 0)? 1 : netDamage);
         
         isSleep = false;
-        controller.OnHPChanged?.Invoke();
     }
 
 
@@ -253,37 +278,32 @@ public abstract class Unit : MonoBehaviour, IHealth
     abstract public void Attack();
     
     //=================================================================================
-    //public bool SearchAndChase(float radius)
-    //{
-    //    bool result = false;
-    //    Transform enemyTr = SearchEnemy(radius);   //적 검색
-    //    if (enemyTr != null)
-    //    {
-    //        chaseTargetTr = enemyTr;                    //적을 표적으로
-    //        result = true;
-    //    }
-    //    return result;
-    //}
-    public Transform SearchEnemyInRange(float radius)
+    
+    public Collider SearchEnemyInRange(float radius)
     {
-        Transform enemyTr = null;
+        Collider enemyCol = null;
         Collider[] cols = Physics.OverlapSphere(transform.position, radius, enemyLayer);
         float minimunDistance = float.MaxValue;
         foreach (Collider col in cols)
         {
             float distance = Vector3.SqrMagnitude(transform.position - col.transform.position);
-            minimunDistance = MathF.Min(distance, minimunDistance);
+            minimunDistance = Mathf.Min(distance, minimunDistance);
             if (minimunDistance == distance)
             {
-                enemyTr = col.transform;
+                enemyCol = col;
             }
         }
-        return enemyTr;
+        return enemyCol;
     }
     public void ChaseTarget(Transform tr)
     {
+        targetCol=tr.GetComponent<Collider>();
         isProvoked = true;
-        chaseTargetTr = tr;
+        ChangeState(UnitState.Chase);
+    }
+    public void ChaseTarget()
+    {
+        isProvoked = true;
         ChangeState(UnitState.Chase);
     }
 
@@ -298,7 +318,6 @@ public abstract class Unit : MonoBehaviour, IHealth
             case UnitState.Chase:
                 break;
             case UnitState.Attack:
-                attackTargetTr = null;
 
                 break;
         }
@@ -308,15 +327,12 @@ public abstract class Unit : MonoBehaviour, IHealth
                 break;
             case UnitState.Move:
                 isProvoked = false;
-                chaseTargetTr = null;
                 navMesh.stoppingDistance = 0;
                 break;
             case UnitState.Chase:
-                navMesh.stoppingDistance = unitStat.attackRange;
+                navMesh.stoppingDistance = currentStat.attackRange;
                 break;
             case UnitState.Attack:
-                attackTargetTr = chaseTargetTr;
-                chaseTargetTr = null;
                 break;
             case UnitState.Dead:
                 break;
@@ -345,4 +361,43 @@ public abstract class Unit : MonoBehaviour, IHealth
     {
         goalTr = tr;
     }
+
+    public void InitUnitHpbar()
+    {
+        Transform unitHpbarParent = FindObjectOfType<HPbars>().transform;
+        unitHpBar = FindObjectOfType<UnitHpbarPool>().GetObjectFromPool().GetComponent<UnitHpBar>();
+        unitHpBar.transform.SetParent(unitHpbarParent);
+        //unitHpBar = Instantiate(unitHpbarPrefab, unitHpbarParent).GetComponent<UnitHpBar>();
+        unitHpBar.SetUnitInfo(this);
+    }
+
+    public void UpdateHPbar(int hp, int hpMax)
+    {
+        unitHpBar.UpdateHpBar(hp, hpMax);
+    }
+
+    public void ShowSelectEffect()
+    {
+        selectEffect.Play();
+    }
+    public void HideSelectEffect()
+    {
+        selectEffect.Stop();
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        transform.GetComponent<Outline>().enabled = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        transform.GetComponent<Outline>().enabled = false;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        UIMgr.Instance.unitStatUI.gameObject.SetActive(true);
+        UIMgr.Instance.unitStatUI.RefreshUnitStatWindow(this);
+    }
+    
 }

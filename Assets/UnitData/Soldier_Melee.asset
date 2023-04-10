@@ -23,8 +23,8 @@ MonoBehaviour:
   armor: 0
   attackSpeed: 0.8
   cost: 50
-  attackRange: 1
-  searchRange: 3
+  attackRange: 2
+  searchRange: 4
   unitPrefab: {fileID: 169604, guid: 51eae40567d3ff847bafc22ed4abaa6a, type: 3}
   attackAniLength:
   - 1.4

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Knight1_sheild : Skill
 {
-    public override void EffectOnUnit(Unit unit, Hero hero)
+    public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
         StartCoroutine(unit.AddAromor(data.damage, 0.5f));
     }
@@ -19,7 +19,7 @@ public class Knight1_sheild : Skill
         data.duration = 10f;
     }
 
-    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
+    public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
         StartCoroutine(hero.AddAromor(data.damage * 2, data.duration));

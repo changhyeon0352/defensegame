@@ -5,12 +5,12 @@ using UnityEngine;
 public class SelectModel : MonoBehaviour
 {
     private List<UnitGroup> groups = new List<UnitGroup>();
-    private List<Hero> heroes = new List<Hero>();
+    private List<HeroUnit> heroes = new List<HeroUnit>();
    
 
     public void SelectHero(int n)
     {
-        Hero hero=heroes[n];    
+        HeroUnit hero=heroes[n];    
         if(!hero.IsDead)
         {
             //ClearSelectedGroups(); 

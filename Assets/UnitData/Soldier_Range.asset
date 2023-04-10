@@ -18,7 +18,7 @@ MonoBehaviour:
   hp: 50
   mp: 0
   moveSpeed: 3
-  atk: 10
+  atk: 20
   magicPower: 0
   armor: 0
   attackSpeed: 0.5

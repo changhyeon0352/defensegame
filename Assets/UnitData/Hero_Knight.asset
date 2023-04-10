@@ -24,7 +24,7 @@ MonoBehaviour:
   attackSpeed: 1
   cost: 80
   attackRange: 2
-  searchRange: 4
+  searchRange: 6
   unitPrefab: {fileID: 169604, guid: ae5d03a1fd0bc17499d87dff6d4bd457, type: 3}
   attackAniLength:
   - 1.4

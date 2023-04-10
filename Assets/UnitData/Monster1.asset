@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 1
   unitPortrait: {fileID: 21300000, guid: 1bd8553401f3d73409c94fc3c2dac999, type: 3}
   unitName: "\uD574\uACE8\uBCD1"
-  hp: 75
+  hp: 100
   mp: 0
   moveSpeed: 3
   atk: 15
@@ -23,7 +23,7 @@ MonoBehaviour:
   armor: 0
   attackSpeed: 0.5
   cost: 0
-  attackRange: 1
+  attackRange: 1.5
   searchRange: 2
   unitPrefab: {fileID: 9085880239558194240, guid: 89cec0479aef7e947be888699ef08555,
     type: 3}

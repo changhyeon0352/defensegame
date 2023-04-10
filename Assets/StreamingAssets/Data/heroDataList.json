@@ -46,7 +46,7 @@
                 0,
                 0
             ],
-            "isDead": false
+            "isDead": true
         },
         {
             "id": 4,
@@ -61,6 +61,118 @@
                 0,
                 0,
                 0
+            ],
+            "isDead": true
+        },
+        {
+            "id": 5,
+            "heroClass": 0,
+            "name": "바리스탄",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": true
+        },
+        {
+            "id": 6,
+            "heroClass": 0,
+            "name": "줄리아",
+            "level": 1,
+            "exp": 0,
+            "level_Weapon": 1,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": false
+        },
+        {
+            "id": 7,
+            "heroClass": 0,
+            "name": "호세",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 8,
+            "heroClass": 1,
+            "name": "시보스",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 9,
+            "heroClass": 1,
+            "name": "호세",
+            "level": 1,
+            "exp": 0,
+            "level_Weapon": 1,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": false
+        },
+        {
+            "id": 10,
+            "heroClass": 1,
+            "name": "베릴",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 11,
+            "heroClass": 0,
+            "name": "베릴",
+            "level": 1,
+            "exp": 0,
+            "level_Weapon": 1,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
             ],
             "isDead": false
         }

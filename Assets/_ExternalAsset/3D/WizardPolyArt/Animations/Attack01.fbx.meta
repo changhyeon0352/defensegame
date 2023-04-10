@@ -478,7 +478,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0.54187787
-        functionName: RangeAttack
+        functionName: Attack
         data: 
         objectReferenceParameter: {fileID: 1248815240492774, guid: 8ca6fca6991f5f14c80b62394ddcd996,
           type: 3}

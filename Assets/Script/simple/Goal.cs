@@ -11,7 +11,7 @@ public class Goal : MonoBehaviour
         {
             if(other.CompareTag("Monster"))
             {
-                Destroy(other.gameObject);
+                unit.TakeDamage(10000);
                 DataMgr.Instance.MonsterEnterTown(unit);
             }
         }

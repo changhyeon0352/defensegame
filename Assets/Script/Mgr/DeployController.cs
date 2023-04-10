@@ -34,17 +34,21 @@ public class DeployController : Controller
         inputActions.Deploy.scrollUpDown.Disable();
         inputActions.Deploy.Click.Disable();
         inputActions.Deploy.scrollUpDown.Disable();
+        inputActions.Deploy.Cancel.Disable();
     }
     private void OnStartSetting(InputAction.CallbackContext obj)
     {
         if (model.UnitGroup == null && model.SpawnUnitData != null)
         {
             model.StartSetting();
+            view.ShaderChange(UnitShader.transparentShader, model.UnitGroup.UnitsTr.GetComponentsInChildren<SkinnedMeshRenderer>());
             inputActions.Deploy.Click.Enable();
             inputActions.Command.Select.Disable();
             inputActions.Deploy.scrollUpDown.Enable();
             inputActions.Camera.CameraZoom.Disable();
             inputActions.Deploy.SwitchRow.Enable();
+            inputActions.Game.GameQuit.Disable();
+            inputActions.Deploy.Cancel.Enable();
         }
     }
     private void OnRotateCancel(InputAction.CallbackContext obj)
@@ -54,7 +58,8 @@ public class DeployController : Controller
 
     private void OnCancel(InputAction.CallbackContext obj)
     {
-        model.Cancel();
+        model.RemoveEveryUnit();
+        OnCompleteSetting(obj);
     }
     private void OnResetting(InputAction.CallbackContext _)
     {
@@ -93,16 +98,18 @@ public class DeployController : Controller
         }
     }
 
-    private void OnCompleteSetting(InputAction.CallbackContext obj)
+    public void OnCompleteSetting(InputAction.CallbackContext obj)
     {
-        view.ShaderChange(UnitShader.normalShader, model.UnitGroup.unitsTr.GetComponentsInChildren<SkinnedMeshRenderer>());
+        view.ShaderChange(UnitShader.normalShader, model.UnitGroup.UnitsTr.GetComponentsInChildren<SkinnedMeshRenderer>());
         model.CompleteUnitSetting(Camera.main.ScreenPointToRay(Input.mousePosition));
+        model.ChangeRow(1);
         inputActions.Deploy.Click.Disable();
         inputActions.Deploy.scrollUpDown.Disable();
         inputActions.Camera.CameraZoom.Enable();
         inputActions.Deploy.ReSetting.Enable();
         inputActions.Command.Select.Enable();
         inputActions.Deploy.SwitchRow.Disable();
+        inputActions.Deploy.Cancel.Disable();
     }
 
     private void OnRotateUnitGroup(InputAction.CallbackContext obj)
@@ -122,7 +129,7 @@ public class DeployController : Controller
             else
             {
                 model.AddUnitColumn();
-                view.ShaderChange(UnitShader.transparentShader, model.UnitGroup.unitsTr.GetComponentsInChildren<SkinnedMeshRenderer>());
+                view.ShaderChange(UnitShader.transparentShader, model.UnitGroup.UnitsTr.GetComponentsInChildren<SkinnedMeshRenderer>());
             }
         }
     }

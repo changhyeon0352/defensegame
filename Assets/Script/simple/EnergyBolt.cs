@@ -6,23 +6,24 @@ using UnityEngine.UIElements;
 public class EnergyBolt : MonoBehaviour
 {
     public GameObject explosionPrefab;
-    private Transform target;
+    private Collider targetCol;
     [SerializeField] float speed=10f;
     private int damage;
 
     private void Update()
     {
-        if (target == null)
+        if (targetCol == null|| !targetCol.enabled)
             Destroy(this.gameObject);
         else
-            transform.position += (target.position - transform.position).normalized * speed * Time.deltaTime;
-        //transform.LookAt(target);
-        //transform.Translate(transform.forward * speed * Time.deltaTime);
+        {
+            transform.LookAt(targetCol.transform);
+            transform.position += (targetCol.transform.position - transform.position).normalized * speed * Time.deltaTime;
+        }
         
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.transform==target)
+        if(other.transform== targetCol.transform)
         {
             IHealth targetHP = other.gameObject.GetComponent<IHealth>();
             if (targetHP != null)
@@ -35,7 +36,7 @@ public class EnergyBolt : MonoBehaviour
     }
     public void SetTargetAndDamage(Transform target,int damage)
     {
-        this.target = target;
+        this.targetCol = target.GetComponent<Collider>();
         this.damage = damage;
     }
 }

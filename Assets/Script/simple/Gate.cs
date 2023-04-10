@@ -14,7 +14,7 @@ public class Gate : MonoBehaviour, IHealth
         set
         {
             hp = value;
-            UIMgr.Instance.hpbar.ChangeHPbarGate((float)hp / (float)hpMax);
+            //UIMgr.Instance.hpbar.ChangeHPbarGate((float)hp / (float)hpMax);
             if (hp < 0) 
             { 
                 Destroy(this.gameObject); 
@@ -23,7 +23,7 @@ public class Gate : MonoBehaviour, IHealth
     }
     int attack = 0;
     public int AttackPoint { get => attack; set { } }
-    int armor;
+    int armor=0;
     public int Armor { get =>armor; set { }  }
 
     public void TakeDamage(int damage)

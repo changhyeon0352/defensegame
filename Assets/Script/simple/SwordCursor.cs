@@ -15,8 +15,8 @@ public class SwordCursor : MonoBehaviour,IPointerEnterHandler,IPointerExitHandle
         {
             UIMgr.Instance.ChangeCursor(CursorType.targeting);
         }
-        else if (GameMgr.Instance.defenseMgr.UsingSkill != BasicSkills.AttackMove)
-            UIMgr.Instance.ChangeCursor(CursorType.Sword);
+        //else if (GameMgr.Instance.heroController.UsingSkill != BasicSkills.AttackMove)
+        //    UIMgr.Instance.ChangeCursor(CursorType.Sword);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -25,7 +25,7 @@ public class SwordCursor : MonoBehaviour,IPointerEnterHandler,IPointerExitHandle
         {
             UIMgr.Instance.ChangeCursor(CursorType.findTarget);
         }
-        else if (GameMgr.Instance.defenseMgr.UsingSkill != BasicSkills.AttackMove)
-            UIMgr.Instance.ChangeCursor(CursorType.Default);
+        //else if (GameMgr.Instance.heroController.UsingSkill != BasicSkills.AttackMove)
+        //    UIMgr.Instance.ChangeCursor(CursorType.Default);
     }
 }

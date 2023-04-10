@@ -654,13 +654,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4463868907105534}
   - component: {fileID: 95538263452871118}
+  - component: {fileID: 8560528358950103763}
   - component: {fileID: 136306802490482818}
-  - component: {fileID: 5144074600902460031}
   - component: {fileID: 3641313431695282749}
   - component: {fileID: 4834599386542768203}
   - component: {fileID: 6658563940566351950}
-  - component: {fileID: 7410359771512289291}
-  - component: {fileID: 1009437042869011507}
   m_Layer: 3
   m_Name: Hero_Mage
   m_TagString: Hero
@@ -707,6 +705,30 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8560528358950103763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248815240492774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db22555c87681ca4c8537ed6c094e114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  goalTr: {fileID: 0}
+  isProvoked: 0
+  isSleep: 0
+  selectEffect: {fileID: 6101159476739162704}
+  heroStatePrefab: {fileID: 7558680418623561605, guid: b15232483dc113543b7d4258043cd61d,
+    type: 3}
+  energyBoltPrefab: {fileID: 1136871183823626, guid: ce2dcc1e43943004eb931b59eba8e52f,
+    type: 3}
+  tipOfStaff: {fileID: 3789588931821636389}
 --- !u!136 &136306802490482818
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -721,29 +743,6 @@ CapsuleCollider:
   m_Height: 1.882848
   m_Direction: 1
   m_Center: {x: 0, y: 0.98, z: 0}
---- !u!114 &5144074600902460031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1248815240492774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 147e57a88b3ace249a049d6766d77a7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  isProvoked: 0
-  isSleep: 0
-  goalTr: {fileID: 0}
-  heroState: {fileID: 0}
-  energyBoltPrefab: {fileID: 1136871183823626, guid: ce2dcc1e43943004eb931b59eba8e52f,
-    type: 3}
-  tipOfStaff: {fileID: 3789588931821636389}
-  rangeforGizmo: 0
 --- !u!54 &3641313431695282749
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -800,30 +799,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &7410359771512289291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1248815240492774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43ab6cd67055cbe47af3ee8f4aaec3a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1009437042869011507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1248815240492774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48e199ef3af689341ac99fe528dc16af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1251583507443948
 GameObject:
   m_ObjectHideFlags: 0
@@ -2936,7 +2911,7 @@ PrefabInstance:
     - target: {fileID: 2412586242081842667, guid: 193201be5d5542249a4338c35fcf89af,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4148167121123378397, guid: 193201be5d5542249a4338c35fcf89af,
         type: 3}
@@ -2970,6 +2945,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 193201be5d5542249a4338c35fcf89af, type: 3}
+--- !u!198 &6101159476739162704 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2412586242081842665, guid: 193201be5d5542249a4338c35fcf89af,
+    type: 3}
+  m_PrefabInstance: {fileID: 8489450634981124025}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6101159476739162705 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2412586242081842664, guid: 193201be5d5542249a4338c35fcf89af,

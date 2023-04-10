@@ -16,7 +16,7 @@ public class UIMgr : Singleton<UIMgr>
     public GameObject skilldurationUI;
     public UnitStatUI unitStatUI;
     public SkillbarUI skillbarUI;
-    public HPbar hpbar;
+    public HPbars hpbar;
     public Sprite[] heroSprites;
     public GameObject heroCardPrefab;
     Transform UnitCommandTr = null;
@@ -24,6 +24,7 @@ public class UIMgr : Singleton<UIMgr>
     Transform defenseStart = null;
     Transform DeploymentTr = null;
     Transform defenseTr = null;
+    public Transform DefenseUITr { get => defenseTr; }
     Transform HeroSelectingTr = null;
     GameObject screenMover = null;
     List<Button> commandButtons = new();
@@ -176,14 +177,21 @@ public class UIMgr : Singleton<UIMgr>
     }
     public void MakeHeroStates()
     {
-        Transform heroStateListTr = defenseTr.Find("HeroStateList");
-        foreach (HeroData heroData in DataMgr.Instance.FightingHeroDataList)
+        HeroUnit[] heros=FindObjectsOfType<HeroUnit>();
+        foreach(HeroUnit hero in heros)
         {
-            HeroState heroState = Instantiate(heroStatePrefab, heroStateListTr).GetComponent<HeroState>();
-            heroState.InitializeHeroState(heroData);
+            hero.MakeHeroStateUI();
         }
     }
-    
+    public void MakeUnitsHpbar()
+    {
+        Unit[] units = FindObjectsOfType<Unit>();
+        foreach (Unit unit in units)
+        {
+            unit.InitUnitHpbar();
+        }
+    }
+
     private void ChangePhase(Phase _phase)
     {
         switch (GameMgr.Instance.Phase)
@@ -238,9 +246,12 @@ public class UIMgr : Singleton<UIMgr>
                     commandImages.Add(UnitCommandTr.GetChild(i).GetChild(0).GetComponent<Image>());
                     commandButtons.Add(UnitCommandTr.GetChild(i).GetComponent<Button>());
                     int index = (int)Mathf.Pow(2, i);
-                    commandButtons[i].onClick.AddListener(() => GameMgr.Instance.defenseMgr.UnitCommand(index));
+                    //commandButtons[i].onClick.AddListener(() => GameMgr.Instance.heroController.UnitCommand(index));
+                    
+                    
                 }
                 MakeHeroStates();
+                MakeUnitsHpbar();
                 ClearSkillButton();
                 break;
             case Phase.result:

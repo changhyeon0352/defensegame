@@ -30,7 +30,7 @@ public class AllyUnit : Unit
         else
         {
             navMesh.SetDestination(goalTr.position);          //목표로 가기
-            if (navMesh.remainingDistance < unitStat.attackRange && !navMesh.pathPending)                  //목표에 다가가면 Idle로 변경
+            if (navMesh.remainingDistance < currentStat.attackRange && !navMesh.pathPending)                  //목표에 다가가면 Idle로 변경
             {
                 ChangeState(UnitState.Idle);
                 isattackMove = true;

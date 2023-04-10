@@ -16,8 +16,8 @@ public class DefenseCommand : MonoBehaviour
     [SerializeField] GameObject moveToPrefabs;
     [SerializeField] GameObject attackToPrefabs;
     List<UnitGroup> seletedGroupList = new List<UnitGroup>();
-    Hero selectedHero;
-    List<Hero> fightingHeroList= new List<Hero>();
+    HeroUnit selectedHero;
+    List<HeroUnit> fightingHeroList= new List<HeroUnit>();
     PlayerInput inputActions;
     private List<Transform> skillIndicatorTrs = new List<Transform>();
     List<Transform> skillTargets = new List<Transform>();
@@ -30,7 +30,7 @@ public class DefenseCommand : MonoBehaviour
         get => seletedGroupList;
     }
     public BasicSkills UsingSkill { get => usingSkill;}
-    public Hero SelectedHero { get => selectedHero;
+    public HeroUnit SelectedHero { get => selectedHero;
         set { selectedHero = value;
             GameMgr.Instance.skillController.selectedHero = value; 
             AllCheckSelected(); 
@@ -46,16 +46,16 @@ public class DefenseCommand : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Command.Enable();
-        inputActions.Command.Select.performed += OnSelect;
+        //inputActions.Command.Select.performed += OnSelect;
         inputActions.Command.skillClick.performed += OnSkillClick;
-        inputActions.Command.MoveorSetTarget.performed += OnMoveOrSetTarget;
+        //inputActions.Command.MoveorSetTarget.performed += OnMoveOrSetTarget;
         inputActions.Command.AttackMove.performed += OnAttackMove;
-        inputActions.Command.ChangeHero.performed += OnChangeHero;
+        //inputActions.Command.ChangeHero.performed += OnChangeHero;
         inputActions.Command.skillClick.Disable();
         inputActions.Camera.ShowHero.Enable();
         foreach (var herodata in DataMgr.Instance.FightingHeroDataList)
         {
-            fightingHeroList.Add(Hero.FindHero(herodata));
+            fightingHeroList.Add(HeroUnit.FindHero(herodata));
         }
         SelectHero(0);
 
@@ -84,7 +84,7 @@ public class DefenseCommand : MonoBehaviour
     {
         if (fightingHeroList.Count == 0)
             return false;
-        Hero hero= fightingHeroList[a];
+        HeroUnit hero= fightingHeroList[a];
         
         if(!hero.IsDead)
         {
@@ -100,10 +100,10 @@ public class DefenseCommand : MonoBehaviour
     {
         for(int i=0;i<fightingHeroList.Count;i++)
         {
-            if(SelectHero(i))
-            {
-                return;
-            }
+            //if(SelectHero(i))
+            //{
+            //    return;
+            //}
         }
     }
 
@@ -124,7 +124,7 @@ public class DefenseCommand : MonoBehaviour
                     skillIndicatorTrs[i].position = hit.point;
                     if(SelectedGroupList.Count>0)
                     {
-                        skillIndicatorTrs[i].forward = hit.point - seletedGroupList[i].spotsTr.position;
+                        skillIndicatorTrs[i].forward = hit.point - seletedGroupList[i].SpotsTr.position;
                     }
                 }
             }
@@ -184,7 +184,7 @@ public class DefenseCommand : MonoBehaviour
             {
                 selectedHero.isProvoked = true;
                 selectedHero.ChangeState(UnitState.Chase);
-                selectedHero.SetChaseTarget(hit.transform);
+                selectedHero.SetTarget(hit.transform);
             }
         }
     }
@@ -211,7 +211,7 @@ public class DefenseCommand : MonoBehaviour
             if ((int)MathF.Pow(2, hit.transform.gameObject.layer) == LayerMask.GetMask("Ally")) //hit한게 ally layer라면
             {
                 //영웅이 클릭됐는지
-                Hero hero=hit.transform.GetComponent<Hero>();
+                HeroUnit hero=hit.transform.GetComponent<HeroUnit>();
                 if (hero!=null)
                 {
                     //ClearSelectedGroups();
@@ -223,22 +223,22 @@ public class DefenseCommand : MonoBehaviour
                     UnitGroup unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
                     if (unitGroup != null)
                     {
-                        if (Input.GetKey(KeyCode.LeftShift) && seletedGroupList.Count > 0 && (SelectedGroupList[0].unitType != UnitType.hero))
-                        {
-                            if (seletedGroupList.Contains(unitGroup))
-                            {
-                                seletedGroupList.Remove(unitGroup);
-                            }
-                            else
-                            {
-                                seletedGroupList.Add(unitGroup);
-                            }
-                        }
-                        else
-                        {
-                            ClearSelectedGroups();
-                            seletedGroupList.Add(unitGroup);
-                        }
+                        //if (Input.GetKey(KeyCode.LeftShift) && seletedGroupList.Count > 0 && (SelectedGroupList[0].unitType != UnitType.hero))
+                        //{
+                        //    if (seletedGroupList.Contains(unitGroup))
+                        //    {
+                        //        seletedGroupList.Remove(unitGroup);
+                        //    }
+                        //    else
+                        //    {
+                        //        seletedGroupList.Add(unitGroup);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    ClearSelectedGroups();
+                        //    seletedGroupList.Add(unitGroup);
+                        //}
                     }
                 }
             }
@@ -276,7 +276,7 @@ public class DefenseCommand : MonoBehaviour
             skillIndicatorTrs.Add(Instantiate(skillIndicatorPrefabs[0]).transform);
             skillIndicatorTrs[i].localScale = new Vector3(seletedGroupList[i].rowColumn.y, 1,
                 seletedGroupList[i].rowColumn.x) * GameMgr.Instance.Deployer.UnitOffset;
-            spots.Add(Instantiate(seletedGroupList[i].spotsTr));
+            spots.Add(Instantiate(seletedGroupList[i].SpotsTr));
 
             spots[i].parent = skillIndicatorTrs[i];
             spots[i].position = Vector3.zero;

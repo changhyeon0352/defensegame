@@ -17,7 +17,6 @@ public class UnitStatUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] Image portrait;
     [SerializeField] Image hpImage;
-    public bool isRefresh = false;
 
     private void Update()
     {
@@ -35,7 +34,9 @@ public class UnitStatUI : MonoBehaviour
         atkSpeedTmp.text = unit.UnitData.AttackSpeed.ToString();
         if (unit.Armor > unit.UnitData.Armor)
             armorTmp.color = Color.green;
-        else { armorTmp.color = Color.white; }
+        else if(unit.Armor==unit.UnitData.Armor) 
+            { armorTmp.color = Color.white; }
+        else { armorTmp.color = Color.red; }
         armorTmp.text = (unit.Armor).ToString();
         magicArmorTmp.text = "0";
         moveSpeedTmp.text = unit.MoveSpeed.ToString();
@@ -47,7 +48,7 @@ public class UnitStatUI : MonoBehaviour
         if (unit.Hp == 0)
         {
             unit = null;
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
         }
     }
     public void RefreshUnitStatWindow(Unit unit)

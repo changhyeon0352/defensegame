@@ -8,7 +8,7 @@ public class UnitData : ScriptableObject
     public HeroData HeroData { set { heroData = value; } }
     [SerializeField]
     private UnitType type;
-    public UnitType unitType { get { return type; } }
+    public UnitType Type { get { return type; } }
     [SerializeField]
     private Sprite unitPortrait;
     public Sprite UnitPortrait { get { return unitPortrait; } }
@@ -26,35 +26,13 @@ public class UnitData : ScriptableObject
     public float MoveSpeed { get { return moveSpeed; } }
     [SerializeField]
     private int atk;
-    public int Atk { get {
-            if (unitType == UnitType.soldier_Range)
-            {
-                return atk + DataMgr.Instance.GetBarracksUpgradeValue(BarracksUpgradeType.range_damage);
-            }
-            else if(unitType==UnitType.hero)
-            {
-                return atk + DataMgr.Instance.blacksmithData.values[heroData.level_Weapon];
-            }
-            return atk; 
-        } 
-    }
+    public int Atk { get { return atk; } }
     [SerializeField]
     private int magicPower;
     public int MagicPower { get { return magicPower; } }
     [SerializeField]
     private int armor;
-    public int Armor { get {
-            if(unitType==UnitType.soldier_Melee)
-            {
-                return armor + DataMgr.Instance.GetBarracksUpgradeValue(BarracksUpgradeType.melee_armor);
-            }
-            else if (unitType == UnitType.hero)
-            {
-                return armor + DataMgr.Instance.blacksmithData.values[5+heroData.level_Armor];
-            }
-            return armor; 
-        } 
-    }
+    public int Armor { get {return armor; } }
     [SerializeField]
     private float attackSpeed;
     public float AttackSpeed { get { return attackSpeed; } }

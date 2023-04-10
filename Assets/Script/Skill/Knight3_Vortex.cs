@@ -13,13 +13,13 @@ public class Knight3_Vortex : Skill
         data.duration = 5f;
     }
 
-    public override void EffectOnUnit(Unit unit, Hero hero)
+    public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
         unit.TakeDamage(data.damage + hero.AttackPoint);
     }
 
     
-    public override IEnumerator SkillCor(Transform skillTr, Hero hero)
+    public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));
         for (int i=0;i<data.duration;i++)

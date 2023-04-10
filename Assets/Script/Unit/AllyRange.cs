@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class AllyRange : FixedUnit,ISelect
+public class AllyRange : FixedUnit
 {
     BowLoadShot bowLoadShot = null;
     public float shotRange = 10f;
@@ -41,10 +41,7 @@ public class AllyRange : FixedUnit,ISelect
         SetAttackSpeed(unitData.AttackSpeed*1.3f);
     }
 
-    public void Select()
-    {
-    }
-
+    //이 유닛은 따로 구현 불필요
     public override void Attack()
     {
         

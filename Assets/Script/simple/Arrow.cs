@@ -5,18 +5,12 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     Rigidbody rb;
-    private float shootingVelocity;
     [SerializeField] private int arrowDamage = 10;
     [SerializeField] private float gravityForce = 10f;
     bool isFlying = true;
     Collider col;
     LayerMask monsterOrGround;
-    public float GravityForce { get=>gravityForce;}
-    public float ShootVel 
-    {
-        get=>shootingVelocity; 
-        set { shootingVelocity = value; } 
-    }
+    public float GravityForce { get=>gravityForce;}    
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,17 +18,19 @@ public class Arrow : MonoBehaviour
         monsterOrGround = LayerMask.GetMask("Monster") | LayerMask.GetMask("Ground");
         GetComponent<ConstantForce>().force = new Vector3(0, -(GravityForce - 9.8f), 0);
     }
-    void Start()
+    public void SetSpeed(float speed)
     {
-        //rb.AddForce(transform.forward * shootingVelocity, ForceMode.Impulse);
-        rb.velocity = transform.forward * shootingVelocity;
-
+        rb.velocity = transform.forward * speed;
     }
-
-    
+    public void ResetArrow()
+    {
+        isFlying = true;
+        rb.isKinematic =false;
+        rb.useGravity = true;
+        col.enabled = true;
+    }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.layer);
         if(other.gameObject.layer==6|| other.gameObject.layer == 7)
         {
             Unit unit = other.GetComponent<Unit>();
@@ -68,7 +64,7 @@ public class Arrow : MonoBehaviour
     }
     IEnumerator DestroyTimer()
     {
-        yield return new WaitForSeconds(5f);
-        Destroy(this.gameObject);
+        yield return new WaitForSeconds(3f);
+        FindObjectOfType<ArrowPool>().ReturnObjectToPool(this.gameObject);
     }
 }
