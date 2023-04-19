@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
   m_Name: Hero_Mage
   m_EditorClassIdentifier: 
-  type: 4
+  type: 3
   unitPortrait: {fileID: 21300000, guid: 0f1a4ce37ccc6ab488c84d999e9f3778, type: 3}
   unitName: "\uBA54\uC774\uC9C0"
   hp: 250

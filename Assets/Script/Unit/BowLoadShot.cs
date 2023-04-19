@@ -4,17 +4,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking.PlayerConnection;
 
 public class BowLoadShot : MonoBehaviour
 {
 	   
 	public Transform bow;
 	public Transform arrowLoad;   //평소엔 바닥에 쏠때 몸 중간 쯤으로 올라와서 화살이 로딩되는 만큼 뒤로감
-    private ArrowPool pool;
+    private ObjectPooling arrowPool;
     //Bow Blendshape
     SkinnedMeshRenderer bowSkinnedMeshRenderer;
-		
-	//Arrow draw & rotation
+
+    //Arrow draw & rotation
+    private bool isShotSpot;
 	public bool arrowOnHand;
 	public Transform arrowToDraw;  //화살 쏘는척 할꺼 
     bool isShootingEnd = true;
@@ -22,13 +24,11 @@ public class BowLoadShot : MonoBehaviour
     public float ShotAngle { get { return shotAngle; } set { shotAngle = value; } }
     [SerializeField] float accuracy = 0f;
     private Transform target;
-    Transform correctionTarget;
-    Transform oldTarget;
 
 	void Awake()
 	{
 
-        pool=FindObjectOfType<ArrowPool>();
+        arrowPool= GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.Arrow);
         if (bow != null)
 		{
 			bowSkinnedMeshRenderer = bow.GetComponent<SkinnedMeshRenderer>();
@@ -39,25 +39,36 @@ public class BowLoadShot : MonoBehaviour
 			arrowToDraw.gameObject.SetActive(false);
 		}
 	}
-    public void SetBowTarget(Transform tr)
+    public void SetEnemyMode()
     {
+        ShotAngle = 5;
+        isShotSpot = false;
+    }
+    public void SetTarget(Transform target)
+    {
+        this.target = target;   
+    }
+    public void SetSpotMode(Transform tr)
+    {
+        ShotAngle = 40;
         target = tr;
+        isShotSpot = true;
     }
 	void Update()
 	{
         if(target != null)
         {
-            if(oldTarget!=target||correctionTarget == null)
-            {
-                GameObject obj = new GameObject();
-            Debug.Log("계속 생성");
-                obj.transform.position=target.position;
-                obj.transform.Translate(transform.right * -0.25f+Vector3.up*0.7f);
-                correctionTarget = obj.transform;
-                correctionTarget.parent = target;
-                oldTarget = target;
-            }
-            transform.forward = new Vector3(correctionTarget.position.x-transform.position.x,0,correctionTarget.position.z-transform.position.z);
+            //if(oldTarget!=target||correctionTarget == null)
+            //{
+            //    GameObject obj = new GameObject();
+            //Debug.Log("계속 생성");
+            //    obj.transform.position=target.position;
+            //    obj.transform.Translate(transform.right * -0.25f+Vector3.up*0.7f);
+            //    correctionTarget = obj.transform;
+            //    correctionTarget.parent = target;
+            //    oldTarget = target;
+            //}
+            transform.forward = new Vector3(target.position.x-transform.position.x,0,target.position.z-transform.position.z);
 
             //Bow blendshape animation 오른팔을 뒤로 뺄수록 활이 휘어짐
             if (bowSkinnedMeshRenderer != null && bow != null && arrowLoad != null)
@@ -85,29 +96,12 @@ public class BowLoadShot : MonoBehaviour
                 {
                     if (arrowToDraw != null)
                     {
-                        //GameObject arrowObj = Instantiate(arrowToShoot, arrowToDraw.position, arrowToDraw.rotation);
-                        //arrowObj.SetActive(true);
-                        GameObject arrowObj = pool.GetObjectFromPool();
-                        arrowObj.transform.position = arrowToDraw.position;
-                        arrowObj.transform.rotation = arrowToDraw.rotation;
-                        
-                        Transform aTr = arrowObj.transform;
-                        aTr.parent = null;
-                        aTr.forward = transform.forward;
-
-                        //aTr.rotation *= Quaternion.Euler(new Vector3(-45, 0, 0));
-                        aTr.rotation *= Quaternion.Euler(new Vector3(-shotAngle, 0, 0));
-                            
-                        float distance = Vector2.Distance(new Vector2(aTr.position.x, aTr.position.z),
-                            new Vector2(correctionTarget.position.x, correctionTarget.position.z));
-                        float deltaH = aTr.position.y - correctionTarget.position.y;
-                        Arrow arrow = aTr.GetComponent<Arrow>();
-                        arrow.SetSpeed(GetArrowVelocity(distance, deltaH, arrow.GravityForce));
-                        Vector3 noise = Random.insideUnitSphere * (1 - accuracy);
-                        arrow.MakeNoise(noise);
-                        arrowToDraw.gameObject.SetActive(false);
-                        arrowOnHand = false;
-                        //Time.timeScale = 0.001f;
+                        if(isShotSpot)
+                        {
+                            ShotToPos(RandomPosInCircle(target.position,AllyRange.SpotRadius));
+                        }
+                        else
+                            ShotToPos(target.position);
                     }
                 }
                 if (arrowLoad.localPosition == Vector3.zero)
@@ -118,15 +112,41 @@ public class BowLoadShot : MonoBehaviour
         }
 		
 	}
-    public float GetArrowVelocity(float L, float dH, float g)
+    private Vector3 RandomPosInCircle(Vector3 center,float radius)
+    {
+        Vector3 pos = center;
+        Vector2 randomPoint = Random.insideUnitCircle.normalized * Random.Range(0, radius);
+        pos += new Vector3(randomPoint.x,0,randomPoint.y);
+
+        return pos;
+    }
+    private void ShotToPos(Vector3 targetPos)
+    {
+        GameObject arrowObj = arrowPool.GetObjectFromPool();
+        Transform aTr = arrowObj.transform;
+        aTr.position = arrowToDraw.position;
+        aTr.forward = (targetPos - transform.position).normalized;
+        aTr.rotation *= Quaternion.Euler(new Vector3(-shotAngle, 0, 0));
+        
+        aTr.parent = null;
+        float distance = Vector2.Distance(new Vector2(aTr.position.x, aTr.position.z),
+            new Vector2(targetPos.x, targetPos.z));
+        float deltaH = aTr.position.y - targetPos.y-1;
+        Arrow arrow = aTr.GetComponent<Arrow>();
+        arrow.SetSpeed(GetArrowVelocity(distance, deltaH, arrow.GravityForce));
+        Vector3 noise = Random.insideUnitSphere * (1 - accuracy);
+        arrow.MakeNoise(noise);
+        arrowToDraw.gameObject.SetActive(false);
+        arrowOnHand = false;
+    }
+    private float GetArrowVelocity(float L, float dH, float g)
     {
         float vel;
-        
         float cos=Mathf.Cos(shotAngle*Mathf.Deg2Rad);
         float sin = Mathf.Sin(shotAngle * Mathf.Deg2Rad);
         vel = Mathf.Sqrt((g * g * L * L) / (cos * cos) / (2 * g * L * sin / cos + 2 * g * (dH)));
-
         return vel;
     }
+    
 }
 

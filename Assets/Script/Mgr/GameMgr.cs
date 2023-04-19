@@ -7,12 +7,14 @@ using UnityEngine;
 public class GameMgr : Singleton<GameMgr>
 {
     public DeployModel Deployer;
-    public HeroUnitController heroController;
-    public SkillController skillController;
+    public GameObject defenseObjs;
     public PlayerInput inputActions;
     public CameraMove cameraMove;
     public GameObject cameraMain;
     public GameObject townCamera;
+    [SerializeField]
+    private ObjectPools objectPools;
+    public ObjectPools ObjectPools { get => objectPools; }
     float defenseTime = 240;
     float timeElapsed = 0;
     private Phase phase;
@@ -28,14 +30,13 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.selectHero:
                 break;
-            case Phase.setting:
+            case Phase.Deployment:
                 Deployer.enabled = false;
                 cameraMove.enabled = false;
                 break;
             case Phase.defense:
                 cameraMove.enabled = false;
-                heroController.enabled = false;
-                skillController.enabled = false;
+                defenseObjs.SetActive(false);
                 inputActions.Command.Enable();
                 break;
             case Phase.result:
@@ -51,7 +52,7 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.selectHero:
                 break;
-            case Phase.setting:
+            case Phase.Deployment:
                 cameraMove.enabled = true;
                 Deployer.enabled = true;
                 Deployer.SpawnHeros();
@@ -59,20 +60,19 @@ public class GameMgr : Singleton<GameMgr>
                 break;
             case Phase.defense:
                 cameraMove.enabled = true;
-                heroController.gameObject.SetActive(true);
-                FindObjectOfType<EnemySpawaner>().enabled = true;
-                skillController.enabled = true;
+                defenseObjs.SetActive(true);
                 inputActions.Command.Enable();
                 break;
             case Phase.result:
                 break;
         }
-
+        UIMgr.Instance.ChangePhase(_phase);
         phase = _phase;
     }
 
     override protected void Awake()
     {
+        
         base.Awake();
         inputActions =new PlayerInput();
         inputActions.Game.Enable();
@@ -81,10 +81,7 @@ public class GameMgr : Singleton<GameMgr>
 
     private void OnEscape(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if(skillController==null||!skillController.IsUsingSkill)
-        {
             UIMgr.Instance.ToggleGameQuitWindow();
-        }
     }
     public void GameQuit()
     {

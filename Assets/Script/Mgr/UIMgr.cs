@@ -55,6 +55,7 @@ public class UIMgr : Singleton<UIMgr>
     private GameObject gameQuitWindow;
     [SerializeField]
     Transform buildingNamesTr;
+    CursorType nowCursorType;
     public Transform HeroListTr { get => heroList.transform; }
 
     public HeroSlot[] HeroSlots { get => heroSlots; }
@@ -72,57 +73,12 @@ public class UIMgr : Singleton<UIMgr>
         defenseStart = DeploymentTr.Find("defenseStartButton");
         HeroSelectingTr = transform.Find("HeroSelecting");
         screenMover = transform.Find("screenMover").gameObject;
-        GameMgr.Instance.actionChangePhase += ChangePhase;
         
 
     }
-    private void Update()
-    {
-        
-        
-    }
 
-    void InitializeUI(Phase phase)
-    {
-        switch (phase)
-        {
-            case Phase.town:
-
-                break;
-            case Phase.selectHero:
-                
-                break;
-            case Phase.setting:
-                
-                break;
-            case Phase.defense:
-                
-                break;
-        }
-    }
-    public void SetButtonAvailable(BasicSkills groupsSkills)
-    {
-        ClearSkillButton();
-        int temp = (int)groupsSkills;
-        for (int i = 0; i < commandButtons.Count; i++)     //선택된건 쓸 수 있게
-        {
-            if ((temp & 1) == 1)//끝자리가 1인지 체크함 이진수 11101 이런거 체크
-            {
-                commandButtons[i].enabled = true;
-                commandImages[i].color = Color.white;
-            }
-            temp >>= 1; // 1101 => 110/1 이렇게 민다
-        }
-    }
-
-    public void ClearSkillButton()
-    {
-        for (int i = 0; i < commandButtons.Count; i++) //모두 못쓰게
-        {
-            commandButtons[i].enabled = false;
-            commandImages[i].color = Color.gray;
-        }
-    }
+    
+    
 
     public void ChangeCursor(CursorType cursor)
     {
@@ -141,6 +97,18 @@ public class UIMgr : Singleton<UIMgr>
         else
         {
             Cursor.SetCursor(cursorFindTarget, new Vector2(cursorTargeting.width * 0.5f, cursorTargeting.height * 0.5f), CursorMode.ForceSoftware);
+        }
+        nowCursorType = cursor;
+    }
+    public void CursorOnMonster(bool isEnter)
+    {
+        if((nowCursorType==CursorType.Default||nowCursorType==CursorType.findTarget)&&isEnter)
+        {
+            ChangeCursor((CursorType)((int)nowCursorType + 1));
+        }
+        else if((nowCursorType == CursorType.Sword || nowCursorType == CursorType.targeting)&& !isEnter)
+        {
+            ChangeCursor((CursorType)((int)nowCursorType + -1));
         }
     }
 
@@ -192,7 +160,7 @@ public class UIMgr : Singleton<UIMgr>
         }
     }
 
-    private void ChangePhase(Phase _phase)
+    public void ChangePhase(Phase _phase)
     {
         switch (GameMgr.Instance.Phase)
         {
@@ -204,7 +172,7 @@ public class UIMgr : Singleton<UIMgr>
                 heroSlots = null;
                 heroList.SetActive(false);
                 break;
-            case Phase.setting:
+            case Phase.Deployment:
                 DeploymentTr.gameObject.SetActive(false);
                 break;
             case Phase.defense:
@@ -227,7 +195,7 @@ public class UIMgr : Singleton<UIMgr>
                 heroSlots = GetComponentsInChildren<HeroSlot>();
                 //InitializeHeroCardList();
                 break;
-            case Phase.setting:
+            case Phase.Deployment:
                 DeploymentTr.gameObject.SetActive(true);
                 screenMover.SetActive(true);
                 for (int i = 0; i < spawnUiTr.childCount; i++)
@@ -240,19 +208,10 @@ public class UIMgr : Singleton<UIMgr>
                 break;
             case Phase.defense:
                 defenseTr.gameObject.SetActive(true);
-                for (int i = 0; i < UnitCommandTr.childCount; i++)
-                {
-
-                    commandImages.Add(UnitCommandTr.GetChild(i).GetChild(0).GetComponent<Image>());
-                    commandButtons.Add(UnitCommandTr.GetChild(i).GetComponent<Button>());
-                    int index = (int)Mathf.Pow(2, i);
-                    //commandButtons[i].onClick.AddListener(() => GameMgr.Instance.heroController.UnitCommand(index));
-                    
-                    
-                }
+                
                 MakeHeroStates();
                 MakeUnitsHpbar();
-                ClearSkillButton();
+                //ClearSkillButton();
                 break;
             case Phase.result:
                 defenseResult.SetActive(true);

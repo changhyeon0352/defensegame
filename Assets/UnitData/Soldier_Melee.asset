@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
   m_Name: Soldier_Melee
   m_EditorClassIdentifier: 
-  type: 2
+  type: 1
   unitPortrait: {fileID: 21300000, guid: 6b53d432c764e3945a2004edcaffe80b, type: 3}
   unitName: "\uBCF4\uBCD1"
   hp: 100

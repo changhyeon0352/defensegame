@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class Mage3_earthquake : Skill
 {
-    public override void EffectOnUnit(Unit unit, HeroUnit hero)
-    {
-        unit.TakeDamage(data.damage + unit.UnitData.MagicPower/2);
-        StartCoroutine(unit.Slow(1f));
-    }
-
     public override void InitSetting()
     {
         data.skillType = SkillType.AreaTarget;
@@ -19,7 +13,12 @@ public class Mage3_earthquake : Skill
         data.damage = 5;
         data.duration = 10f;// playskillontr을 반복하기 위해서
     }
-
+    public override void EffectOnUnit(Unit unit, HeroUnit hero)
+    {
+        unit.TakeDamage(data.damage + unit.UnitData.MagicPower/2);
+        SlowEffect slowEffect = new SlowEffect(unit, 1f);
+        StartCoroutine(unit.StatusEffectCoroutine(slowEffect));
+    }
     public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
         StartCoroutine(PlaySkillOnTr(skillTr));

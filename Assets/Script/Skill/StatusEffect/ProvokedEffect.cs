@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ProvokedEffect : StatusEffect
@@ -9,9 +10,11 @@ public class ProvokedEffect : StatusEffect
     public ProvokedEffect(Unit unit, float duration, Transform target) : base(unit, duration)
     {
         this.target = target;
+        psPool = GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.Provoke);
     }
     public override void EndEffect()
     {
+        unit.isProvoked = false;
         if (unit.State != UnitState.Dead)
         {
             unit.ChangeState(UnitState.Move);
@@ -20,16 +23,16 @@ public class ProvokedEffect : StatusEffect
 
     public override void StartEffect()
     {
-        //unit.ChaseTargetTr = target;
-        unit.ChangeState(UnitState.Chase);
+        MovableUnit movableUnit=unit as MovableUnit;
+        movableUnit.ChaseTarget(target);
+        //이펙트 시작
     }
 
     public override void UpdateEffect()
     {
-        //if (!unit.IsProvoked || unit.ChaseTargetTr == null)
-        //{
-        //    // 도발 상태가 해제됐을 때, 상태이상 효과를 종료합니다.
-        //    unit.EndStatusEffect();
-        //}
+        if(target==null|| unit.State == UnitState.Dead)
+        {
+            isEnd=true;
+        }
     }
 }

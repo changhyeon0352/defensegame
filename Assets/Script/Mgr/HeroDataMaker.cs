@@ -22,7 +22,7 @@ public class HeroDatas : Data
 {
     public List<HeroData> heroDataList;
 }
-public class HeroDataController : Singleton<HeroDataController>
+public class HeroDataMaker : MonoBehaviour
 {
     public HeroData heroData;
     public HeroDatas heroDatas;

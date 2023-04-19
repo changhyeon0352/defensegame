@@ -5,12 +5,11 @@ using UnityEngine;
 public class rockWall : MonoBehaviour
 {
     float stopSec = 1.4f;
-    float count;
+    float count = 8;
     ParticleSystem ps;
     void Awake()
     {
         ps=GetComponent<ParticleSystem>();
-        count = GameMgr.Instance.skillController.UsingSKill.data.duration-2;
 
     }
 

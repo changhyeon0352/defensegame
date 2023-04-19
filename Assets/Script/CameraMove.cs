@@ -29,7 +29,7 @@ public class CameraMove : MonoBehaviour
 
     private void OnShowHero(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        Transform heroTr = GameMgr.Instance.heroController.SelectedHeroTr;
+        Transform heroTr = FindObjectOfType<HeroUnitController>().SelectedHeroTr;
         transform.position=new Vector3(heroTr.position.x+3, transform.position.y, heroTr.position.z);
     }
 

@@ -7,6 +7,8 @@ public class AllyRange : FixedUnit
 {
     BowLoadShot bowLoadShot = null;
     public float shotRange = 10f;
+    static float spotRadius = 2.5f;
+    public static float SpotRadius { get { return spotRadius; } }
     protected override void Awake()
     {
         base.Awake();
@@ -28,19 +30,18 @@ public class AllyRange : FixedUnit
     public void ShotEnemyMode()
     {
         ChangeState(UnitState.Idle);
-        bowLoadShot.ShotAngle = 5;
+        bowLoadShot.SetEnemyMode();
         isShotSpot = false;
-        SetAttackSpeed( unitData.AttackSpeed);
+        //SetAttackSpeed( unitData.AttackSpeed);
     }
     public void ShotSpotMode(Transform targetTr)
     {
-        bowLoadShot.ShotAngle = 40;
-        bowLoadShot.SetBowTarget(targetTr);
+        target = targetTr;
+        bowLoadShot.SetSpotMode(targetTr);
         ChangeState(UnitState.Attack);
         isShotSpot = true;
-        SetAttackSpeed(unitData.AttackSpeed*1.3f);
     }
-
+    
     //이 유닛은 따로 구현 불필요
     public override void Attack()
     {
@@ -49,6 +50,7 @@ public class AllyRange : FixedUnit
 
     public override void SetTarget(Transform target)
     {
-        bowLoadShot.SetBowTarget(target);
+        bowLoadShot.SetTarget(target);
     }
+
 }

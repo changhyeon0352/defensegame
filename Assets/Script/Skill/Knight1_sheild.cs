@@ -7,7 +7,9 @@ public class Knight1_sheild : Skill
 {
     public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
-        StartCoroutine(unit.AddAromor(data.damage, 0.5f));
+        ShieldBuffEffect shieldBuff = new ShieldBuffEffect(unit, 0.5f, data.damage);
+
+        StartCoroutine(unit.StatusEffectCoroutine(shieldBuff));
     }
 
     public override void InitSetting()

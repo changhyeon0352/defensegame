@@ -4,12 +4,9 @@ using UnityEngine;
 
 public abstract class HeroUnit : MovableUnit
 {
-    bool isAttackMove=true;
+    
     private HeroData heroData;
-    protected HeroUnitController controller;
     public HeroData HeroData { get => heroData;}
-    bool isSelected = false;
-    public bool IsSelected{ get => isSelected; }
 
     [SerializeField]
     GameObject heroStatePrefab;
@@ -19,6 +16,7 @@ public abstract class HeroUnit : MovableUnit
     public float[] SkillCools { get => skillCools; }
     bool[] skillCanUse = { true, true, true, true };
     private HeroState heroState;
+    private SkillController skillController;
     public bool[] SkillCanUse { get { return skillCanUse; } }
     public override int Hp
     {
@@ -40,7 +38,10 @@ public abstract class HeroUnit : MovableUnit
     override protected void Awake()
     {
         base.Awake();
-        controller = GetComponent<HeroUnitController>();
+    }
+    public void SetSkillController(SkillController skillController)
+    {
+        this.skillController = skillController;
     }
     public void SetHeroData(HeroData data)
     {
@@ -77,54 +78,26 @@ public abstract class HeroUnit : MovableUnit
     
     
 
-    //무브업데이트땐 적추적 ㄴㄴ
-    public static HeroUnit FindHero(HeroData herodata)
-    {
-        HeroUnit[] heros=FindObjectsOfType<HeroUnit>();
-        HeroUnit result = heros[0];
-        foreach(HeroUnit hero in heros)
-        {
-            if(hero.heroData == herodata)
-            {
-                result = hero;
-            }
-        }
-        return result;
-    }
-
-    protected override void MoveUpdate()
-    {
-        if(!isAttackMove)
-        {
-            navMesh.SetDestination(goalTr.position);
-            if(navMesh.remainingDistance<0.1f&&!navMesh.pathPending)
-            {
-                isAttackMove= true;
-            }
-        }
-        else
-            base.MoveUpdate();  
-    }
     protected override void ChaseUpdate()
     {
-        if (GameMgr.Instance.skillController.IsChasingForSkill)
+        if (skillController.IsChasingForSkill)
         {
             navMesh.SetDestination(targetCol.transform.position);
-            if(navMesh.remainingDistance < GameMgr.Instance.skillController.SkillRange && !navMesh.pathPending)
+            if(navMesh.remainingDistance < skillController.SkillRange && !navMesh.pathPending)
             {
-                GameMgr.Instance.skillController.UseClinkingSkill(targetCol.transform);
-                MoveSpots(transform.position);
+                skillController.UseSkillToTarget(targetCol.transform);
+                MoveSpot(transform.position,false);
             }
         }
         else
             base.ChaseUpdate();
     }
-    public void MoveSpots(Vector3 position)
+    public void MoveSpot(Vector3 position,bool isAttackMove)
     {
         UnitGroup unitgroup =transform.parent.parent.GetComponent<UnitGroup>();
         unitgroup.SetSpots(position);
         ChangeState(UnitState.Move);
-        isAttackMove = false;
+        this.isAttackMove = isAttackMove;
     }
     public void SetTarget(Transform targetTr)
     {
@@ -152,7 +125,7 @@ public abstract class HeroUnit : MovableUnit
     {
         base.Die();
         DataMgr.Instance.HeroDie(this);
-        GameMgr.Instance.heroController.ChangeHeroAfterDie(this);
+        FindObjectOfType<HeroUnitController>().ChangeHeroAfterDie(this);
     }
     public void MakeHeroStateUI()
     {

@@ -21,10 +21,10 @@ public class Knight3_Vortex : Skill
     
     public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {
-        StartCoroutine(PlaySkillOnTr(skillTr));
+        StartCoroutine(PlaySkillOnTr(skillTr));//스킬 이펙트 오브젝트 생성후 삭제
         for (int i=0;i<data.duration;i++)
         {
-            AoeSkill(skillTr, hero);
+            AoeSkill(skillTr, hero);//범위 내의 타겟에게  EffextOnUnit()실행
             yield return new WaitForSeconds(1);
         }
         

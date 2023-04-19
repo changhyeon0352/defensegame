@@ -19,7 +19,6 @@ public abstract class ObjectPooling : MonoBehaviour
             GameObject obj = Instantiate(prefab, transform.position, Quaternion.identity, transform);
             obj.SetActive(false); // 처음에는 비활성화
             objectPool.Add(obj);
-            
         }
     }
     protected abstract void InitializeObj(GameObject obj);
@@ -29,7 +28,6 @@ public abstract class ObjectPooling : MonoBehaviour
         {
             if (!objectPool[i].activeInHierarchy)
             { // 활성화되어 있지 않은 오브젝트를 찾음
-                objectPool[i].SetActive(true);
                 InitializeObj(objectPool[i]);
                 return objectPool[i];
             }
@@ -38,9 +36,9 @@ public abstract class ObjectPooling : MonoBehaviour
         GameObject obj = Instantiate(prefab, transform.position, Quaternion.identity, transform);
         obj.SetActive(false);
         objectPool.Add(obj);
+        InitializeObj(obj);
         return obj;
     }
-
     public void ReturnObjectToPool(GameObject obj)
     {
         obj.SetActive(false);

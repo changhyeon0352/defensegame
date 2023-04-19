@@ -48,7 +48,18 @@ public class DeployModel : MonoBehaviour
     {
         UnitSpawnPoint=DataMgr.Instance.GetSpawnPoint();
     }
-    public void SortingUnit()
+    public void StartSetting(bool isHero = false)
+    {
+        GameObject obj = Instantiate(unitGroupPrefab, transform);
+        unitGroup = obj.GetComponent<UnitGroup>();
+        //unitGroup.transform.SetParent(transform);
+        if (!isHero)
+        {
+            AddUnitColumn();
+            rowColumn = Vector2Int.one;
+        }
+    }
+    private void SortingUnit()
     {
         Vector3 mousePosition = Mouse.current.position.ReadValue();
         //유닛그룹 정렬시키기
@@ -88,24 +99,44 @@ public class DeployModel : MonoBehaviour
             }
         }
     }
-    public void Ressetting(RaycastHit hit)
-    {
-        int unitIndex = (int)hit.transform.GetComponent<Unit>().UnitData.Type - 2;// none,monster 다음부터임
-        SelectSpwanUnitData(unitIndex);
-        unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
-        rowColumn = UnitGroup.rowColumn;
-        //unitspot제거
-        for (int i = 0; i < UnitGroup.SpotsTr.childCount; i++)
-        {
-            Destroy(UnitGroup.SpotsTr.GetChild(i).gameObject);
-        }
-        unitGroup.transform.SetParent(transform);
-    }
+    
     public void RemoveEveryUnit()
     {
         for (int i = 0; i < UnitGroup.NumUnitList;)
         {
             RemoveLastToList(true);
+        }
+    }
+    public void AddUnitColumn()
+    {
+        if(unitSpawnPoint >= SpawnUnitData.Cost*rowColumn.x)
+        {
+            rowColumn.y++;
+            for (int i = 0; i < rowColumn.x; i++)
+            {
+                if (unitSpawnPoint >= SpawnUnitData.Cost)
+                {
+                    UnitSpawnPoint -= SpawnUnitData.Cost;
+                    GameObject obj = Instantiate(SpawnUnitData.unitPrefab, UnitGroup.UnitsTr);
+                    Unit unit = obj.GetComponent<Unit>();
+                    unit.SetUnitData(SpawnUnitData);
+                    UnitGroup.AddUnitList(unit);
+                }
+            }
+        }
+        
+        
+    }
+    public void RemoveLastColumn()
+    {
+
+        if (UnitGroup.NumUnitList > rowColumn.x)
+        {
+            rowColumn.y--;
+            for (int i = 0; i < rowColumn.x; i++)
+            {
+                RemoveLastToList();
+            }
         }
     }
     public void CompleteUnitSetting(Ray ray)
@@ -126,6 +157,7 @@ public class DeployModel : MonoBehaviour
             Unit unit = UnitGroup.UnitList[i]; 
             unit.SetGoalSpot(spot.transform);
             unit.InitializeUnitStat();
+            unit.SetUnitGroup(unitGroup);
         }
 
         //unitGroup.transform.SetParent(UnitGroup.AllyGroups);//유닛그룹이 AllyGroups의 자식으로 계층이동
@@ -133,34 +165,17 @@ public class DeployModel : MonoBehaviour
             UnitGroup.SetUnitGroupSkill(SpawnUnitData);
         unitGroup = null;
     }
-    public void AddUnitColumn()
+    public void Ressetting(RaycastHit hit)
     {
-        rowColumn.y++;
-        for (int i = 0; i < rowColumn.x; i++)
-        {
-            if (unitSpawnPoint > SpawnUnitData.Cost)
-            {
-                UnitSpawnPoint -= SpawnUnitData.Cost;
-                GameObject obj = Instantiate(SpawnUnitData.unitPrefab, UnitGroup.UnitsTr);
-                Unit unit = obj.GetComponent<Unit>();
-                unit.SetUnitData(SpawnUnitData);
-                UnitGroup.AddUnitList(unit);
-            }
-        }
-    }
-    public void RemoveLastColumn()
-    {
+        int unitIndex = (int)hit.transform.GetComponent<Unit>().UnitData.Type - 1;// none 다음부터임
+        SelectSpwanUnitData(unitIndex);
+        unitGroup = hit.transform.parent.parent.GetComponent<UnitGroup>();
+        rowColumn = UnitGroup.rowColumn;
+        unitGroup.ClearSpots();
 
-        if (UnitGroup.NumUnitList > rowColumn.x)
-        {
-            rowColumn.y--;
-            for (int i = 0; i < rowColumn.x; i++)
-            {
-                RemoveLastToList();
-            }
-        }
+        unitGroup.transform.SetParent(transform);
     }
-    void RemoveLastToList(bool isCancel = false)
+    private void RemoveLastToList(bool isCancel = false)
     {
         int limitNum = isCancel ? 0 : 1;
         if (UnitGroup.NumUnitList > limitNum * rowColumn.x)
@@ -170,19 +185,9 @@ public class DeployModel : MonoBehaviour
             UnitSpawnPoint += SpawnUnitData.Cost;
         }
     }
-    //배치중인 유닛은 파란색으로 보이게 쉐이더를 조절하는 함수
     
-    public void StartSetting(bool isHero = false)
-    {
-        GameObject obj = Instantiate(unitGroupPrefab,transform);
-        unitGroup = obj.GetComponent<UnitGroup>();
-        //unitGroup.transform.SetParent(transform);
-        if (!isHero)
-        {
-            AddUnitColumn();
-            rowColumn = Vector2Int.one;
-        }
-    }
+    
+    
     public void SetDir(float dir)
     {
         this.dir = dir;
@@ -227,6 +232,7 @@ public class DeployModel : MonoBehaviour
                     hero.SetUnitData(unitData);
                     hero.SetHeroData(heroData);
                     hero.InitializeUnitStat();
+                    hero.SetUnitGroup(unitGroup);
                 }
                 Ray ray = new Ray();
                 ray.origin = heroSpawnSpots.GetChild(i).position;

@@ -6,7 +6,8 @@ public class Mage2_Sleep : Skill
 {
     public override void EffectOnUnit(Unit unit, HeroUnit hero)
     {
-        StartCoroutine(unit.Sleep(data.duration));
+        SleepEffect sleepEffect = new SleepEffect(unit, data.duration);
+        StartCoroutine(unit.StatusEffectCoroutine(sleepEffect));
     }
 
     public override void InitSetting()
@@ -25,5 +26,4 @@ public class Mage2_Sleep : Skill
         yield return null;
         AoeSkill(skillTr, hero);
     }
-
 }

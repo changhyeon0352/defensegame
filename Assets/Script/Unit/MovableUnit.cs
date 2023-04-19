@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class MovableUnit : Unit
 {
+    protected bool isAttackMove = true;
     protected override void IdleUpdate()
     {
         if (IsEnemyInSearchRange(currentStat.searchRange))
@@ -17,12 +18,25 @@ public abstract class MovableUnit : Unit
     {
         if (!navMesh.enabled)
             return;
-        navMesh.SetDestination(goalTr.position);          //목표로 가기
-        if (IsEnemyInSearchRange(currentStat.searchRange))
-            ChangeState(UnitState.Chase);
-        if (navMesh.remainingDistance < 0.1f && !navMesh.pathPending)                  //목표에 다가가면 Idle로 변경
-        {
+        if(goalTr == null)
             ChangeState(UnitState.Idle);
+        if (!isAttackMove)
+        {
+            navMesh.SetDestination(goalTr.position);
+            if (navMesh.remainingDistance < 0.2f && !navMesh.pathPending)
+            {
+                isAttackMove = true;
+            }
+        }
+        else
+        {
+            navMesh.SetDestination(goalTr.position);          //목표로 가기
+            if (IsEnemyInSearchRange(currentStat.searchRange))
+                ChangeState(UnitState.Chase);
+            if (navMesh.remainingDistance < 0.1f && !navMesh.pathPending)                  //목표에 다가가면 Idle로 변경
+            {
+                ChangeState(UnitState.Idle);
+            }
         }
     }
     protected override void ChaseUpdate()

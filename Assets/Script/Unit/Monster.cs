@@ -27,14 +27,27 @@ public class Monster : MovableUnit
     }
     protected override IEnumerator DieFallCor()
     {
-        if(state == UnitState.Dead)
+        yield return new WaitForSeconds(1);
+        Arrow[] arrows = GetComponentsInChildren<Arrow>();
+        for(int i = 0; i < arrows.Length; i++)
         {
-            rb.useGravity = true;
-            rb.isKinematic = false;
-            rb.drag = 20;
-            yield return new WaitForSeconds(1);
-            FindObjectOfType<EnemySpawaner>().ReturnObjectToPool(this.gameObject);
+            GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.Arrow).ReturnObjectToPool(arrows[i].gameObject);
         }
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        rb.drag = 20;
+        yield return new WaitForSeconds(1);
+        ObjectPooling objPool;
+        if (UnitData.Type==UnitType.mon2)
+        {
+            objPool=GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.mon2);
+        }
+        else
+        {
+            objPool = GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.mon1);
+        }
+        
+        objPool.ReturnObjectToPool(this.gameObject);
     }
     public void ReSetUnitAfterDie()
     {

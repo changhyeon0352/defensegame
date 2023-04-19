@@ -18,6 +18,11 @@ public class AllyMelee : MovableUnit
             multipleNum *= multipleNum;
         }
     }
+    public void ReturnToLine()
+    {
+        ChangeState(UnitState.Move);
+        isAttackMove=false;
+    }
     public override void Attack()
     {
         if (targetCol.enabled)

@@ -30,8 +30,9 @@ public class EnergyBolt : MonoBehaviour
             {
                 targetHP.TakeDamage(damage);
                 Instantiate(explosionPrefab,transform.position,Quaternion.identity);
-                Destroy(this.gameObject);
+                
             }
+            Destroy(this.gameObject);
         }
     }
     public void SetTargetAndDamage(Transform target,int damage)

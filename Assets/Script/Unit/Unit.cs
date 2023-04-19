@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using static UnityEngine.Rendering.DebugUI;
-
+using Unity.VisualScripting;
 
 public struct UnitStat
 {
@@ -43,11 +43,11 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
     [SerializeField]
     protected Transform goalTr;
     protected float attackCooldown;
-    protected StatusEffect statusEffect;
     protected int hp;
     protected int mp;
     public bool isProvoked = false;
     public bool isSleep = false;
+    private UnitGroup ownUnitGoup;
     private UnitHpBar unitHpBar;
     [SerializeField]
     protected ParticleSystem selectEffect;
@@ -147,7 +147,10 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
         hp = currentStat.hpMax;
         mp = currentStat.mpMax;
     }
-
+    public void SetUnitGroup(UnitGroup group)
+    {
+        ownUnitGoup = group;
+    }
 
     public IEnumerator AddAromor(int armorPlus, float sec)
     {
@@ -164,49 +167,14 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
         //    //UIMgr.Instance.unitStatUI.isRefresh = true;
         //}
     }
-    public IEnumerator Provoked(Transform tr, float sec)
+    public void Sleep(bool isSleep)
     {
-        targetCol = tr.GetComponent<Collider>();
-        ChangeState(UnitState.Chase);
-        isProvoked = true;
-        GameObject obj = Instantiate(GameMgr.Instance.skillController.Buffs[(int)Buff.provoked], transform);
-        yield return new WaitForSeconds(sec);
-        if (state != UnitState.Dead)
-        {
-            ChangeState(UnitState.Move);
-            isProvoked = false;
-        }
-        Destroy(obj);
+        this.isSleep = isSleep;
+        navMesh.enabled = !isSleep;
     }
-    public IEnumerator Sleep(float sec)
+    public void MultiplyMoveSpeed(float multiple)
     {
-        float count = sec;
-        isSleep = true;
-        //anim.SetTrigger("Sleep");
-        navMesh.enabled = false;
-        GameObject obj = Instantiate(GameMgr.Instance.skillController.Buffs[(int)Buff.sleep], transform);
-        while (count > 0)
-        {
-            count -= Time.deltaTime;
-            yield return null;
-            if (!isSleep)
-                break;
-        }
-        if (state != UnitState.Dead)
-        {
-            navMesh.enabled = true;
-            isSleep = false;
-            //anim.SetTrigger("WakeUp");
-            ChangeState(UnitState.Move);
-        }
-        Destroy(obj);
-    }
-    public IEnumerator Slow(float sec)
-    {
-        MoveSpeed = unitData.MoveSpeed / 4;
-        yield return new WaitForSeconds(sec);
-        if (state != UnitState.Dead)
-            MoveSpeed = unitData.MoveSpeed;
+        MoveSpeed=permanentStat.moveSpeed*multiple;
     }
 
     public void SetAttackSpeed(float speed)
@@ -222,7 +190,11 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
 
     virtual protected void Die()
     {
-        FindObjectOfType<UnitHpbarPool>().ReturnObjectToPool(unitHpBar.gameObject);
+        if (unitHpBar == null)
+        {
+            int a = 0;
+        }    
+        GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.Hpbar).ReturnObjectToPool(unitHpBar.gameObject);
         anim.SetTrigger("Dead");
         col.enabled = false;
         navMesh.enabled = false;
@@ -232,21 +204,20 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
         {
             ps.Stop();
         }
-    }
-    public void DieFall()
-    {
+        this.transform.parent = null;
         StartCoroutine(DieFallCor());
+        
     }
     protected virtual IEnumerator DieFallCor()
     {
-        if (state == UnitState.Dead)
-        {
-            rb.useGravity = true;
-            rb.isKinematic = false;
-            rb.drag = 20;
-            yield return new WaitForSeconds(1);
-            Destroy(this);
-        }
+        ownUnitGoup.RemoveUnitFromList(this);
+        yield return new WaitForSeconds(1);
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        rb.drag = 20;
+        yield return new WaitForSeconds(1);
+        Destroy(this.gameObject);
+        
     }
     
 
@@ -298,6 +269,13 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
     public void ChaseTarget(Transform tr)
     {
         targetCol=tr.GetComponent<Collider>();
+        if(targetCol==null)
+        {
+            SphereCollider col = tr.AddComponent<SphereCollider>();
+            col.radius = 0.5f;
+            col.isTrigger = true;
+            targetCol = col;
+        }
         isProvoked = true;
         ChangeState(UnitState.Chase);
     }
@@ -342,18 +320,36 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
         state = newState;
         anim.SetInteger("iState", (int)state);
     }
-    private IEnumerator EffectCoroutine()
+    public IEnumerator StatusEffectCoroutine(StatusEffect statusEffect)
     {
-        statusEffect.StartEffect();
-
-        float elapsed = 0f;
-        while (elapsed < statusEffect.Duration)
+        if (statusEffect.PsPool!=null)
         {
-            statusEffect.UpdateEffect();
-            elapsed += Time.deltaTime;
-            yield return null;
+            GameObject psObj = statusEffect.PsPool.GetObjectFromPool();
+            psObj.transform.SetParent(transform);
+            psObj.transform.position=transform.position+Vector3.up;
+            psObj.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+            psObj.SetActive(true);
+            statusEffect.StartEffect();
+            float elapsed = 0f;
+            while (elapsed < statusEffect.Duration&& !statusEffect.IsEnd)
+            {
+                statusEffect.UpdateEffect();
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            statusEffect.PsPool.ReturnObjectToPool(psObj);
         }
-
+        else
+        {
+            statusEffect.StartEffect();
+            float elapsed = 0f;
+            while (elapsed < statusEffect.Duration&&!statusEffect.IsEnd)
+            {
+                statusEffect.UpdateEffect();
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+        }
         statusEffect.EndEffect();
         statusEffect = null;
     }
@@ -365,24 +361,30 @@ public abstract class Unit : MonoBehaviour, IHealth, IPointerEnterHandler, IPoin
     public void InitUnitHpbar()
     {
         Transform unitHpbarParent = FindObjectOfType<HPbars>().transform;
-        unitHpBar = FindObjectOfType<UnitHpbarPool>().GetObjectFromPool().GetComponent<UnitHpBar>();
+        GameObject obj = GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.Hpbar).GetObjectFromPool();
+        obj.SetActive(true);
+        unitHpBar = obj.GetComponent<UnitHpBar>();
         unitHpBar.transform.SetParent(unitHpbarParent);
         //unitHpBar = Instantiate(unitHpbarPrefab, unitHpbarParent).GetComponent<UnitHpBar>();
         unitHpBar.SetUnitInfo(this);
     }
 
-    public void UpdateHPbar(int hp, int hpMax)
+    protected void UpdateHPbar(int hp, int hpMax)
     {
-        unitHpBar.UpdateHpBar(hp, hpMax);
+        if(unitHpBar!=null)
+        {
+            unitHpBar.UpdateHpBar(hp, hpMax);
+        }
+        
     }
 
     public void ShowSelectEffect()
     {
-        selectEffect.Play();
+        selectEffect.gameObject.SetActive(true);
     }
     public void HideSelectEffect()
     {
-        selectEffect.Stop();
+        selectEffect.gameObject.SetActive(false);
     }
     public void OnPointerEnter(PointerEventData eventData)
     {

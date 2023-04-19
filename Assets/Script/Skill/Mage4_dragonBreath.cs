@@ -24,7 +24,7 @@ public class Mage4_dragonBreath : Skill
     {
         Hero_Mage hero_Mage = (Hero_Mage)hero;
         UIMgr.Instance.ShowDuration(data.Name, data.duration);
-        hero_Mage.MoveSpots(hero.transform.position);
+        //hero_Mage.MoveSpots(hero.transform.position);
         hero_Mage.IsStopSkill = true;
         StartCoroutine(PlaySkillOnTr(skillTr));
         yield return new WaitForSeconds(data.duration);

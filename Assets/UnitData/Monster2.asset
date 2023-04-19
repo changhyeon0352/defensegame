@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12fc1fd9f4e61d94ca09851c51441a60, type: 3}
   m_Name: Monster2
   m_EditorClassIdentifier: 
-  type: 1
+  type: 5
   unitPortrait: {fileID: 21300000, guid: 1bd8553401f3d73409c94fc3c2dac999, type: 3}
   unitName: "\uD574\uACE8\uAE30\uC0AC"
   hp: 500

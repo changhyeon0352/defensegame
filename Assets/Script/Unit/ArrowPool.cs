@@ -11,6 +11,7 @@ public class ArrowPool : ObjectPooling
     protected override void InitializeObj(GameObject obj)
     {
         Arrow arrow = obj.GetComponent<Arrow>();
+        obj.SetActive(true);
         arrow.ResetArrow();
     }
 }

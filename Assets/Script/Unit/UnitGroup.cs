@@ -17,10 +17,9 @@ public class UnitGroup:MonoBehaviour
     //유닛그룹의 부모가 될 오브젝트
     public Transform AllyGroups;
     public Vector2Int rowColumn=Vector2Int.zero;
-    BasicSkills groupSkill =BasicSkills.None;
-    private bool isSelected=false;
+    SoldierSkill groupSkill =SoldierSkill.None;
 
-    public BasicSkills GroupSkill { get => groupSkill; }
+    public SoldierSkill GroupSkill { get => groupSkill; }
     public int NumUnitList { get => unitList.Count; }
     public List<Unit> UnitList { get => unitList; }
 
@@ -29,10 +28,14 @@ public class UnitGroup:MonoBehaviour
         unitList = new List<Unit>();
         //AllyGroups = FindObjectOfType<AllyUnitGroups>().transform;
     }
-    public void CheckSelected()
+    public void ClearSpots()
     {
-        
+        for (int i = 0; i < SpotsTr.childCount; i++)
+        {
+            unitList[i].SetGoalSpot(null);
+            Destroy(SpotsTr.GetChild(i).gameObject);
 
+        }
     }
     public void SetSpots(Vector3 position)
     {
@@ -50,20 +53,21 @@ public class UnitGroup:MonoBehaviour
         
         if (unitType == UnitType.soldier_Melee)
         {
-            groupSkill |= BasicSkills.MoveToSpot;
-            groupSkill |= BasicSkills.Charge;
+            groupSkill |= SoldierSkill.ReturnToLine;
+            groupSkill |= SoldierSkill.Charge;
         }
         else if (unitType == UnitType.soldier_Range)
         {
-            groupSkill |= BasicSkills.ShootSpot;
-            groupSkill |= BasicSkills.ShootEnemy;
+            groupSkill |= SoldierSkill.ShootSpot;
+            groupSkill |= SoldierSkill.ShootEnemy;
         }
         
     }
     public void RemoveUnitFromList(Unit unit)
     {
         unitList.Remove(unit);
-        Destroy(unit.gameObject);
+        if(GameMgr.Instance.Phase==Phase.Deployment)
+            Destroy(unit.gameObject);
         if(unitList.Count== 0)
         {
             //GameMgr.Instance.defenseMgr.SelectedGroupList.Remove(this);
@@ -72,7 +76,7 @@ public class UnitGroup:MonoBehaviour
     }
     public void SelectThisGroup()
     {
-        isSelected = true;
+        //isSelected = true;
         foreach(Unit unit in unitList)
         {
             unit.ShowSelectEffect();
@@ -80,7 +84,7 @@ public class UnitGroup:MonoBehaviour
     }
     public void CancelSelect()
     {
-        isSelected = false;
+        //isSelected = false;
         foreach (Unit unit in unitList)
         {
             unit.HideSelectEffect();

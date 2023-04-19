@@ -15,7 +15,8 @@ public class Knight2_Provoke : Skill
 
     public override void EffectOnUnit(Unit unit,HeroUnit hero)
     {
-        StartCoroutine(unit.Provoked(hero.transform, data.duration));
+        ProvokedEffect provokedEffect =new ProvokedEffect(unit, data.duration, hero.transform);
+        StartCoroutine(unit.StatusEffectCoroutine(provokedEffect));
     }
     public override IEnumerator SkillCor(Transform skillTr, HeroUnit hero)
     {

@@ -413,15 +413,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "HeroSkillClick",
-                    "type": "Button",
-                    "id": "c96d209e-dc46-4ba4-b443-d0c607b9ab9a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -565,17 +556,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "SkillCancel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dd80f40c-0176-42a3-9edd-1b0bb7da2488",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "HeroSkillClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

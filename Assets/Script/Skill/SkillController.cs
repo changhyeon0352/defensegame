@@ -1,18 +1,18 @@
 
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public enum SkillType { OnHero, UnitTarget, AreaTarget,directional }
 public enum Buff { provoked,sleep,shield}
 public class SkillController : MonoBehaviour
 {
-    
-    public GameObject[] Buffs;
     public GameObject skillRangePrefab;
     [SerializeField]
     Skill[] knigjtSkills;
     [SerializeField]
     Skill[] mageSkills;
     Skill usingSkill;
+    public Action cancelAction;
     
     public Skill UsingSKill { get=> usingSkill; } 
     public SkillType SkillType { 
@@ -50,42 +50,42 @@ public class SkillController : MonoBehaviour
         GameMgr.Instance.inputActions.Command.SkillButton2.performed += OnSkill2;
         GameMgr.Instance.inputActions.Command.SkillButton3.performed += OnSkill3;
         GameMgr.Instance.inputActions.Command.SkillButton4.performed += OnSkill4;
-        GameMgr.Instance.inputActions.Command.HeroSkillClick.performed += OnSkillClick;
         GameMgr.Instance.inputActions.Command.SkillCancel.performed += OnSkillCancel;
-        GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
+        GameMgr.Instance.inputActions.Command.skillClick.Disable();
     }
-
-    //스킬 인디케이터 표시
+    
+    //스킬 인디케이터가 마우스를 따라가게 표시
     private void Update()
     {
         if(indicator!=null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ground")))
-            {   
-                if(SkillType==SkillType.AreaTarget)
+            {  
+                if (SkillType == SkillType.directional)
+                {
+                    indicator.transform.right=-(hit.point - selectedHero.transform.position);
+                }
+                else
                 {
                     indicator.transform.position = hit.point;
                     indicator.transform.forward = hit.point - selectedHero.transform.position;
                 }
-                else if (SkillType == SkillType.directional)
-                {
-                    indicator.transform.right=-(hit.point - selectedHero.transform.position);
-                }
             }
         }
     }
+    
+    private void OnSkill1(InputAction.CallbackContext _) { PressSkillButton(0); }
+    private void OnSkill2(InputAction.CallbackContext _) { PressSkillButton(1); }
+    private void OnSkill3(InputAction.CallbackContext _) { PressSkillButton(2); }
+    private void OnSkill4(InputAction.CallbackContext _) { PressSkillButton(3); }
     private void OnSkillCancel(InputAction.CallbackContext _)
     {
-        if(isUsingSkill)
+        if (isUsingSkill)
             SkillEnd();
     }
-    private void OnSkill1(InputAction.CallbackContext _) { StartUsingSkill(0); }
-    private void OnSkill2(InputAction.CallbackContext _) { StartUsingSkill(1); }
-    private void OnSkill3(InputAction.CallbackContext _) { StartUsingSkill(2); }
-    private void OnSkill4(InputAction.CallbackContext _) { StartUsingSkill(3); }
-
-    //skillTarget을 정해서 UseClinkingSkill(skillTarget) 하는 역할(StartClickingSkill()함수가 실행된 다음 인풋이 활성화)
+    //skillTarget을 정해서 UseClinkingSkill(skillTarget) 하는 역할
+    //(StartClickingSkill()함수가 실행된 다음 인풋이 활성화)
     private void OnSkillClick(InputAction.CallbackContext _)
     {
         if (SkillType == SkillType.UnitTarget || SkillType == SkillType.AreaTarget)//타게팅,혹은 논타겟범위
@@ -105,21 +105,21 @@ public class SkillController : MonoBehaviour
                 else if (usingSkill.data.skillType == SkillType.AreaTarget)
                 {
                     skillTarget = new GameObject().transform;
+
                     skillTarget.position = hit.point + Vector3.up * 0.3f;
                     skillTarget.forward = indicator.transform.forward;
                 }
                 if (distance > usingSkill.data.range)//사거리 밖일때
                 {
                     //Hero.cs ChaseUpdate에서 체크해서 사거리 이내로 오면UseClinkingSkill(skillTarget)
-                    isChasingForSkill = true; 
+                    isChasingForSkill = true;
                     SkillEnd(true);
                     selectedHero.ChaseTarget(skillTarget);
                     return;
                 }
                 //스킬 쓰는 방향으로 바로보고 스킬 사용
-                selectedHero.transform.forward = new Vector3(skillTarget.position.x - selectedHero.transform.position.x
-                    , 0, skillTarget.position.z - selectedHero.transform.position.z);
-                UseClinkingSkill(skillTarget);
+                selectedHero.transform.LookAt(skillTarget);
+                UseSkillToTarget(skillTarget);
             }
             else
             {
@@ -132,21 +132,22 @@ public class SkillController : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, usingSkill.TargetLayer))
             {
                 selectedHero.transform.LookAt(hit.point);
-                UseClinkingSkill(selectedHero.transform);
+                UseSkillToTarget(selectedHero.transform);
             }
         }
     }
-
-    // 스킬 취소 함수
+    // 스킬 취소 함수 범위 밖이면 인풋과 인디케이터만 처리
     public void SkillEnd(bool isOutRange=false)
     {
         if(skillRangeObj!=null)
             Destroy(skillRangeObj);
         if(indicator!=null)
             Destroy(indicator);
-
-        GameMgr.Instance.inputActions.Command.HeroSkillClick.Disable();
+        cancelAction?.Invoke();
+        GameMgr.Instance.inputActions.Command.skillClick.performed -= OnSkillClick;
+        GameMgr.Instance.inputActions.Command.skillClick.Disable();
         GameMgr.Instance.inputActions.Command.Select.Enable();
+        GameMgr.Instance.inputActions.Game.GameQuit.Enable();
         UIMgr.Instance.ChangeCursor(CursorType.Default);
         if (isOutRange)
         {
@@ -160,16 +161,32 @@ public class SkillController : MonoBehaviour
     }
 
     //스킬 버튼 누를시 실행되는 스킬 시작 함수
-    public void StartUsingSkill(int index)
+    private void PressSkillButton(int index)
     {
         //스킬 사용 도중에 눌렀으면 기존 스킬 취소
         if (skillRangeObj != null || indicator != null)
         {
             SkillEnd();
         }
+        
         this.index = index;
         if (!selectedHero.SkillCanUse[index]) //스킬쿨 체크
             return;
+        SetSkill(index);
+        usingSkill.InitSetting();
+        //OnHero타입은 스킬타겟을 정하고 스킬을 바로 실행 그외의 스킬은 StartClickingSill()로 클릭을 통해 정함
+        
+        if (usingSkill.data.skillType != SkillType.OnHero)
+        {
+            StartClickingSkill();
+            return;
+        }
+        skillTarget = selectedHero.transform;
+        UseSkill();
+    }
+    //PressSkillButton 시 usingSkill을 정함
+    private void SetSkill(int index)
+    {
         switch (selectedHero.HeroData.heroClass) //컨트롤 중 영웅캐릭터 클래스 체크 
         {
             case (HeroClass.Knight):
@@ -179,22 +196,34 @@ public class SkillController : MonoBehaviour
                 usingSkill = mageSkills[index];
                 break;
         }
-        usingSkill.InitSetting();
-        //OnHero타입은 스킬타겟을 정하고 스킬을 바로 실행 그외의 스킬은 StartClickingSill()로 클릭을 통해 정함
-        if (skillTarget == null)
-        {
-            if (usingSkill.data.skillType != SkillType.OnHero)
-            {
-                StartClickingSkill();
-                return;
-            }
-            skillTarget = selectedHero.transform;
-        }
-        UseSkill(index);
     }
-
+    //버튼을 누르고 클릭으로 목표를 지정하는 스킬일 경우 PressSkillButton()에서 실행되는 함수
+    private void StartClickingSkill()
+    {
+        if (SkillType == SkillType.AreaTarget || SkillType == SkillType.UnitTarget)
+            ShowSkillRange(usingSkill.data.range);
+        isUsingSkill = true;
+        GameMgr.Instance.inputActions.Game.GameQuit.Disable();
+        GameMgr.Instance.inputActions.Command.Select.Disable();
+        GameMgr.Instance.inputActions.Command.skillClick.Enable();
+        GameMgr.Instance.inputActions.Command.skillClick.performed += OnSkillClick;
+        if (SkillType == SkillType.UnitTarget)
+        {
+            UIMgr.Instance.ChangeCursor(CursorType.findTarget);
+        }
+        else
+        {
+            ShowIndicator(); //스킬인디케이터온
+        }
+    }
+    //스킬타겟 지정하고 다시 UseSkill 
+    public void UseSkillToTarget(Transform skillTarget)
+    {
+        this.skillTarget = skillTarget;
+        UseSkill();
+    }
     //스킬이 실제 발동될때 실행되는 함수
-    private void UseSkill(int index)
+    private void UseSkill()
     {
         StartCoroutine(usingSkill.SkillCor(skillTarget, selectedHero));              //스킬사용
         StartCoroutine(selectedHero.SkillCoolCor(index, usingSkill.data.coolTime)); //스킬쿨타임 적용
@@ -202,7 +231,6 @@ public class SkillController : MonoBehaviour
             selectedHero.SkillAnimation(UsingSKill == mageSkills[3], UsingSKill.data.duration);
         SkillEnd();
     }
-
     //스킬 범위 보여주는 함수(유닛타겟,영역타겟)
     public void ShowSkillRange(float skillRange)
     {
@@ -213,8 +241,17 @@ public class SkillController : MonoBehaviour
     }
 
     // 스킬 인디케이터 보여주는 함수
-    public void ShowIndicator()
+    public void ShowIndicator(float radius)
     {
+        indicator = Instantiate(skillRangePrefab);
+        indicator.transform.localScale = new Vector3(radius, 1, radius);
+    }
+    private void ShowIndicator()
+    {
+        if(UsingSKill==null)
+        {
+            return;
+        }
         indicator = Instantiate(usingSkill.Indicator);
         if(SkillType==SkillType.AreaTarget)
         {
@@ -227,29 +264,8 @@ public class SkillController : MonoBehaviour
         }
     }
 
-    //버튼을 누르고 클릭으로 목표를 지정하는 스킬일 경우 StartUsingSkill()다음으로 실행되는 함수
-    public void StartClickingSkill()
-    {
-        if(SkillType==SkillType.AreaTarget|| SkillType == SkillType.UnitTarget)
-            ShowSkillRange(usingSkill.data.range);
-        isUsingSkill = true;
-        GameMgr.Instance.inputActions.Command.Select.Disable();
-        GameMgr.Instance.inputActions.Command.HeroSkillClick.Enable();
-        if (SkillType == SkillType.UnitTarget)
-        {
-            UIMgr.Instance.ChangeCursor(CursorType.findTarget);
-        }
-        else
-        {
-            ShowIndicator(); //스킬인디케이터온
-        }
-    }
-    //스킬타겟 지정하고 다시 UseSkill 
-    public void UseClinkingSkill(Transform skillTarget)
-    {
-        this.skillTarget = skillTarget;
-        UseSkill(index);
-    }
+    
+    
     
     
 }

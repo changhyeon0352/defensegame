@@ -18,21 +18,19 @@ public enum UnitShader
 public enum UnitType
 {
     none=0,
-    Monster,
     soldier_Melee,
     soldier_Range,
-    hero
+    hero,
+    mon1,mon2
 }
 [System.Flags]
-public enum BasicSkills:byte
+public enum SoldierSkill:byte
 {
     None        = 0b_0000_0000,
-    MoveToSpot  = 0b_0000_0001,
+    ReturnToLine  = 0b_0000_0001,
     Charge      = 0b_0000_0010,
     ShootSpot   = 0b_0000_0100,
     ShootEnemy  = 0b_0000_1000,
-    AttackMove  = 0b_0001_0000
-    //
 }
 public enum HeroClass
 {
@@ -44,14 +42,15 @@ public enum CursorType
 {
     Default=0,
     Sword,
-    targeting,
-    findTarget
+    findTarget,
+    targeting
+    
 }
 public enum Phase
 {
     town,
     selectHero,
-    setting,
+    Deployment,
     defense,
     result
 

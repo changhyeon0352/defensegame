@@ -67,12 +67,15 @@ public class DeployController : Controller
         if (Physics.Raycast(ray, out RaycastHit hit, 1000.0f, LayerMask.GetMask("Ally")))
         {
             model.Ressetting(hit);
+            view.ShaderChange(UnitShader.transparentShader, model.UnitGroup.UnitsTr.GetComponentsInChildren<SkinnedMeshRenderer>());
             inputActions.Deploy.Click.Enable();
             inputActions.Deploy.ReSetting.Disable();
             inputActions.Command.Select.Disable();
             inputActions.Deploy.scrollUpDown.Enable();
             inputActions.Camera.CameraZoom.Disable();
             inputActions.Deploy.SwitchRow.Enable();
+            inputActions.Game.GameQuit.Disable();
+            inputActions.Deploy.Cancel.Enable();
         }
     }
 
@@ -110,6 +113,7 @@ public class DeployController : Controller
         inputActions.Command.Select.Enable();
         inputActions.Deploy.SwitchRow.Disable();
         inputActions.Deploy.Cancel.Disable();
+        inputActions.Game.GameQuit.Enable();
     }
 
     private void OnRotateUnitGroup(InputAction.CallbackContext obj)

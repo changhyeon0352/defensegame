@@ -65,6 +65,6 @@ public class Arrow : MonoBehaviour
     IEnumerator DestroyTimer()
     {
         yield return new WaitForSeconds(3f);
-        FindObjectOfType<ArrowPool>().ReturnObjectToPool(this.gameObject);
+        GameMgr.Instance.ObjectPools.GetObjectPool(ObjectPoolType.Arrow).ReturnObjectToPool(this.gameObject);
     }
 }

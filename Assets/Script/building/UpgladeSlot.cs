@@ -44,7 +44,7 @@ public class UpgladeSlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(isUpgradable&&cost<=DataMgr.Instance.Money)
+        if(isUpgradable&&cost<=DataMgr.Instance.Money&&image.sprite== upgladeCheckSprite[1])
         {
             if(buildingType==BuildingType.Barracks)
             {

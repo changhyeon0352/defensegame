@@ -1,3 +1,68 @@
 {
-    "heroDataList": []
+    "heroDataList": [
+        {
+            "id": 0,
+            "heroClass": 1,
+            "name": "레이널드",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 0,
+            "heroClass": 1,
+            "name": "줄리아",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 0,
+            "heroClass": 0,
+            "name": "오스먼드",
+            "level": 0,
+            "exp": 0,
+            "level_Weapon": 0,
+            "level_Armor": 0,
+            "level_Skills": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "isDead": false
+        },
+        {
+            "id": 0,
+            "heroClass": 0,
+            "name": "리네시",
+            "level": 1,
+            "exp": 0,
+            "level_Weapon": 1,
+            "level_Armor": 1,
+            "level_Skills": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "isDead": false
+        }
+    ]
 }
