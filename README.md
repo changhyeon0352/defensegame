@@ -1,5 +1,5 @@
-# 포트폴리오
-[포트폴리오 설명 링크](https://florentine-pet-0b5.notion.site/f9fc73defe6145ccbb99de5e9f975ea4)
+# 플레이영상
+[영상 링크](https://www.youtube.com/watch?v=69qTTYtvP9A)
 
 ## 조작키
 |조작키|기능|
